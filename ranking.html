@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Ranking - CrossFit Clã</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Leaderboard Clã 2026</h1>
+
+    <div class="filters">
+      <div>
+        <label for="sexoFiltro" style="font-weight:bold; display:block; margin-bottom:5px;">Sexo</label>
+        <select id="sexoFiltro" onchange="mostrarRanking()">
+          <option value="TODOS">Todos</option>
+          <option value="M">Masculino</option>
+          <option value="F">Feminino</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="faixaFiltro" style="font-weight:bold; display:block; margin-bottom:5px;">Categoria</label>
+        <select id="faixaFiltro" onchange="mostrarRanking()">
+          <option value="GERAL">Geral</option>
+          <option value="Até 24">Até 24</option>
+          <option value="25–29">25–29</option>
+          <option value="30–34">30–34</option>
+          <option value="35–39">35–39</option>
+          <option value="40+">40+</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="list-header grid-ranking">
+      <div>🏆</div>
+      <div class="text-left">Atleta</div>
+      <div>Workout 1</div>
+      <div>Workout 2</div>
+      <div>Workout 3</div>
+      <div>Score</div>
+    </div>
+
+    <div id="ranking"></div>
+
+    <nav class="main-nav">
+      <a href="index.html">🏠 Home</a>
+      <a href="cadastro.html">📝 Cadastro</a>
+      <a href="inscritos.html">👥 Inscritos</a>
+      <a href="resultados.html">⏱️Lançar Resultados</a>
+      <a href="ranking.html">🥇 Ranking</a>
+    </nav>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

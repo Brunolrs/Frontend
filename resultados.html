@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lançar Resultados</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Lançar Resultados</h1>
+
+    <div style="max-width: 500px; margin: 0 auto;">
+      <div class="input-group">
+        <label>Atleta</label>
+        <select id="atletaSelect"></select>
+      </div>
+
+      <div class="input-group">
+        <label>Prova (Workout)</label>
+        <select id="rodada">
+          <option value="1">Workout 26.1</option>
+          <option value="2">Workout 26.2</option>
+          <option value="3">Workout 26.3</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label>Categoria da Prova</label>
+        <select id="workout">
+          <option value="RX">RX </option>
+          <option value="SCALE">Scale </option>
+          <option value="FOUNDATION">Foundation </option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label>Pontuação (Reps/Carga)</label>
+        <input id="score" type="number" placeholder="Digite o score...">
+      </div>
+
+      <button onclick="lancarResultado()" style="width:100%; margin-top:10px;">Salvar Resultado</button>
+    </div>
+
+    <nav class="main-nav">
+      <a href="index.html">🏠 Home</a>
+      <a href="cadastro.html">📝 Cadastro</a>
+      <a href="inscritos.html">👥 Inscritos</a>
+      <a href="resultados.html">⏱️ Lançar Resultados</a>
+      <a href="ranking.html">🥇 Ranking</a>
+    </nav>    
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

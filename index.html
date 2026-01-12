@@ -1,70 +1,125 @@
 <!DOCTYPE html>
-<html lang="pt-br" class="light">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-A-Compatible" content="IE=Edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- define a responsividade, garantido que a página seja exibida corretamente em dispositivos móveis*/ -->
-    <title>Projeto</title>
-    <link rel="stylesheet" href="./style.css" />
-  </head>
-  <body>
-    <div id="container">
-      <div id="profile">
-        <img src="./assets/avatar.png" alt="Foto de Mayk Brito sorrindo" />
-        <p>@maykbrito</p>
-      </div>
-       <div id="switch" onclick="toggleMode()">
-        <button></button>
-        <span></span>
-       </div>
-      <ul>
-        <li>
-          <a href="#">Inscrever-se no NLW</a>
-        </li>
-        <li>
-          <a href="#">Baixar meu e-book</a>
-        </li>
-        <li>
-          <a href="https://github.com/maykbrito" target="_blank"
-            >Ver meu portifólio</a
-          >
-        </li>
-        <li>
-          <a
-            href="https://app.rocketseat.com.br/journey/discover/contents"
-            target="_blank"
-            >Conheça o Explore</a
-          >
-        </li>
-      </ul>
-      <div id="social-links">
-        <a href="https://github.com/maykbrito" target="_blank">
-          <ion-icon name="logo-github"></ion-icon>
-        </a>
-        <a href="https://instagram.com/maykbrito" target="_blank">
-          <ion-icon name="logo-instagram"> </ion-icon>
-        </a>
-        <a href="https://youtube.com/maykbrito" target="_blank">
-          <ion-icon name="logo-youtube"></ion-icon>
-        </a>
-        <a href="https://linkedin.com/maykbrito" target="_blank">
-          <ion-icon name="logo-linkedin"></ion-icon>
-        </a>
-      </div>
-      <footer>
-        Feito com ♥ pela <a href="https//rocketseat.com.br">rocketseat</a>
-      </footer>
-     
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CrossFit Clã - Open 2026</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Home */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 40px;
+    }
+
+    .menu-card {
+      background: var(--item-bg);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+
+    .menu-card:hover {
+      transform: translateY(-10px);
+      filter: brightness(1.2);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    .menu-card i {
+      font-size: 3em;
+      margin-bottom: 15px;
+    }
+
+    .menu-card h2 {
+      margin-bottom: 10px;
+      font-size: 1.5em;
+    }
+
+    .menu-card p {
+      font-size: 0.9em;
+      opacity: 0.9;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 40px 20px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .logo-hero {
+      max-width: 100px; /* Ajuste o tamanho conforme preferir */
+      width: 100%;
+      height: auto;
+      margin-bottom: 10px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .hero h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    .hero {
+      background: rgba(255, 255, 255, 0.4); /* Levemente mais claro para destacar o logo escuro */
+      padding: 30px 20px;
+    }
+    
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <header class="hero">
+      <h1><img src="logo.jpg" alt="CrossFit Clã" class="logo-hero"> CROSSFIT CLÃ</h1>
+      <p>Open Series 2026</p>
+    </header>
+
+    <div class="menu-grid">
+      <a href="cadastro.html" class="menu-card">
+        <div style="font-size: 40px;">📝</div>
+        <h2>Cadastro</h2>
+        <p>Registrar novos atletas na competição.</p>
+      </a>
+
+      <a href="inscritos.html" class="menu-card">
+        <div style="font-size: 40px;">👥</div>
+        <h2>Inscritos</h2>
+        <p>Gerenciar dados, sexo e faixas etárias.</p>
+      </a>
+
+      <a href="resultados.html" class="menu-card">
+        <div style="font-size: 40px;">⏱️</div>
+        <h2>Lançar Resultados</h2>
+        <p>Lançar scores de WODs (RX/Scale).</p>
+      </a>
+
+      <a href="ranking.html" class="menu-card">
+        <div style="font-size: 40px;">🥇</div>
+        <h2>Leaderboard</h2>
+        <p>Ver classificação geral e pódio por categoria.</p>
+      </a>
     </div>
-    <script
-      type="module"
-      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
-    ></script>
-    <script
-      nomodule
-      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
-    ></script>
-    <script src="./script.js"></script>
-  </body>
+
+    <footer style="margin-top: 50px; text-align: center; font-size: 0.8em; opacity: 0.7;">
+      <p>&copy; Bruno Lopes Ribeiro Silva - Todos os direitos reservados.</p>
+    </footer>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
 </html>
