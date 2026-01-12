@@ -3,30 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <title>Gestão de Resultados - CrossFit Clã</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Gestão de Resultados</h1>
-    <p style="text-align: center; margin-bottom: 20px;">Visualize e gerencie todos os scores enviados.</p>
 
-    <div class="list-header grid-gestao">
-      <div class="text-left">Atleta</div>
-      <div>WOD</div>
-      <div>Tipo</div>
-      <div>Score</div>
-      <div>Ação</div>
-    </div>
+<div class="container">
+  <h1>Gestão de Resultados</h1>
+  <p style="text-align:center; margin-bottom:20px;">
+    Edite, valide ou exclua os resultados lançados.
+  </p>
 
-    <div id="listaResultados"></div>
-
-    <nav class="main-nav">
-      <a href="index.html">🏠 Home</a>
-      <a href="resultados.html">⏱️ Lançar</a>
-      <a href="gestao_resultados.html" class="active">⚙️ Gestão</a>
-      <a href="ranking.html">🥇 Ranking</a>
-    </nav>
+  <div class="list-header grid-gestao">
+    <div class="text-left">Atleta</div>
+    <div>WOD</div>
+    <div>Categoria</div>
+    <div>Score</div>
+    <div>Ações</div>
   </div>
-  <script src="script.js"></script>
+
+  <div id="listaResultados"></div>
+
+  <nav class="main-nav">
+    <a href="index.html">🏠 Home</a>
+    <a href="resultados.html">⏱️ Lançar</a>
+    <a href="gestao_resultados.html" class="active">⚙️ Gestão</a>
+    <a href="ranking.html">🥇 Ranking</a>
+  </nav>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
