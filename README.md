@@ -1,25 +1,50 @@
-<h1 align="center"> DevLinks </h1>
+<h1 align="center"> crossfit open </h1>
 
 <p align="center">
-Programa exclusivo e gratuito, promovido pela Rocketseat para ensino de tecnologias WEB.
 </p>
 
 <p align="center">
+  <a href="#-Descrição">Descrição</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#-tecnologias">Tecnologias</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#-projeto">Projeto</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#-layout">Layout</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#memo-licença">Licença</a>
 </p>
 
-<p align="center">
-  <img alt="License" src="https://img.shields.io/static/v1?label=license&message=MIT&color=49AA26&labelColor=000000">
-</p>
+## Descrição 
 
-<br>
+# 🏋️‍♂️ CrossFit Clã - Open Series 2026
 
-<p align="center">
-  <img alt="projto DevLinks" src=".github/preview.jpg" width="100%">
-</p>
+![Status do Projeto](https://img.shields.io/badge/Status-Em_Desenvolvimento-orange)
+![Licença](https://img.shields.io/badge/License-MIT-blue)
+
+Sistema de gestão de atletas e leaderboard para competições de CrossFit, inspirado na interface oficial do **CrossFit Games**.
+
+## 🚀 Funcionalidades
+
+- **Dashboard Intuitivo**: Navegação rápida entre as principais funções.
+- **Gestão de Inscritos**: Cadastro de atletas com separação automática por Sexo e Faixa Etária.
+- **Lançamento de Resultados**: Registro de scores com distinção entre categorias (RX ou Scale).
+- **Leaderboard Dinâmico**: Ranking em tempo real com critérios de desempate (Total de RX > Pontuação Total).
+- **Pódio com Medalhas**: Destaque automático com 🥇, 🥈 e 🥉 para os primeiros colocados.
+- **Design Responsivo**: Totalmente otimizado para uso em smartphones (Mobile-First) durante o evento.
+
+## 🎨 Interface Visual
+
+O projeto utiliza o **Dark Mode** oficial do CrossFit, com foco em alto contraste, tipografia robusta e elementos em vermelho vibrante.
+
+## 🛠️ Tecnologias Utilizadas
+
+- **HTML5**: Estrutura semântica das páginas.
+- **CSS3**: Layouts em Grid e Flexbox com design responsivo.
+- **JavaScript (Vanilla)**: Lógica de cálculos, persistência de dados e manipulação do DOM.
+- **LocalStorage**: Armazenamento de dados diretamente no navegador (sem necessidade de banco de dados externo).
+
+## 📥 Como executar o projeto
+
+1. Clone este repositório:
+   ```bash
+   git clone [https://github.com/SEU_USUARIO/cla-open-2026.git](https://github.com/brunolrs/cla-open-2026.git)
 
 ## 🚀 Tecnologias
 
@@ -28,20 +53,11 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 - HTML e CSS
 - JavaScript
 - Git e Github
-- Figma
 
 ## 💻 Projeto
 
-O DevLinks é im agregador de links para usar como cartão de visitas online.  
-
-## 🔖 Layout
-
-Você pode visualizar o layout do projeto através [DESSE LINK](https://www.figma.com/design/3P8LEn2FVV6RLeLRMEbzcP/DevLinks-%E2%80%A2-Projeto-Discover-(Community)?t=NVlR9WtBPNwQdmTc-0). É necessário ter conta no [Figma](https://figma.com) para acessá-lo.
+Ranking para evento de crossfit interno 
 
 ## :memo: Licença
 
 Esse projeto está sob a licença MIT.
-
----
-
-Feito com ♥ by Rocketseat :wave: [Participe da nossa comunidade!](https://discord.gg/rocketseat)
