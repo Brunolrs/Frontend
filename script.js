@@ -2,10 +2,9 @@
 const SUPABASE_URL = "https://fcnjpdzxqceenfsprrvw.supabase.co"; 
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjbmpwZHp4cWNlZW5mc3BycnZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzNjQxNTAsImV4cCI6MjA4Mzk0MDE1MH0.da-1snEhvQjT3sbQ0vt-DQcmm-D-RzlQzgzkE0VdJpM";
 
-// Mudamos para supabaseClient para evitar o erro de "already declared"
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// --- DATA LAYER (Unificado e corrigido para usar supabaseClient) ---
+// --- DATA LAYER ---
 const Data = {
   async getAtletas() {
     const { data, error } = await supabaseClient
@@ -58,7 +57,7 @@ const Data = {
   }
 };
 
-// --- CÁLCULOS (Sua lógica original mantida 100%) ---
+// --- CÁLCULOS ---
 const Calc = {
   getIdade(data) {
     const hoje = new Date();
@@ -107,12 +106,23 @@ const Calc = {
   }
 };
 
-// --- UI (Sua lógica original mantida 100%) ---
+// --- UI ---
 const UI = {
+  atletasCache: [],
+
   async init() {
     if (document.getElementById("listaInscritos")) await this.renderInscritos();
-    if (document.getElementById("atletaSelect")) await this.initResultados();
+    // Verifica se estamos na página de resultados pelo ID do input de busca
+    if (document.getElementById("buscaAtleta")) await this.initResultados();
     if (document.getElementById("ranking")) await this.renderRanking();
+    
+    // Fecha a lista se clicar fora
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.input-group')) {
+            const lista = document.getElementById("listaSugestoes");
+            if(lista) lista.style.display = 'none';
+        }
+    });
   },
 
   async cadastrarAtleta() {
@@ -214,26 +224,63 @@ const UI = {
     }
   },
 
+  // --- NOVA LÓGICA DE AUTOCOMPLETE ---
   async initResultados() {
-    const select = document.getElementById("atletaSelect");
-    if(!select) return;
-    select.innerHTML = "<option>Carregando...</option>";
-    const atletas = await Data.getAtletas();
-    select.innerHTML = "";
-    atletas.sort((a,b) => a.nome.localeCompare(b.nome));
-    atletas.forEach(a => {
-      select.innerHTML += `<option value="${a.id}">${a.nome} (${a.sexo})</option>`;
-    });
+    // Carrega dados e salva no Cache
+    this.atletasCache = await Data.getAtletas();
+    this.atletasCache.sort((a,b) => a.nome.localeCompare(b.nome));
   },
+
+  buscarAtleta(termo) {
+    const listaDiv = document.getElementById("listaSugestoes");
+    const idInput = document.getElementById("atletaId");
+    
+    // Se o usuário altera o texto, limpamos o ID selecionado anteriormente
+    idInput.value = "";
+
+    if (!termo || termo.length === 0) {
+      listaDiv.style.display = "none";
+      return;
+    }
+
+    // Filtra
+    const filtrados = this.atletasCache.filter(a => 
+      a.nome.toLowerCase().includes(termo.toLowerCase())
+    );
+
+    // Renderiza sugestões
+    listaDiv.innerHTML = "";
+    if (filtrados.length > 0) {
+      listaDiv.style.display = "block";
+      filtrados.forEach(a => {
+        const div = document.createElement("div");
+        div.className = "sugestao-item";
+        div.innerHTML = `<strong>${a.nome}</strong> <small>(${a.sexo})</small>`;
+        // Ao clicar, seleciona o atleta
+        div.onclick = () => this.selecionarAtleta(a.id, a.nome);
+        listaDiv.appendChild(div);
+      });
+    } else {
+      listaDiv.style.display = "none";
+    }
+  },
+
+  selecionarAtleta(id, nome) {
+    document.getElementById("buscaAtleta").value = nome;
+    document.getElementById("atletaId").value = id;
+    document.getElementById("listaSugestoes").style.display = "none";
+  },
+  // ------------------------------------
 
   async lancarResultado() {
     const btn = document.querySelector("button");
-    const id = document.getElementById("atletaSelect").value;
+    // Agora pegamos o ID do campo oculto
+    const id = document.getElementById("atletaId").value;
     const rodada = Number(document.getElementById("rodada").value);
     const workout = document.getElementById("workout").value;
     const score = Number(document.getElementById("score").value);
 
-    if(!id) return alert("Selecione um atleta");
+    if(!id) return alert("Por favor, selecione um atleta da lista de sugestões.");
 
     btn.textContent = "Enviando...";
     btn.disabled = true;

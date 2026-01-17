@@ -5,7 +5,7 @@
   <script src="script.js"></script>
  
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Cadastro de Atletas</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -13,7 +13,7 @@
   <div class="container">
     <h1>Cadastro de Atletas</h1>
 
-    <div id="formCadastro" style="max-width: 500px; margin: 0 auto;">
+    <div id="formCadastro" class="form-card">
       <div class="input-group">
         <label>Nome Completo</label>
         <input id="nome" placeholder="Ex: João da Silva">
@@ -33,17 +33,20 @@
         </select>
       </div>
 
-      <button onclick="cadastrarAtleta()" style="width: 100%; margin-top: 10px;">Finalizar Cadastro</button>
+      <button onclick="cadastrarAtleta()" class="btn-primary-action">Finalizar Cadastro</button>
     </div>
 
     <nav class="main-nav">
       <a href="index.html">🏠 Home</a>
-      <a href="cadastro.html">📝 Cadastro</a>
+      <a href="cadastro.html" class="active">📝 Cadastro</a>
       <a href="inscritos.html">👥 Inscritos</a>
       <a href="resultados.html">⏱️Lançar Resultados</a>
       <a href="ranking.html">🥇 Ranking</a>
-  </nav>
+    </nav>
   </div>
-  <script src="script.js"></script>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", () => UI.init());
+  </script>
 </body>
 </html>
