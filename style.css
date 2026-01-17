@@ -3,7 +3,7 @@
    ========================================================================== */
 :root {
   --bg-gradient-start: #9ed6fb;
-  --bg-gradient-end: #bfe6ff;
+  --bg-gradient-end: #f0f8ff;
   --text-color: #0a2b3d;
   --header-bg: #e9f6ff;
   --item-bg: #55788f;
@@ -11,8 +11,10 @@
   --btn-edit: #ffb74d;
   --btn-save: #66bb6a;
   --btn-delete: #ef5350;
-  --highlight: #ffeb3b; /* Amarelo para Scores */
+  --highlight: #ffeb3b; 
   --white: #ffffff;
+  --shadow-standard: 0 4px 10px rgba(0,0,0,0.1);
+  --transition-fast: all 0.2s ease;
 }
 
 * {
@@ -23,10 +25,17 @@
 }
 
 body {
-  background: linear-gradient(180deg, var(--bg-gradient-start), var(--bg-gradient-end));
-  padding: 20px;
-  color: var(--text-color);
-  min-height: 100vh;
+  /* Substitua o linear-gradient no seu :root ou no body */
+  background: linear-gradient(180deg, var(--bg-gradient-start), var(--bg-gradient-end));  min-height: 100vh;
+  color: #ffffff; /* Texto branco para melhor contraste */
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-gradient-end); }
+::-webkit-scrollbar-thumb { 
+  background: var(--item-bg); 
+  border-radius: 10px; 
 }
 
 .container {
@@ -43,7 +52,7 @@ h1 {
 }
 
 /* ==========================================================================
-   NAVEGAÇÃO COMPLETA (GESTOR)
+   NAVEGAÇÃO COMPLETA
    ========================================================================== */
 .main-nav {
   margin: 20px 0 30px 0;
@@ -55,7 +64,7 @@ h1 {
   justify-content: center;
   gap: 10px;
   flex-wrap: wrap;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  box-shadow: var(--shadow-standard);
   backdrop-filter: blur(5px);
 }
 
@@ -65,7 +74,7 @@ h1 {
   font-weight: bold;
   padding: 10px 18px;
   border-radius: 8px;
-  transition: all 0.2s ease;
+  transition: var(--transition-fast);
   font-size: 0.9em;
   background: rgba(255, 255, 255, 0.5);
   display: flex;
@@ -73,39 +82,51 @@ h1 {
   gap: 5px;
 }
 
-.main-nav a:hover {
+.main-nav a:hover, .main-nav a.active {
   background: var(--btn-primary);
   color: var(--white);
   transform: translateY(-2px);
 }
 
-.main-nav a.active {
-  background: var(--btn-primary);
-  color: var(--white);
-}
-
 /* ==========================================================================
    FORMULÁRIOS E FILTROS
    ========================================================================== */
+.filters {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 25px;
+  background: rgba(255,255,255,0.2);
+  padding: 15px;
+  border-radius: 12px;
+}
+
 .input-group {
-  margin-bottom: 15px;
-  text-align: left;
+  flex: 1;
+  min-width: 200px;
 }
 
 .input-group label {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
-  font-size: 0.9em;
+  font-size: 0.85em;
 }
 
 input, select {
   padding: 12px;
   border-radius: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid rgba(0,0,0,0.1);
   width: 100%;
   font-size: 1rem;
   background-color: var(--white);
+  transition: border-color 0.2s;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--btn-primary);
+  box-shadow: 0 0 0 3px rgba(8, 60, 90, 0.1);
 }
 
 button {
@@ -114,34 +135,19 @@ button {
   border: none;
   font-weight: bold;
   cursor: pointer;
-  transition: all 0.2s;
-  background-color: var(--btn-primary);
-  color: var(--white);
+  transition: var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
-button:hover {
-  filter: brightness(1.2);
-}
-
-.filters {
-  display: flex;
-  gap: 15px;
-  justify-content: left;
-  margin-bottom: 25px;
-  background: rgba(255,255,255,0.2);
-  padding: 15px;
-  border-radius: 12px;
-}
-
-.filters select {
-  min-width: 150px;
-}
+button:active { transform: scale(0.98); }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
 
 /* ==========================================================================
-   SISTEMA DE GRIDS (RANKING E INSCRITOS)
+   SISTEMA DE GRIDS
    ========================================================================== */
-
-/* Layout Base das Listas */
 .list-header, .list-item {
   display: grid;
   align-items: center;
@@ -156,34 +162,45 @@ button:hover {
   background: var(--header-bg);
   font-weight: bold;
   color: var(--text-color);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 .list-item {
   background: var(--item-bg);
   color: var(--white);
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-standard);
+  transition: transform 0.2s;
 }
 
-/* GRID: RANKING (Posição | Nome | WODs... | Score) */
-.grid-ranking {
-  grid-template-columns: 80px 3fr 1fr 1fr 1fr 1.2fr;
-}
+.list-item:hover { transform: translateX(5px); }
 
-/* GRID: INSCRITOS (Nome | Sexo | Nasc | Faixa | Ações) */
-.grid-inscritos {
-  grid-template-columns: 1.9fr 0.1fr 1.5fr 1fr 1.5fr;
-}
+/* Definição das colunas */
+.grid-ranking { grid-template-columns: 80px 3fr 1fr 1fr 1fr 1.2fr; }
+.grid-inscritos { grid-template-columns: 2fr 0.8fr 1.2fr 1fr 1.5fr; }
 
 /* ==========================================================================
-   DETALHES VISUAIS (MEDALHAS E SCORES)
+   ESTILOS DOS CAMPOS DENTRO DA LISTA
    ========================================================================== */
-.text-left {
-  text-align: left !important;
+.list-item input, .list-item select {
+  background: var(--white);
+  color: #333;
+  padding: 6px;
+  font-size: 0.9em;
+  border: 1px solid transparent;
 }
 
-.posicao {
-  line-height: 1.1;
+/* Estado de visualização (desativado) */
+.list-item input:disabled, 
+.list-item select:disabled {
+  background: transparent;
+  color: var(--white);
+  border: 1px solid transparent;
+  padding: 6px 0;
   font-weight: bold;
+  cursor: default;
+  appearance: none;
+  -webkit-appearance: none;
+  opacity: 1;
 }
 
 .score-highlight {
@@ -193,46 +210,10 @@ button:hover {
   text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
 }
 
-.wod-info {
-  line-height: 1.2;
-}
-
-.wod-info small {
-  font-size: 0.75em;
-  text-transform: uppercase;
-  opacity: 0.9;
-}
-
-/* ==========================================================================
-   ESTILOS DE EDIÇÃO (DENTRO DAS LISTAS)
-   ========================================================================== */
-.list-item input, .list-item select {
-  background: var(--white);
-  border: none;
-  padding: 6px;
-  color: #333;
-  font-size: 0.9em;
-}
-
-.list-item input:disabled, .list-item select:disabled {
-  background: transparent;
-  color: var(--white);
-  padding: 0;
-  font-weight: bold;
-  cursor: default;
-  appearance: none;
-  -webkit-appearance: none;
-}
-
 .acoes {
   display: flex;
   gap: 8px;
-  justify-content: left;
-}
-
-.acoes button {
-  padding: 8px 12px;
-  font-size: 0.85em;
+  justify-content: center;
 }
 
 .btn-editar { background: var(--btn-edit); color: #333; }
@@ -240,36 +221,31 @@ button:hover {
 .btn-excluir { background: var(--btn-delete); color: white; }
 
 /* ==========================================================================
-   RESPONSIVIDADE (MOBILE)
+   RESPONSIVIDADE
    ========================================================================== */
-@media (max-width: 850px) {
-  .grid-ranking {
-    grid-template-columns: 60px 2fr 1fr 1fr 1fr 1fr;
-    font-size: 0.85em;
-    gap: 5px;
-  }
+@media (max-width: 900px) {
+  .grid-ranking { grid-template-columns: 60px 2fr 1fr 1fr 1fr 1fr; font-size: 0.85em; }
+  .grid-inscritos { grid-template-columns: 1.5fr 0.7fr 1fr 1fr 1.2fr; font-size: 0.85em; }
 }
 
 @media (max-width: 768px) {
-  .list-header {
-    display: none;
-  }
+  .list-header { display: none; }
 
-  .grid-ranking, .grid-inscritos {
+  .list-item {
     grid-template-columns: 1fr;
-    gap: 10px;
+    text-align: left;
+    gap: 8px;
     padding: 20px;
   }
 
-  .text-left {
-    text-align: center !important;
+  .grid-ranking, .grid-inscritos { grid-template-columns: 1fr; }
+
+  .acoes {
+    justify-content: flex-start;
+    margin-top: 10px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 15px;
   }
 
-  .main-nav {
-    flex-direction: column;
-  }
-
-  .main-nav a {
-    justify-content: center;
-  }
+  .main-nav { flex-direction: column; }
 }
