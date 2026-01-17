@@ -11,27 +11,27 @@
   <link rel="stylesheet" href="style.css">
   
   <style>
-
-  .hero {
-  text-align: center;
-  padding: 0; /* Remove o recuo para a imagem encostar nas bordas */
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 20px;
-  margin-bottom: 30px;
-  overflow: hidden; /* Corta a imagem no formato arredondado do container */
-  line-height: 0;
-  display: flex; /* Ajuda no alinhamento interno */
-  justify-content: center;
-  align-items: center;
-  height: 300px; /* Define uma altura fixa para manter o padrão em todos os aparelhos */
-  }
+      .hero {
+      text-align: center;
+      /* Removemos o padding para a imagem encostar nas bordas */
+      padding: 0; 
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 20px;
+      margin-bottom: 30px;
+      overflow: hidden; /* Garante que a imagem respeite o arredondamento (border-radius) do container */
+      line-height: 0;   /* Remove pequenos espaços em branco abaixo da imagem */
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
 
     .hero-logo {
-    width: 100%;
-    height: 100%; /* Faz a imagem ocupar toda a altura do container de 200px */
-    object-fit: cover; /* ESSENCIAL: Faz a imagem preencher o espaço como um "papel de parede", sem distorcer */
-   object-position: center; /* Mantém o foco no centro da foto */
-}
+      width: 100%;      /* Força a imagem a ocupar toda a largura */
+      height: 300px;     /* Mantém a proporção original */
+      display: block;
+      object-fit: cover; /* Garante que a imagem preencha o container sem distorção */
+      /* Se você quiser que ela tenha uma altura fixa e "corte" o excesso, use as linhas abaixo: */
+      /* height: 250px; 
+        object-fit: cover; */
+    }
 
     .menu-grid {
       display: grid;
@@ -90,12 +90,11 @@
       opacity: 0.7;
       padding-bottom: 20px;
     }
-    /* Ajuste específico para telas pequenas (Celulares) */
+
+    /* Ajuste Mobile */
     @media (max-width: 480px) {
-      .hero {
-        height: 125px; /* Reduz um pouco a altura no celular para não ocupar a tela toda */
-        margin-bottom: 15px;
-      }
+      .hero { padding: 20px 10px; }
+      .hero-logo { max-height: 140px; }
     }
   </style>
 </head>
