@@ -67,7 +67,7 @@ h1 {
    ========================================================================== */
 .hero-ranking-wrapper {
   position: relative; width: 100%; height: 350px;
-  background-image: url('rank.png'); background-size: cover; background-position: center;
+  background-image: url('rank3.png'); background-size: cover; background-position: center;
   display: flex; flex-direction: column; justify-content: flex-end;
   padding: 20px; margin-bottom: 30px;
 }
