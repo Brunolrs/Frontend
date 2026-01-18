@@ -1,351 +1,264 @@
 /* ==========================================================================
-   VARIÁVEIS E DEFINIÇÕES GERAIS
+   VARIÁVEIS E TEMA (DARK MODE GLOBAL)
    ========================================================================== */
 :root {
-  --bg-gradient-start: #9ed6fb;
-  --bg-gradient-end: #f0f8ff;
-  --text-color: #0a2b3d;
-  --header-bg: #e9f6ff;
-  --item-bg: #55788f;
-  --btn-primary: #083c5a;
-  --btn-edit: #ffb74d;
-  --btn-save: #66bb6a;
-  --btn-delete: #ef5350;
-  --highlight: #ffeb3b; 
-  --white: #ffffff;
-  --input-bg: #f8fafd; /* Fundo cinza claro para inputs */
-  --shadow-standard: 0 4px 10px rgba(0,0,0,0.1);
-  --transition-fast: all 0.2s ease;
+  --bg-color: #0f172a; 
+  --card-bg: #1e293b;
+  --text-color: #f8fafc;
+  --text-muted: #94a3b8;
+  
+  --btn-primary: #00AEEF; /* Ciano Clã */
+  --btn-hover: #009cd6;
+  --btn-danger: #ef4444;
+  --btn-success: #22c55e;
+  
+  --border-color: rgba(255, 255, 255, 0.1);
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+  --input-bg: rgba(0, 0, 0, 0.3);
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  -webkit-text-size-adjust: 100%;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto Condensed', 'Segoe UI', sans-serif; }
 
 body {
-  background: linear-gradient(180deg, var(--bg-gradient-start), var(--bg-gradient-end));
+  background-color: var(--bg-color);
+  color: var(--text-color);
   min-height: 100vh;
-  color: #ffffff;
-  padding-bottom: 100px; /* Espaço extra para o menu fixo não cobrir conteúdo */
+  padding-bottom: 100px;
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: var(--bg-gradient-end); }
-::-webkit-scrollbar-thumb { background: var(--item-bg); border-radius: 10px; }
-
-.container { max-width: 1100px; margin: auto; padding: 0 20px; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
 
 h1 {
-  margin: 25px 0;
-  text-align: center;
-  color: var(--btn-primary);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-size: 1.6rem;
-  font-weight: 800;
+  text-align: center; text-transform: uppercase; margin: 30px 0;
+  color: var(--text-color); font-weight: 900; letter-spacing: 1px;
 }
 
 /* ==========================================================================
-   ESTILOS DE FORMULÁRIOS E CARDS
-   ========================================================================== */
-.form-card {
-  background: rgba(255, 255, 255, 0.95);
-  padding: 25px;
-  border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  max-width: 500px;
-  margin: 0 auto;
-  color: var(--text-color);
-}
-
-/* Filtros do Ranking (Lado a Lado) */
-.filters {
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* Divide em 2 colunas iguais */
-  gap: 15px;
-  margin-bottom: 25px;
-  background: rgba(255, 255, 255, 0.95);
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  color: var(--text-color);
-}
-
-.filters > div { display: flex; flex-direction: column; }
-
-.input-group label, .filters label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 700;
-  font-size: 0.85rem;
-  color: var(--btn-primary);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.input-group { margin-bottom: 20px; }
-
-/* Estilo Geral dos Inputs */
-input, select {
-  padding: 14px;
-  border-radius: 10px;
-  border: 2px solid transparent;
-  width: 100%;
-  font-size: 16px; 
-  background-color: var(--input-bg);
-  color: #333;
-  transition: all 0.3s ease;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
-}
-
-/* CORREÇÃO CRÍTICA PARA DATA NO MOBILE */
-/* Remove o estilo nativo "feio" do iOS/Android e aplica o nosso */
-input[type="date"] {
-  -webkit-appearance: none;
-  appearance: none;
-  min-height: 52px; /* Força altura igual aos campos de texto */
-  display: block;
-  font-family: inherit;
-  color: #333;
-  background-color: var(--input-bg);
-  line-height: normal;
-}
-
-input:focus, select:focus {
-  outline: none;
-  background-color: #fff;
-  border-color: var(--btn-primary);
-  box-shadow: 0 0 0 4px rgba(8, 60, 90, 0.1);
-}
-
-/* Botão de Ação Principal (Azul Grande) */
-.btn-primary-action {
-  background-color: var(--btn-primary);
-  color: white;
-  width: 100%;
-  padding: 16px;
-  font-size: 1.1rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-top: 10px;
-  box-shadow: 0 4px 15px rgba(8, 60, 90, 0.3);
-  border-radius: 8px;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.btn-primary-action:active { transform: scale(0.97); box-shadow: 0 2px 5px rgba(8, 60, 90, 0.3); }
-
-/* ==========================================================================
-   ESTILO DA IMAGEM (LOGO)
+   ESTILOS ESPECÍFICOS DA HOME
    ========================================================================== */
 .hero-logo {
-  display: block; 
-  margin: 0 auto 25px auto; 
-  width: 100%; 
-  height: 400px; 
-  object-fit: cover; /* Corta excessos para manter proporção */
-  border-radius: 15px; 
-  filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)); 
-  animation: fadeInDown 0.8s ease-out;
+  display: block; width: 100%; max-height: 350px; object-fit: cover; 
+  border-radius: 15px; border: 1px solid var(--border-color);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 10px;
 }
 
-@keyframes fadeInDown {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
+.menu-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 15px; margin-top: 20px; padding-bottom: 40px;
+}
+
+.menu-card {
+  background: var(--card-bg); color: white; padding: 30px 15px; text-align: center;
+  border-radius: 15px; text-decoration: none; transition: all 0.2s ease;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2); border: 1px solid var(--border-color);
+}
+.menu-card div { margin-bottom: 10px; font-size: 40px; }
+.menu-card h2 { margin-bottom: 5px; font-size: 1.1em; text-transform: uppercase; letter-spacing: 1px; color: var(--btn-primary); }
+.menu-card p { font-size: 0.85em; opacity: 0.8; line-height: 1.3; margin: 0; color: var(--text-muted); }
+.menu-card:active { transform: scale(0.96); background: var(--btn-primary); color: #000; }
+
+@media (min-width: 769px) {
+  .menu-card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.4); border-color: var(--btn-primary); filter: brightness(1.1); }
 }
 
 /* ==========================================================================
-   NAVEGAÇÃO
+   ESTILOS DO RANKING (HERO GAMES)
    ========================================================================== */
-.main-nav {
-  margin: 20px 0 30px 0;
-  text-align: center;
-  background: rgba(255, 255, 255, 0.7);
-  padding: 12px;
-  border-radius: 12px;
+.hero-ranking-wrapper {
+  position: relative; width: 100%; height: 350px;
+  background-image: url('rank.png'); background-size: cover; background-position: center;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 20px; margin-bottom: 30px;
+}
+.hero-overlay {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(to bottom, rgba(15, 23, 42, 0.2), rgba(15, 23, 42, 1)); z-index: 1;
+}
+.hero-content { position: relative; z-index: 2; width: 100%; max-width: 1100px; margin: 0 auto; }
+.hero-title {
+  font-size: 3.5rem; font-weight: 900; text-transform: uppercase;
+  line-height: 1; margin-bottom: 20px; text-shadow: 0 4px 10px rgba(0,0,0,0.8);
+}
+.hero-subtitle {
+  font-size: 1rem; font-weight: 700; text-transform: uppercase;
+  color: var(--btn-primary); margin-bottom: 5px; letter-spacing: 2px;
+}
+
+/* FILTROS RANKING (TRANSPARENTE) */
+.ranking-filters-bar {
   display: flex;
-  justify-content: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  box-shadow: var(--shadow-standard);
+  background: transparent;
+  border: 1px solid var(--border-color);
   backdrop-filter: blur(5px);
+  border-radius: 8px 8px 0 0;
 }
 
-.main-nav a {
-  text-decoration: none;
-  color: var(--btn-primary);
-  font-weight: bold;
-  padding: 10px 18px;
-  border-radius: 8px;
-  transition: var(--transition-fast);
-  font-size: 0.9em;
-  background: rgba(255, 255, 255, 0.5);
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.ranking-filter-item { flex: 1; border-right: 1px solid var(--border-color); position: relative; }
+.ranking-filter-item:last-child { border-right: none; }
+.ranking-filter-item label {
+  position: absolute; top: 8px; left: 15px; font-size: 0.65rem; color: var(--btn-primary);
+  text-transform: uppercase; font-weight: bold;
 }
-
-.main-nav a:hover, .main-nav a.active {
-  background: var(--btn-primary);
-  color: var(--white);
-  transform: translateY(-2px);
+.ranking-filter-item select {
+  width: 100%; background: transparent; border: none; color: white;
+  padding: 25px 15px 10px 15px; font-size: 0.9rem; font-weight: bold;
+  text-transform: uppercase; cursor: pointer; -webkit-appearance: none;
 }
+.ranking-filter-item select option { background-color: var(--bg-color); color: white; }
 
 /* ==========================================================================
-   AUTOCOMPLETE (BUSCA DE ATLETA)
+   FORMULÁRIOS E GERAIS
+   ========================================================================== */
+.form-card {
+  background: var(--card-bg); padding: 30px; border-radius: 16px;
+  box-shadow: var(--shadow); border: 1px solid var(--border-color);
+  max-width: 500px; margin: 0 auto;
+}
+.input-group { margin-bottom: 20px; }
+.input-group label {
+  display: block; margin-bottom: 8px; font-size: 0.85rem;
+  color: var(--btn-primary); font-weight: 700; text-transform: uppercase;
+}
+input, select {
+  width: 100%; padding: 14px; border-radius: 8px; border: 1px solid var(--border-color);
+  background-color: var(--input-bg); color: white; font-size: 1rem; transition: all 0.2s;
+}
+input:focus, select:focus { outline: none; border-color: var(--btn-primary); background-color: rgba(0,0,0,0.5); }
+input[type="date"], input[type="tel"] { min-height: 52px; display: block; }
+input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
+
+.btn-primary-action, button {
+  background-color: var(--btn-primary); color: #000; width: 100%; padding: 16px;
+  font-size: 1rem; text-transform: uppercase; font-weight: 900;
+  border: none; border-radius: 8px; cursor: pointer; margin-top: 10px;
+}
+.acoes button { width: auto; padding: 8px 12px; margin: 0 2px; }
+
+/* ==========================================================================
+   TABELAS
+   ========================================================================== */
+.list-header {
+  background: black; color: white; padding: 15px; font-weight: 900;
+  text-transform: uppercase; font-size: 0.9rem; border-top: 4px solid var(--btn-primary);
+  display: grid; align-items: center; gap: 10px;
+}
+.list-item {
+  background: var(--card-bg); padding: 15px; align-items: center; margin-bottom: 4px;
+  border-bottom: 1px solid var(--border-color); display: grid; gap: 10px; color: white; transition: transform 0.2s;
+}
+.list-item:hover { transform: translateX(5px); border-left: 3px solid var(--btn-primary); }
+
+.grid-ranking { grid-template-columns: 60px 4fr 1fr 1fr 1fr 1fr; text-align: center; }
+.grid-ranking > div:nth-child(2) { text-align: left; padding-left: 10px; }
+.grid-ranking > div:nth-child(6) { font-weight: bold; color: var(--btn-primary); font-size: 1.1em; }
+
+.grid-inscritos { grid-template-columns: 2fr 0.5fr 1fr 1fr 1fr; text-align: center; }
+.grid-inscritos > div:nth-child(1) { text-align: left; padding-left: 10px; }
+.list-item input, .list-item select { background: transparent; border: 1px solid transparent; padding: 5px; }
+.list-item input:disabled, .list-item select:disabled { opacity: 1; color: #ccc; }
+
+/* ==========================================================================
+   AUTOCOMPLETE E MENU FIXO
    ========================================================================== */
 .lista-sugestoes {
-  position: absolute;
-  top: 100%; 
-  left: 0;
-  width: 100%;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 0 0 8px 8px;
-  max-height: 200px; 
-  overflow-y: auto;
-  z-index: 1000; 
-  display: none; 
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  position: absolute; top: 100%; left: 0; width: 100%; background: var(--card-bg);
+  border: 1px solid var(--btn-primary); border-top: none; border-radius: 0 0 8px 8px;
+  max-height: 200px; overflow-y: auto; z-index: 1000; display: none;
 }
+.sugestao-item { padding: 12px; cursor: pointer; border-bottom: 1px solid var(--border-color); }
+.sugestao-item:hover { background-color: var(--btn-primary); color: black; font-weight: bold; }
 
-.sugestao-item {
-  padding: 12px;
-  cursor: pointer;
-  border-bottom: 1px solid #eee;
-  color: #333;
-  font-size: 0.95rem;
-  text-align: left;
+.main-nav {
+  position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(15, 23, 42, 0.95);
+  padding: 10px; display: flex; justify-content: space-around;
+  border-top: 2px solid var(--btn-primary); z-index: 1000; backdrop-filter: blur(5px);
 }
-
-.sugestao-item:hover { background-color: var(--header-bg); color: var(--btn-primary); font-weight: bold; }
+.main-nav a {
+  color: var(--text-muted); text-decoration: none; font-size: 0.75rem;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+.main-nav a.active { color: var(--btn-primary); font-weight: bold; }
 
 /* ==========================================================================
-   SISTEMA DE GRIDS (TABELAS)
+   RESPONSIVIDADE (MOBILE)
    ========================================================================== */
-.list-header, .list-item {
-  display: grid;
-  align-items: center;
-  gap: 15px;
-  text-align: center;
-  margin-bottom: 10px;
-  padding: 15px;
-  border-radius: 10px;
-}
-
-.list-header { background: var(--header-bg); font-weight: bold; color: var(--text-color); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-
-.list-item { background: var(--item-bg); color: var(--white); box-shadow: var(--shadow-standard); transition: transform 0.2s; }
-
-.list-item:hover { transform: translateX(5px); }
-
-/* Colunas Desktop */
-.grid-ranking { grid-template-columns: 80px 3fr 1fr 1fr 1fr 1.2fr; }
-.grid-inscritos { grid-template-columns: 2fr 0.8fr 1.2fr 1fr 1.5fr; }
-
-/* HELPER CLASS: Alinhamento à esquerda para nomes */
-.text-left {
-  text-align: left !important;
-  padding-left: 15px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-/* ==========================================================================
-   ESTILOS INTERNOS DA LISTA
-   ========================================================================== */
-.list-item input, .list-item select {
-  background: var(--white);
-  color: #333;
-  padding: 8px;
-  font-size: 0.9em;
-  border: 1px solid transparent;
-}
-
-.list-item input:disabled, .list-item select:disabled {
-  background: transparent;
-  color: var(--white);
-  border: 1px solid transparent;
-  padding: 6px 0;
-  font-weight: bold;
-  cursor: default;
-  opacity: 1;
-  text-align: center; 
-  -webkit-appearance: none; 
-  appearance: none;
-}
-
-.text-left input:disabled { text-align: left; }
-
-.score-highlight { font-size: 1.4em; font-weight: bold; color: var(--highlight); text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
-
-.acoes { display: flex; gap: 8px; justify-content: center; }
-
-button {
-  padding: 14px 20px;
-  border-radius: 8px;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
-  transition: var(--transition-fast);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font-size: 1rem;
-}
-button:active { transform: scale(0.98); }
-button:disabled { opacity: 0.5; cursor: not-allowed; }
-
-.btn-editar { background: var(--btn-edit); color: #333; }
-.btn-salvar { background: var(--btn-save); color: white; }
-.btn-excluir { background: var(--btn-delete); color: white; }
-
-/* ==========================================================================
-   RESPONSIVIDADE E OTIMIZAÇÃO MOBILE
-   ========================================================================== */
-@media (max-width: 900px) { .container { width: 100%; } }
-
 @media (max-width: 768px) {
-  /* Some o cabeçalho da tabela */
-  .list-header { display: none; }
-
-  /* Se a tela for muito estreita, empilha os filtros */
-  @media (max-width: 350px) { .filters { grid-template-columns: 1fr; } }
-
-  /* MENU FIXO NO RODAPÉ */
-  .main-nav {
-    position: fixed;
-    bottom: 0; left: 0; width: 100%; margin: 0;
-    border-radius: 15px 15px 0 0;
-    background: rgba(255, 255, 255, 0.95);
-    padding: 10px 5px;
-    z-index: 1000;
-    justify-content: space-around;
-    box-shadow: 0 -5px 20px rgba(0,0,0,0.15);
+  
+  .hero-ranking-header { 
+    height: 350px; 
+    justify-content: flex-end; 
+    padding-bottom: 10px;
   }
   
-  .main-nav a { flex-direction: column; padding: 5px; font-size: 0.75em; background: transparent; gap: 2px; min-width: 60px; }
-  .main-nav a:hover, .main-nav a.active { background: transparent; color: var(--btn-primary); transform: none; }
+  .hero-title { font-size: 2.5rem; text-align: center; margin-bottom: 10px; }
+  .hero-subtitle { text-align: center; }
+  
+  /* Filtros em Grid Boxed */
+  .ranking-filters-bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(5px);
+    border-radius: 4px;
+    margin-top: 10px;
+  }
 
-  /* TABELAS EM PILHA VERTICAL (DESIGN ANTERIOR) */
-  .grid-ranking, .grid-inscritos { display: grid; grid-template-columns: 1fr; text-align: left; gap: 5px; padding: 20px; }
-  .grid-ranking > div, .grid-inscritos > div { grid-area: auto; border: none; background: transparent; padding: 0; margin: 0; }
+  .ranking-filter-item:nth-child(1) {
+    grid-column: span 2;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  }
 
-  /* Ajuste dos botões no mobile */
-  .acoes { display: flex; margin-top: 10px; gap: 10px; }
-  .acoes button { flex: 1; }
+  .ranking-filter-item:nth-child(2) {
+    border-right: 1px solid rgba(255, 255, 255, 0.3);
+    border-bottom: none;
+  }
 
-  /* Imagem menor no celular */
-  .hero-logo { height: auto; max-height: 200px; margin-bottom: 15px; }
+  .ranking-filter-item:nth-child(3) {
+    border-right: none;
+    border-bottom: none;
+  }
 
-  .list-item:hover { transform: none; } 
+  .ranking-filter-item { height: auto; min-height: 50px; }
+  .ranking-filter-item label { top: 4px; font-size: 0.6rem; opacity: 0.8; color: var(--btn-primary); }
+  .ranking-filter-item select { padding: 18px 5px 5px 10px; font-size: 0.85rem; }
+
+  /* --- CORREÇÃO DO CABEÇALHO DA TABELA --- */
+  
+  /* 1. Esconde o cabeçalho padrão para todas as listas... */
+  .list-header { display: none; }
+
+  /* 2. ...MAS força a exibição (Grid) SOMENTE para o Ranking */
+  .list-header.grid-ranking { 
+    display: grid; /* Traz de volta o header do ranking */
+    font-size: 0.75rem; 
+    padding: 10px 5px; 
+    /* Colunas idênticas aos itens da lista */
+    grid-template-columns: 30px 3fr 1fr 1fr 1fr 1.2fr;
+    gap: 5px;
+    background: #000; /* Fundo preto para destaque */
+    margin-top: 10px;
+  }
+
+  /* --- ITENS DA TABELA RANKING --- */
+  .list-item.grid-ranking {
+    display: grid;
+    grid-template-columns: 30px 3fr 1fr 1fr 1fr 1.2fr;
+    gap: 5px; padding: 15px 5px; font-size: 0.8rem;
+    align-items: center; border-radius: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .grid-ranking > div:nth-child(2) { white-space: normal; font-size: 0.85rem; line-height: 1.2; padding-left: 5px; }
+  .grid-ranking > div:nth-child(3), .grid-ranking > div:nth-child(4), .grid-ranking > div:nth-child(5) { font-size: 0.75rem; }
+
+  /* --- INSCRITOS (CARD) --- */
+  .list-item.grid-inscritos {
+    display: flex; flex-direction: column; align-items: flex-start;
+    text-align: left; gap: 5px; padding: 20px; margin-bottom: 10px;
+    border-radius: 8px; background: var(--card-bg);
+  }
+  .grid-inscritos > div { width: 100%; text-align: left; padding: 0; }
+  .list-item.grid-inscritos input, .list-item.grid-inscritos select { border-bottom: 1px solid rgba(255,255,255,0.1) !important; width: 100%; }
 }
