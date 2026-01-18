@@ -25,7 +25,7 @@
 
       <div class="input-group">
         <label>Confirme sua Data de Nascimento</label>
-        <input id="dataNascimentoLogin" type="tel" placeholder="DD/MM/AAAA" maxlength="10" oninput="UI.mascaraData(this)">
+        <input id="dataNascimentoLogin" type="date">
       </div>
 
       <button onclick="UI.validarAtleta()" class="btn-primary-action">Acessar Meus Resultados</button>
@@ -34,7 +34,7 @@
     <div id="formResultados" class="form-card" style="display: none;">
       <div style="text-align: center; margin-bottom: 20px;">
         <h3 id="nomeAtletaDisplay" style="color: var(--btn-primary); margin-bottom: 5px;"></h3>
-        <small style="color: #666;">Logado com sucesso</small>
+        <small style="color: #666;">Acesso Liberado</small>
       </div>
 
       <div class="input-group">
@@ -62,7 +62,7 @@
 
       <button onclick="lancarResultado()" class="btn-primary-action">Salvar Resultado</button>
       
-      <button onclick="location.reload()" style="background: transparent; border: 1px solid #ccc; color: #666; margin-top: 15px; width: 100%;">Sair / Trocar Atleta</button>
+      <button onclick="location.reload()" style="background: transparent; border: 1px solid #ccc; color: #666; margin-top: 15px; width: 100%; padding: 10px; border-radius: 8px;">Sair</button>
     </div>
 
     <nav class="main-nav">

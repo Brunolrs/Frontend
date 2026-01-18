@@ -57,15 +57,25 @@ const Data = {
   }
 };
 
-// --- CÁLCULOS ---
+// --- CÁLCULOS ROBUSTOS ---
 const Calc = {
-  getIdade(data) {
+  getIdade(dataString) {
+    // dataString deve vir no formato "AAAA-MM-DD"
+    if (!dataString) return 0;
+
+    // Divide a string para criar a data localmente (evita erros de UTC/Fuso)
+    const [ano, mes, dia] = dataString.split('-').map(Number);
+    
+    // Cria data com horário zerado no fuso local
+    const nasc = new Date(ano, mes - 1, dia);
     const hoje = new Date();
-    const nasc = new Date(data);
-    const nascCorrigido = new Date(nasc.getUTCFullYear(), nasc.getUTCMonth(), nasc.getUTCDate());
-    let idade = hoje.getFullYear() - nascCorrigido.getFullYear();
-    const m = hoje.getMonth() - nascCorrigido.getMonth();
-    if (m < 0 || (m === 0 && hoje.getDate() < nascCorrigido.getDate())) idade--;
+    
+    let idade = hoje.getFullYear() - nasc.getFullYear();
+    const m = hoje.getMonth() - nasc.getMonth();
+    
+    if (m < 0 || (m === 0 && hoje.getDate() < nasc.getDate())) {
+        idade--;
+    }
     return idade;
   },
 
@@ -122,21 +132,13 @@ const UI = {
     });
   },
 
-  mascaraData(input) {
-    let v = input.value;
-    v = v.replace(/\D/g, ""); 
-    if (v.length > 2) v = v.replace(/^(\d{2})(\d)/, "$1/$2");
-    if (v.length > 5) v = v.replace(/^(\d{2})\/(\d{2})(\d)/, "$1/$2/$3");
-    input.value = v;
-  },
-
   async cadastrarAtleta() {
     const btn = document.querySelector("button");
     btn.textContent = "Verificando...";
     btn.disabled = true;
 
     const nome = document.getElementById("nome").value;
-    let nascimento = document.getElementById("dataNascimento").value;
+    const nascimento = document.getElementById("dataNascimento").value; // Formato nativo AAAA-MM-DD
     const sexo = document.getElementById("sexo").value;
 
     if (!nome || !nascimento || !sexo) {
@@ -146,13 +148,7 @@ const UI = {
       return;
     }
 
-    if (nascimento.includes('/')) {
-        const partes = nascimento.split('/');
-        if (partes.length === 3) {
-            nascimento = `${partes[2]}-${partes[1]}-${partes[0]}`;
-        }
-    }
-
+    // --- VERIFICAÇÃO DE DUPLICIDADE ---
     const atletasExistentes = await Data.getAtletas();
     const duplicado = atletasExistentes.find(a => 
       a.nome.trim().toLowerCase() === nome.trim().toLowerCase() && 
@@ -278,7 +274,7 @@ const UI = {
         const div = document.createElement("div");
         div.className = "sugestao-item";
         div.innerHTML = `<strong>${a.nome}</strong> <small>(${a.sexo})</small>`;
-        div.onclick = () => this.selecionarAtleta(a.id, a.nome, a.nascimento); // Passamos a data também para validar
+        div.onclick = () => this.selecionarAtleta(a.id, a.nome, a.nascimento);
         listaDiv.appendChild(div);
       });
     } else {
@@ -286,46 +282,36 @@ const UI = {
     }
   },
 
-  // Guarda os dados no input hidden e na memória temporária para validar
   selecionarAtleta(id, nome, nascimento) {
     document.getElementById("buscaAtleta").value = nome;
     document.getElementById("atletaId").value = id;
-    
-    // Guardamos a data real num atributo data- para checar depois
     document.getElementById("atletaId").setAttribute("data-nasc-real", nascimento);
-    
     document.getElementById("listaSugestoes").style.display = "none";
   },
 
-  // --- NOVA FUNÇÃO DE VALIDAÇÃO DE SEGURANÇA ---
   validarAtleta() {
     const id = document.getElementById("atletaId").value;
-    const dataDigitada = document.getElementById("dataNascimentoLogin").value; // DD/MM/AAAA
-    const dataReal = document.getElementById("atletaId").getAttribute("data-nasc-real"); // AAAA-MM-DD
+    const dataDigitada = document.getElementById("dataNascimentoLogin").value; // Vem como AAAA-MM-DD
+    const dataReal = document.getElementById("atletaId").getAttribute("data-nasc-real"); // Vem como AAAA-MM-DD
 
     if (!id) {
         alert("Por favor, selecione seu nome na lista.");
         return;
     }
-    if (!dataDigitada || dataDigitada.length < 10) {
-        alert("Digite sua data de nascimento completa.");
+    if (!dataDigitada) {
+        alert("Informe sua data de nascimento.");
         return;
     }
 
-    // Converte a data digitada para o formato do banco (AAAA-MM-DD) para comparar
-    const partes = dataDigitada.split('/');
-    const dataFormatada = `${partes[2]}-${partes[1]}-${partes[0]}`;
-
-    if (dataFormatada === dataReal) {
-        // Sucesso! Esconde login e mostra resultados
+    // Comparação Direta e Segura
+    if (dataDigitada === dataReal) {
         document.getElementById("loginCard").style.display = "none";
         document.getElementById("formResultados").style.display = "block";
         document.getElementById("nomeAtletaDisplay").textContent = document.getElementById("buscaAtleta").value;
     } else {
-        alert("Data de nascimento incorreta! Verifique se digitou certo.");
+        alert("Data de nascimento incorreta!");
     }
   },
-  // ----------------------------------------------
 
   async lancarResultado() {
     const btn = document.querySelector("#formResultados button");
@@ -334,7 +320,7 @@ const UI = {
     const workout = document.getElementById("workout").value;
     const score = Number(document.getElementById("score").value);
 
-    if(!id) return alert("Erro de identificação. Recarregue a página.");
+    if(!id) return alert("Erro de identificação. Recarregue.");
 
     btn.textContent = "Enviando...";
     btn.disabled = true;
@@ -346,7 +332,7 @@ const UI = {
 
     await Data.updateAtleta(id, { resultados: resultadosAtuais });
 
-    alert("Resultado salvo com sucesso!");
+    alert("Resultado salvo!");
     location.reload(); 
   },
 
