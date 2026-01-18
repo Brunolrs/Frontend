@@ -33,6 +33,7 @@ body {
   padding-bottom: 100px;
 }
 
+/* Custom Scrollbar */
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: var(--bg-gradient-end); }
 ::-webkit-scrollbar-thumb { background: var(--item-bg); border-radius: 10px; }
@@ -50,7 +51,7 @@ h1 {
 }
 
 /* ==========================================================================
-   ESTILOS DE FORMULÁRIOS E FILTROS (CARD BRANCO)
+   ESTILOS DE FORMULÁRIOS E FILTROS
    ========================================================================== */
 .form-card {
   background: rgba(255, 255, 255, 0.95);
@@ -88,6 +89,7 @@ h1 {
 
 .input-group { margin-bottom: 20px; }
 
+/* Estilo Geral dos Inputs */
 input, select {
   padding: 14px;
   border-radius: 10px;
@@ -99,6 +101,20 @@ input, select {
   transition: all 0.3s ease;
   box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
 }
+
+/* --- CORREÇÃO ESPECÍFICA PARA DATA NO MOBILE --- */
+/* Isso força o celular a obedecer nosso estilo visual */
+input[type="date"] {
+  -webkit-appearance: none;
+  appearance: none;
+  min-height: 52px; /* Garante altura igual aos outros */
+  display: block;
+  font-family: inherit;
+  color: #333;
+  background-color: var(--input-bg);
+  line-height: normal; /* Alinha o texto verticalmente */
+}
+/* ----------------------------------------------- */
 
 input:focus, select:focus {
   outline: none;
@@ -211,7 +227,7 @@ input:focus, select:focus {
 .sugestao-item:hover { background-color: var(--header-bg); color: var(--btn-primary); font-weight: bold; }
 
 /* ==========================================================================
-   SISTEMA DE GRIDS
+   SISTEMA DE GRIDS (TABELAS)
    ========================================================================== */
 .list-header, .list-item {
   display: grid;
@@ -283,7 +299,7 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .btn-excluir { background: var(--btn-delete); color: white; }
 
 /* ==========================================================================
-   RESPONSIVIDADE E OTIMIZAÇÃO MOBILE
+   RESPONSIVIDADE
    ========================================================================== */
 @media (max-width: 900px) { .container { width: 100%; } }
 
