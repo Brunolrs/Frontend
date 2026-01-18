@@ -6,22 +6,35 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Lançar Resultados</title>
+  <title>Área do Atleta</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
-    <h1>Lançar Resultados</h1>
+    <h1>Área do Atleta</h1>
 
-    <div class="form-card">
+    <div id="loginCard" class="form-card">
+      <h3 style="text-align:center; color:var(--text-color); margin-bottom:15px;">Identifique-se</h3>
       
       <div class="input-group" style="position: relative;">
-        <label>Atleta</label>
-        
-        <input type="text" id="buscaAtleta" placeholder="Digite o nome para buscar..." autocomplete="off" oninput="UI.buscarAtleta(this.value)">
+        <label>Seu Nome</label>
+        <input type="text" id="buscaAtleta" placeholder="Digite seu nome..." autocomplete="off" oninput="UI.buscarAtleta(this.value)">
         <input type="hidden" id="atletaId">
-        
         <div id="listaSugestoes" class="lista-sugestoes"></div>
+      </div>
+
+      <div class="input-group">
+        <label>Confirme sua Data de Nascimento</label>
+        <input id="dataNascimentoLogin" type="tel" placeholder="DD/MM/AAAA" maxlength="10" oninput="UI.mascaraData(this)">
+      </div>
+
+      <button onclick="UI.validarAtleta()" class="btn-primary-action">Acessar Meus Resultados</button>
+    </div>
+
+    <div id="formResultados" class="form-card" style="display: none;">
+      <div style="text-align: center; margin-bottom: 20px;">
+        <h3 id="nomeAtletaDisplay" style="color: var(--btn-primary); margin-bottom: 5px;"></h3>
+        <small style="color: #666;">Logado com sucesso</small>
       </div>
 
       <div class="input-group">
@@ -44,17 +57,19 @@
 
       <div class="input-group">
         <label>Pontuação (Reps/Carga)</label>
-        <input id="score" type="number" placeholder="Digite o score...">
+        <input id="score" type="number" placeholder="Digite seu score...">
       </div>
 
       <button onclick="lancarResultado()" class="btn-primary-action">Salvar Resultado</button>
+      
+      <button onclick="location.reload()" style="background: transparent; border: 1px solid #ccc; color: #666; margin-top: 15px; width: 100%;">Sair / Trocar Atleta</button>
     </div>
 
     <nav class="main-nav">
       <a href="index.html">🏠 Home</a>
       <a href="cadastro.html">📝 Cadastro</a>
       <a href="inscritos.html">👥 Inscritos</a>
-      <a href="resultados.html" class="active">⏱️ Lançar Resultados</a>
+      <a href="resultados.html" class="active">⏱️ Área do Atleta</a>
       <a href="ranking.html">🥇 Ranking</a>
     </nav>    
   </div>

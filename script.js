@@ -60,21 +60,12 @@ const Data = {
 // --- CÁLCULOS ---
 const Calc = {
   getIdade(data) {
-    // Garante que a data string seja interpretada corretamente
-    // Se vier YYYY-MM-DD, o new Date funciona bem.
     const hoje = new Date();
     const nasc = new Date(data);
-    
-    // Tratamento de fuso horário simples para evitar erro de "1 dia a menos"
-    // Adicionamos horas para garantir que caia no dia certo ao converter
     const nascCorrigido = new Date(nasc.getUTCFullYear(), nasc.getUTCMonth(), nasc.getUTCDate());
-    
     let idade = hoje.getFullYear() - nascCorrigido.getFullYear();
     const m = hoje.getMonth() - nascCorrigido.getMonth();
-    
-    if (m < 0 || (m === 0 && hoje.getDate() < nascCorrigido.getDate())) {
-        idade--;
-    }
+    if (m < 0 || (m === 0 && hoje.getDate() < nascCorrigido.getDate())) idade--;
     return idade;
   },
 
@@ -131,46 +122,56 @@ const UI = {
     });
   },
 
-  // --- NOVA FUNÇÃO DE MÁSCARA PARA DATA ---
   mascaraData(input) {
     let v = input.value;
-    v = v.replace(/\D/g, ""); // Remove tudo que não é dígito
+    v = v.replace(/\D/g, ""); 
     if (v.length > 2) v = v.replace(/^(\d{2})(\d)/, "$1/$2");
     if (v.length > 5) v = v.replace(/^(\d{2})\/(\d{2})(\d)/, "$1/$2/$3");
     input.value = v;
   },
-  // -----------------------------------------
 
   async cadastrarAtleta() {
     const btn = document.querySelector("button");
-    btn.textContent = "Salvando...";
+    btn.textContent = "Verificando...";
     btn.disabled = true;
 
     const nome = document.getElementById("nome").value;
-    let nascimento = document.getElementById("dataNascimento").value; // Vem como DD/MM/AAAA
+    let nascimento = document.getElementById("dataNascimento").value;
     const sexo = document.getElementById("sexo").value;
 
     if (!nome || !nascimento || !sexo) {
-      alert("Preencha tudo!");
+      alert("Preencha todos os campos!");
       btn.textContent = "Finalizar Cadastro";
       btn.disabled = false;
       return;
     }
 
-    // --- CONVERSÃO DE DATA (DD/MM/AAAA -> AAAA-MM-DD) ---
     if (nascimento.includes('/')) {
         const partes = nascimento.split('/');
         if (partes.length === 3) {
-            // Transforma 17/01/2026 em 2026-01-17
             nascimento = `${partes[2]}-${partes[1]}-${partes[0]}`;
         }
     }
-    // ----------------------------------------------------
+
+    const atletasExistentes = await Data.getAtletas();
+    const duplicado = atletasExistentes.find(a => 
+      a.nome.trim().toLowerCase() === nome.trim().toLowerCase() && 
+      a.nascimento === nascimento
+    );
+
+    if (duplicado) {
+      alert("Este atleta já está cadastrado!");
+      btn.textContent = "Finalizar Cadastro";
+      btn.disabled = false;
+      return;
+    }
+
+    btn.textContent = "Salvando...";
 
     const novoAtleta = {
       id: Date.now(),
       nome,
-      nascimento, // Salva no formato ISO (AAAA-MM-DD)
+      nascimento,
       sexo,
       faixaEtaria: Calc.getFaixa(Calc.getIdade(nascimento)),
       resultados: []
@@ -277,7 +278,7 @@ const UI = {
         const div = document.createElement("div");
         div.className = "sugestao-item";
         div.innerHTML = `<strong>${a.nome}</strong> <small>(${a.sexo})</small>`;
-        div.onclick = () => this.selecionarAtleta(a.id, a.nome);
+        div.onclick = () => this.selecionarAtleta(a.id, a.nome, a.nascimento); // Passamos a data também para validar
         listaDiv.appendChild(div);
       });
     } else {
@@ -285,20 +286,55 @@ const UI = {
     }
   },
 
-  selecionarAtleta(id, nome) {
+  // Guarda os dados no input hidden e na memória temporária para validar
+  selecionarAtleta(id, nome, nascimento) {
     document.getElementById("buscaAtleta").value = nome;
     document.getElementById("atletaId").value = id;
+    
+    // Guardamos a data real num atributo data- para checar depois
+    document.getElementById("atletaId").setAttribute("data-nasc-real", nascimento);
+    
     document.getElementById("listaSugestoes").style.display = "none";
   },
 
+  // --- NOVA FUNÇÃO DE VALIDAÇÃO DE SEGURANÇA ---
+  validarAtleta() {
+    const id = document.getElementById("atletaId").value;
+    const dataDigitada = document.getElementById("dataNascimentoLogin").value; // DD/MM/AAAA
+    const dataReal = document.getElementById("atletaId").getAttribute("data-nasc-real"); // AAAA-MM-DD
+
+    if (!id) {
+        alert("Por favor, selecione seu nome na lista.");
+        return;
+    }
+    if (!dataDigitada || dataDigitada.length < 10) {
+        alert("Digite sua data de nascimento completa.");
+        return;
+    }
+
+    // Converte a data digitada para o formato do banco (AAAA-MM-DD) para comparar
+    const partes = dataDigitada.split('/');
+    const dataFormatada = `${partes[2]}-${partes[1]}-${partes[0]}`;
+
+    if (dataFormatada === dataReal) {
+        // Sucesso! Esconde login e mostra resultados
+        document.getElementById("loginCard").style.display = "none";
+        document.getElementById("formResultados").style.display = "block";
+        document.getElementById("nomeAtletaDisplay").textContent = document.getElementById("buscaAtleta").value;
+    } else {
+        alert("Data de nascimento incorreta! Verifique se digitou certo.");
+    }
+  },
+  // ----------------------------------------------
+
   async lancarResultado() {
-    const btn = document.querySelector("button");
+    const btn = document.querySelector("#formResultados button");
     const id = document.getElementById("atletaId").value;
     const rodada = Number(document.getElementById("rodada").value);
     const workout = document.getElementById("workout").value;
     const score = Number(document.getElementById("score").value);
 
-    if(!id) return alert("Por favor, selecione um atleta da lista de sugestões.");
+    if(!id) return alert("Erro de identificação. Recarregue a página.");
 
     btn.textContent = "Enviando...";
     btn.disabled = true;
@@ -310,7 +346,7 @@ const UI = {
 
     await Data.updateAtleta(id, { resultados: resultadosAtuais });
 
-    alert("Resultado salvo!");
+    alert("Resultado salvo com sucesso!");
     location.reload(); 
   },
 

@@ -33,19 +33,11 @@ body {
   padding-bottom: 100px;
 }
 
-/* Custom Scrollbar */
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: var(--bg-gradient-end); }
-::-webkit-scrollbar-thumb { 
-  background: var(--item-bg); 
-  border-radius: 10px; 
-}
+::-webkit-scrollbar-thumb { background: var(--item-bg); border-radius: 10px; }
 
-.container {
-  max-width: 1100px;
-  margin: auto;
-  padding: 0 20px; 
-}
+.container { max-width: 1100px; margin: auto; padding: 0 20px; }
 
 h1 {
   margin: 25px 0;
@@ -60,7 +52,6 @@ h1 {
 /* ==========================================================================
    ESTILOS DE FORMULÁRIOS E FILTROS (CARD BRANCO)
    ========================================================================== */
-/* Usado no Cadastro e no Lançar Resultados */
 .form-card {
   background: rgba(255, 255, 255, 0.95);
   padding: 25px;
@@ -71,10 +62,9 @@ h1 {
   color: var(--text-color);
 }
 
-/* Usado especificamente na página de Ranking */
 .filters {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Divide em 2 colunas iguais */
+  grid-template-columns: 1fr 1fr;
   gap: 15px;
   margin-bottom: 25px;
   background: rgba(255, 255, 255, 0.95);
@@ -84,14 +74,9 @@ h1 {
   color: var(--text-color);
 }
 
-.filters > div {
-  display: flex;
-  flex-direction: column;
-}
+.filters > div { display: flex; flex-direction: column; }
 
-/* Estilo comum para Labels (Formulários e Filtros) */
-.input-group label, 
-.filters label {
+.input-group label, .filters label {
   display: block;
   margin-bottom: 8px;
   font-weight: 700;
@@ -101,9 +86,7 @@ h1 {
   letter-spacing: 0.5px;
 }
 
-.input-group {
-  margin-bottom: 20px;
-}
+.input-group { margin-bottom: 20px; }
 
 input, select {
   padding: 14px;
@@ -124,7 +107,6 @@ input:focus, select:focus {
   box-shadow: 0 0 0 4px rgba(8, 60, 90, 0.1);
 }
 
-/* Botão Principal de Ação (Salvar/Cadastrar) */
 .btn-primary-action {
   background-color: var(--btn-primary);
   color: white;
@@ -141,10 +123,7 @@ input:focus, select:focus {
   cursor: pointer;
 }
 
-.btn-primary-action:active {
-  transform: scale(0.97);
-  box-shadow: 0 2px 5px rgba(8, 60, 90, 0.3);
-}
+.btn-primary-action:active { transform: scale(0.97); box-shadow: 0 2px 5px rgba(8, 60, 90, 0.3); }
 
 /* ==========================================================================
    ESTILO DA IMAGEM (LOGO)
@@ -203,7 +182,7 @@ input:focus, select:focus {
 }
 
 /* ==========================================================================
-   AUTOCOMPLETE (BUSCA DE ATLETA)
+   AUTOCOMPLETE
    ========================================================================== */
 .lista-sugestoes {
   position: absolute;
@@ -229,14 +208,10 @@ input:focus, select:focus {
   text-align: left;
 }
 
-.sugestao-item:hover {
-  background-color: var(--header-bg);
-  color: var(--btn-primary);
-  font-weight: bold;
-}
+.sugestao-item:hover { background-color: var(--header-bg); color: var(--btn-primary); font-weight: bold; }
 
 /* ==========================================================================
-   SISTEMA DE GRIDS (TABELAS)
+   SISTEMA DE GRIDS
    ========================================================================== */
 .list-header, .list-item {
   display: grid;
@@ -248,19 +223,9 @@ input:focus, select:focus {
   border-radius: 10px;
 }
 
-.list-header {
-  background: var(--header-bg);
-  font-weight: bold;
-  color: var(--text-color);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
+.list-header { background: var(--header-bg); font-weight: bold; color: var(--text-color); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 
-.list-item {
-  background: var(--item-bg);
-  color: var(--white);
-  box-shadow: var(--shadow-standard);
-  transition: transform 0.2s;
-}
+.list-item { background: var(--item-bg); color: var(--white); box-shadow: var(--shadow-standard); transition: transform 0.2s; }
 
 .list-item:hover { transform: translateX(5px); }
 
@@ -278,8 +243,7 @@ input:focus, select:focus {
   border: 1px solid transparent;
 }
 
-.list-item input:disabled, 
-.list-item select:disabled {
+.list-item input:disabled, .list-item select:disabled {
   background: transparent;
   color: var(--white);
   border: 1px solid transparent;
@@ -294,20 +258,10 @@ input:focus, select:focus {
 
 .text-left input:disabled { text-align: left; }
 
-.score-highlight {
-  font-size: 1.4em;
-  font-weight: bold;
-  color: var(--highlight);
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-}
+.score-highlight { font-size: 1.4em; font-weight: bold; color: var(--highlight); text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
 
-.acoes {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-}
+.acoes { display: flex; gap: 8px; justify-content: center; }
 
-/* Botões padrão da lista (Editar/Excluir) */
 button {
   padding: 14px 20px;
   border-radius: 8px;
@@ -331,24 +285,16 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 /* ==========================================================================
    RESPONSIVIDADE E OTIMIZAÇÃO MOBILE
    ========================================================================== */
-@media (max-width: 900px) {
-  .container { width: 100%; }
-}
+@media (max-width: 900px) { .container { width: 100%; } }
 
 @media (max-width: 768px) {
   .list-header { display: none; }
 
-  /* Filtros empilham se a tela for muito, muito pequena (opcional) */
-  @media (max-width: 350px) {
-    .filters { grid-template-columns: 1fr; }
-  }
+  @media (max-width: 350px) { .filters { grid-template-columns: 1fr; } }
 
   .main-nav {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    margin: 0;
+    bottom: 0; left: 0; width: 100%; margin: 0;
     border-radius: 15px 15px 0 0;
     background: rgba(255, 255, 255, 0.95);
     padding: 10px 5px;
@@ -357,50 +303,16 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
     box-shadow: 0 -5px 20px rgba(0,0,0,0.15);
   }
   
-  .main-nav a {
-    flex-direction: column;
-    padding: 5px;
-    font-size: 0.75em;
-    background: transparent;
-    gap: 2px;
-    min-width: 60px;
-  }
-  
-  .main-nav a:hover, .main-nav a.active {
-    background: transparent;
-    color: var(--btn-primary);
-    transform: none;
-  }
+  .main-nav a { flex-direction: column; padding: 5px; font-size: 0.75em; background: transparent; gap: 2px; min-width: 60px; }
+  .main-nav a:hover, .main-nav a.active { background: transparent; color: var(--btn-primary); transform: none; }
 
-  /* LEADERBOARD & INSCRITOS: Pilha Vertical Simples no Mobile */
-  .grid-ranking, .grid-inscritos {
-    display: grid;
-    grid-template-columns: 1fr; 
-    text-align: left;
-    gap: 5px;
-    padding: 20px;
-  }
-  
-  .grid-ranking > div, .grid-inscritos > div {
-    grid-area: auto; 
-    border: none;
-    background: transparent;
-    padding: 0;
-    margin: 0;
-  }
+  .grid-ranking, .grid-inscritos { display: grid; grid-template-columns: 1fr; text-align: left; gap: 5px; padding: 20px; }
+  .grid-ranking > div, .grid-inscritos > div { grid-area: auto; border: none; background: transparent; padding: 0; margin: 0; }
 
-  .acoes {
-    display: flex;
-    margin-top: 10px;
-    gap: 10px;
-  }
+  .acoes { display: flex; margin-top: 10px; gap: 10px; }
   .acoes button { flex: 1; }
 
-  .hero-logo {
-    height: auto; 
-    max-height: 200px; 
-    margin-bottom: 15px;
-  }
+  .hero-logo { height: auto; max-height: 200px; margin-bottom: 15px; }
 
   .list-item:hover { transform: none; } 
 }
