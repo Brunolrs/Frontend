@@ -6,24 +6,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Cadastro de Atletas</title>
+  
+  <link rel="icon" href="logo1.jpg" type="image/png">
+
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
     <h1>Cadastro de Atletas</h1>
-
     <div id="formCadastro" class="form-card">
       <div class="input-group">
         <label>Nome Completo</label>
         <input id="nome" placeholder="Ex: João da Silva">
       </div>
-      
       <div class="input-group">
         <label>Data de Nascimento</label>
-        <input type="tel" id="dataNascimento" placeholder="DD/MM/AAAA" maxlength="10" 
-               oninput="UI.mascaraData(this)">
+        <input type="tel" id="dataNascimento" placeholder="DD/MM/AAAA" maxlength="10" oninput="UI.mascaraData(this)">
       </div>
-
       <div class="input-group">
         <label>Sexo</label>
         <select id="sexo">
@@ -32,15 +31,13 @@
           <option value="F">Feminino</option>
         </select>
       </div>
-
       <button onclick="cadastrarAtleta()" class="btn-primary-action">Finalizar Cadastro</button>
     </div>
-
     <nav class="main-nav">
       <a href="index.html">🏠 Home</a>
       <a href="cadastro.html" class="active">📝 Cadastro</a>
       <a href="inscritos.html">👥 Inscritos</a>
-      <a href="resultados.html">⏱️Lançar Resultados</a>
+      <a href="resultados.html">⏱️ Lançar</a>
       <a href="ranking.html">🥇 Ranking</a>
     </nav>
   </div>

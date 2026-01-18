@@ -6,28 +6,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Área do Atleta</title>
+  
+  <link rel="icon" href="logo1.jpg" type="image/png">
+
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
     <h1>Área do Atleta</h1>
-
     <div id="loginCard" class="form-card">
       <h3 style="text-align:center; color:var(--text-color); margin-bottom:15px;">Identifique-se</h3>
-      
       <div class="input-group" style="position: relative;">
         <label>Seu Nome</label>
         <input type="text" id="buscaAtleta" placeholder="Digite seu nome..." autocomplete="off" oninput="UI.buscarAtleta(this.value)">
         <input type="hidden" id="atletaId">
         <div id="listaSugestoes" class="lista-sugestoes"></div>
       </div>
-
       <div class="input-group">
         <label>Confirme sua Data de Nascimento</label>
-        <input type="tel" id="dataNascimentoLogin" placeholder="DD/MM/AAAA" maxlength="10" 
-               oninput="UI.mascaraData(this)">
+        <input type="tel" id="dataNascimentoLogin" placeholder="DD/MM/AAAA" maxlength="10" oninput="UI.mascaraData(this)">
       </div>
-
       <button onclick="UI.validarAtleta()" class="btn-primary-action">Acessar Meus Resultados</button>
     </div>
 
@@ -36,39 +34,27 @@
         <h3 id="nomeAtletaDisplay" style="color: var(--btn-primary); margin-bottom: 5px;"></h3>
         <small style="color: #666;">Acesso Liberado</small>
       </div>
-
       <div class="input-group">
-        <label>Prova (Workout)</label>
-        <select id="rodada">
-          <option value="1">Workout 26.1</option>
-          <option value="2">Workout 26.2</option>
-          <option value="3">Workout 26.3</option>
-        </select>
+        <label>Prova</label>
+        <select id="rodada"><option value="1">Workout 26.1</option><option value="2">Workout 26.2</option><option value="3">Workout 26.3</option></select>
       </div>
-
       <div class="input-group">
-        <label>Categoria da Prova</label>
-        <select id="workout">
-          <option value="RX">RX (Padrão Oficial)</option>
-          <option value="SCALE">Scale (Adaptado)</option>
-          <option value="FOUNDATION">Foundation (Adaptado)</option>
-        </select>
+        <label>Categoria</label>
+        <select id="workout"><option value="RX">RX</option><option value="SCALE">Scale</option><option value="FOUNDATION">Foundation</option></select>
       </div>
-
       <div class="input-group">
-        <label>Pontuação (Reps/Carga)</label>
+        <label>Score</label>
         <input id="score" type="number" placeholder="Digite seu score...">
       </div>
-
-      <button onclick="lancarResultado()" class="btn-primary-action">Salvar Resultado</button>
-      <button onclick="location.reload()" style="background: transparent; border: 1px solid #ccc; color: #666; margin-top: 15px; width: 100%; padding: 10px; border-radius: 8px;">Sair</button>
+      <button onclick="lancarResultado()" class="btn-primary-action">Salvar</button>
+      <button onclick="location.reload()" style="background: transparent; border: 1px solid #ccc; margin-top: 15px; width: 100%; color: #999;">Sair</button>
     </div>
 
     <nav class="main-nav">
       <a href="index.html">🏠 Home</a>
       <a href="cadastro.html">📝 Cadastro</a>
       <a href="inscritos.html">👥 Inscritos</a>
-      <a href="resultados.html" class="active">⏱️ Área do Atleta</a>
+      <a href="resultados.html" class="active">⏱️ Lançar</a>
       <a href="ranking.html">🥇 Ranking</a>
     </nav>    
   </div>
