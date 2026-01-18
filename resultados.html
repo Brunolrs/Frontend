@@ -24,17 +24,8 @@
 
       <div class="input-group">
         <label>Confirme sua Data de Nascimento</label>
-        
-        <div class="date-wrapper">
-            <input type="tel" id="dataNascimentoLogin" placeholder="DD/MM/AAAA" maxlength="10" 
-                   oninput="UI.mascaraData(this)" data-picker-id="pickerLogin">
-            
-            <span class="calendar-icon">📅</span>
-            
-            <input type="date" id="pickerLogin" class="date-picker-trigger" 
-                   onchange="UI.syncDate(this)" data-text-id="dataNascimentoLogin">
-        </div>
-
+        <input type="tel" id="dataNascimentoLogin" placeholder="DD/MM/AAAA" maxlength="10" 
+               oninput="UI.mascaraData(this)">
       </div>
 
       <button onclick="UI.validarAtleta()" class="btn-primary-action">Acessar Meus Resultados</button>
@@ -81,7 +72,6 @@
       <a href="ranking.html">🥇 Ranking</a>
     </nav>    
   </div>
-  
   <script>document.addEventListener("DOMContentLoaded", () => UI.init());</script>
 </body>
 </html>

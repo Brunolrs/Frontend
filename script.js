@@ -34,31 +34,24 @@ const Data = {
   }
 };
 
-// --- CÁLCULOS ---
+// --- CÁLCULOS ROBUSTOS ---
 const Calc = {
-  // Função robusta que aceita AAAA-MM-DD ou DD/MM/AAAA
   getIdade(dataString) {
+    // Aceita tanto AAAA-MM-DD quanto DD/MM/AAAA por segurança
     if (!dataString) return 0;
     
     let ano, mes, dia;
 
-    // Se vier DD/MM/AAAA (do campo de texto)
     if (dataString.includes('/')) {
-        const partes = dataString.split('/');
-        dia = parseInt(partes[0]);
-        mes = parseInt(partes[1]);
-        ano = parseInt(partes[2]);
-    } 
-    // Se vier AAAA-MM-DD (do banco ou date picker)
-    else if (dataString.includes('-')) {
-        const partes = dataString.split('-');
-        ano = parseInt(partes[0]);
-        mes = parseInt(partes[1]);
-        dia = parseInt(partes[2]);
+        // Formato BR
+        [dia, mes, ano] = dataString.split('/').map(Number);
+    } else if (dataString.includes('-')) {
+        // Formato ISO
+        [ano, mes, dia] = dataString.split('-').map(Number);
     } else {
         return 0;
     }
-
+    
     const nasc = new Date(ano, mes - 1, dia);
     const hoje = new Date();
     
@@ -111,47 +104,24 @@ const UI = {
     });
   },
 
-  // --- MÁSCARA DE DATA (DIGITAÇÃO) ---
+  // --- NOVA FUNÇÃO: MÁSCARA DE DATA (DD/MM/AAAA) ---
   mascaraData(input) {
     let v = input.value;
-    v = v.replace(/\D/g, ""); 
+    v = v.replace(/\D/g, ""); // Remove tudo que não é número
+    
+    // Adiciona as barras automaticamente nos lugares certos
     if (v.length > 2) v = v.replace(/^(\d{2})(\d)/, "$1/$2");
     if (v.length > 5) v = v.replace(/^(\d{2})\/(\d{2})(\d)/, "$1/$2/$3");
-    input.value = v;
-
-    // Sincroniza com o Date Picker invisível (se a data for válida completa)
-    if (v.length === 10) {
-        const pickerId = input.getAttribute('data-picker-id');
-        if(pickerId) {
-            const partes = v.split('/');
-            // AAAA-MM-DD
-            const isoDate = `${partes[2]}-${partes[1]}-${partes[0]}`;
-            document.getElementById(pickerId).value = isoDate;
-        }
-    }
-  },
-
-  // --- SINCRONIZAÇÃO DO PICKER PARA O TEXTO ---
-  syncDate(picker) {
-    const textInputId = picker.getAttribute('data-text-id');
-    const isoDate = picker.value; // Vem AAAA-MM-DD
-    if (!isoDate) return;
-
-    const [ano, mes, dia] = isoDate.split('-');
-    // Converte para DD/MM/AAAA
-    const formattedDate = `${dia}/${mes}/${ano}`;
     
-    document.getElementById(textInputId).value = formattedDate;
+    input.value = v;
   },
 
-  // --- FORMATAÇÃO PARA SALVAR NO BANCO ---
+  // --- NOVA FUNÇÃO: CONVERTE DD/MM/AAAA PARA AAAA-MM-DD ---
   formatarDataParaBanco(dataBR) {
-      if (!dataBR) return "";
-      if (dataBR.includes('/')) {
-          const partes = dataBR.split('/');
-          return `${partes[2]}-${partes[1]}-${partes[0]}`;
-      }
-      return dataBR; // Já está em ISO ou formato desconhecido
+      if (!dataBR || dataBR.length !== 10) return "";
+      const partes = dataBR.split('/');
+      // Retorna AAAA-MM-DD
+      return `${partes[2]}-${partes[1]}-${partes[0]}`;
   },
 
   async cadastrarAtleta() {
@@ -160,19 +130,27 @@ const UI = {
     btn.disabled = true;
 
     const nome = document.getElementById("nome").value;
-    const nascimentoBR = document.getElementById("dataNascimento").value;
+    const nascimentoBR = document.getElementById("dataNascimento").value; // Agora vem com barras (DD/MM/AAAA)
     const sexo = document.getElementById("sexo").value;
 
-    if (!nome || !nascimentoBR || !sexo || nascimentoBR.length < 10) {
-      alert("Preencha todos os campos corretamente!");
+    if (!nome || !nascimentoBR || !sexo) {
+      alert("Preencha todos os campos!");
       btn.textContent = "Finalizar Cadastro";
       btn.disabled = false;
       return;
     }
 
+    if (nascimentoBR.length < 10) {
+      alert("Digite a data completa: Dia, Mês e Ano.");
+      btn.textContent = "Finalizar Cadastro";
+      btn.disabled = false;
+      return;
+    }
+
+    // Converte para salvar no banco
     const nascimentoISO = this.formatarDataParaBanco(nascimentoBR);
 
-    // Verificação de duplicidade
+    // --- VERIFICAÇÃO DE DUPLICIDADE ---
     const atletasExistentes = await Data.getAtletas();
     const duplicado = atletasExistentes.find(a => 
       a.nome.trim().toLowerCase() === nome.trim().toLowerCase() && 
@@ -180,7 +158,7 @@ const UI = {
     );
 
     if (duplicado) {
-      alert("Atleta já cadastrado!");
+      alert("Este atleta já está cadastrado!");
       btn.textContent = "Finalizar Cadastro";
       btn.disabled = false;
       return;
@@ -190,22 +168,20 @@ const UI = {
 
     const novoAtleta = {
       id: Date.now(),
-      nome: nome,
-      nascimento: nascimentoISO,
-      sexo: sexo,
-      faixa_etaria: Calc.getFaixa(Calc.getIdade(nascimentoISO)), // Usar campo correto do banco
+      nome,
+      nascimento: nascimentoISO, // Salva ISO
+      sexo,
+      faixaEtaria: Calc.getFaixa(Calc.getIdade(nascimentoISO)),
       resultados: []
     };
 
-    // Ajuste importante: O objeto para insert deve bater com as colunas do banco
-    // Se sua coluna no banco é 'faixa_etaria', o objeto JS deve ter essa chave.
     const error = await Data.addAtleta(novoAtleta);
 
     if (!error) {
       alert("Cadastrado com sucesso!");
       window.location.href = "inscritos.html";
     } else {
-      alert("Erro ao cadastrar: " + error.message);
+      alert("Erro ao cadastrar.");
       btn.textContent = "Finalizar Cadastro";
       btn.disabled = false;
     }
@@ -214,33 +190,81 @@ const UI = {
   async renderInscritos() {
     const container = document.getElementById("listaInscritos");
     container.innerHTML = "<p>Carregando...</p>";
+    
     const atletas = await Data.getAtletas();
     container.innerHTML = "";
+
     atletas.forEach(a => {
-      // Converte data ISO para BR na visualização
+      const faixa = a.faixa_etaria || a.faixaEtaria; 
+      
+      // Converte a data do banco (ISO) para exibir com barras (BR) na lista
       let nascDisplay = a.nascimento;
-      if(a.nascimento && a.nascimento.includes('-')) {
+      if (a.nascimento && a.nascimento.includes('-')) {
           const p = a.nascimento.split('-');
           nascDisplay = `${p[2]}/${p[1]}/${p[0]}`;
       }
 
       container.innerHTML += `
         <div class="list-item grid-inscritos">
-          <div class="text-left"><input value="${a.nome}" disabled></div>
-          <div><input value="${a.sexo}" disabled style="text-align:center; width:50px;"></div>
-          <div><input value="${nascDisplay}" disabled></div>
-          <div><strong>${a.faixa_etaria}</strong></div>
+          <div class="text-left"><input id="nome-${a.id}" value="${a.nome}" disabled></div>
+          <div>
+            <select id="sexo-${a.id}" disabled>
+              <option value="M" ${a.sexo === "M" ? "selected" : ""}>M</option>
+              <option value="F" ${a.sexo === "F" ? "selected" : ""}>F</option>
+            </select>
+          </div>
+          <div>
+            <input type="tel" id="nasc-${a.id}" value="${nascDisplay}" disabled maxlength="10" oninput="UI.mascaraData(this)">
+          </div>
+          <div><strong>${faixa}</strong></div>
           <div class="acoes">
-             <button style="background-color: var(--btn-delete);" onclick="UI.excluirAtleta(${a.id})">🗑️</button>
+            <button onclick="UI.toggleEdit(${a.id}, true)">✏️</button>
+            <button id="sv-${a.id}" style="display:none; background-color: var(--btn-save);" onclick="UI.salvarEdicao(${a.id})">💾</button>
+            <button style="background-color: var(--btn-delete);" onclick="UI.excluirAtleta(${a.id})">🗑️</button>
           </div>
         </div>`;
     });
   },
-  
+
+  toggleEdit(id, modo) {
+    ["nome", "sexo", "nasc"].forEach(campo => {
+      const el = document.getElementById(`${campo}-${id}`);
+      if(el) el.disabled = !modo;
+    });
+    const btnSave = document.getElementById(`sv-${id}`);
+    if(btnSave) btnSave.style.display = modo ? "inline-block" : "none";
+  },
+
+  async salvarEdicao(id) {
+    const novoNome = document.getElementById(`nome-${id}`).value;
+    const novoSexo = document.getElementById(`sexo-${id}`).value;
+    const nascBR = document.getElementById(`nasc-${id}`).value; // Lê formato BR
+    
+    // Converte BR -> ISO para salvar
+    const novoNascISO = this.formatarDataParaBanco(nascBR);
+    
+    if(!novoNascISO) {
+        alert("Data inválida na edição.");
+        return;
+    }
+
+    const novaFaixa = Calc.getFaixa(Calc.getIdade(novoNascISO));
+
+    await Data.updateAtleta(id, {
+      nome: novoNome,
+      sexo: novoSexo,
+      nascimento: novoNascISO,
+      faixa_etaria: novaFaixa
+    });
+
+    alert("Atualizado!");
+    this.renderInscritos();
+  },
+
   async excluirAtleta(id) {
-    if(confirm("Deseja realmente excluir?")) {
-        await Data.deleteAtleta(id);
-        this.renderInscritos();
+    if (confirm("Tem certeza?")) {
+      await Data.deleteAtleta(id);
+      this.renderInscritos();
     }
   },
 
@@ -252,11 +276,17 @@ const UI = {
   buscarAtleta(termo) {
     const listaDiv = document.getElementById("listaSugestoes");
     const idInput = document.getElementById("atletaId");
+    
     idInput.value = "";
 
-    if (!termo || termo.length === 0) { listaDiv.style.display = "none"; return; }
+    if (!termo || termo.length === 0) {
+      listaDiv.style.display = "none";
+      return;
+    }
 
-    const filtrados = this.atletasCache.filter(a => a.nome.toLowerCase().includes(termo.toLowerCase()));
+    const filtrados = this.atletasCache.filter(a => 
+      a.nome.toLowerCase().includes(termo.toLowerCase())
+    );
 
     listaDiv.innerHTML = "";
     if (filtrados.length > 0) {
@@ -268,27 +298,30 @@ const UI = {
         div.onclick = () => this.selecionarAtleta(a.id, a.nome, a.nascimento);
         listaDiv.appendChild(div);
       });
-    } else { listaDiv.style.display = "none"; }
+    } else {
+      listaDiv.style.display = "none";
+    }
   },
 
   selecionarAtleta(id, nome, nascimento) {
     document.getElementById("buscaAtleta").value = nome;
     document.getElementById("atletaId").value = id;
-    document.getElementById("atletaId").setAttribute("data-nasc-real", nascimento);
+    document.getElementById("atletaId").setAttribute("data-nasc-real", nascimento); // Guarda a data real (ISO)
     document.getElementById("listaSugestoes").style.display = "none";
   },
 
   validarAtleta() {
     const id = document.getElementById("atletaId").value;
-    const dataDigitada = document.getElementById("dataNascimentoLogin").value; // DD/MM/AAAA
-    const dataReal = document.getElementById("atletaId").getAttribute("data-nasc-real"); // AAAA-MM-DD
+    const dataDigitada = document.getElementById("dataNascimentoLogin").value; // Vem com barras (DD/MM/AAAA)
+    const dataReal = document.getElementById("atletaId").getAttribute("data-nasc-real"); // Vem ISO (AAAA-MM-DD)
 
-    if (!id) return alert("Selecione seu nome.");
-    if (dataDigitada.length < 10) return alert("Digite a data completa.");
+    if (!id) return alert("Por favor, selecione seu nome na lista.");
+    if (!dataDigitada || dataDigitada.length < 10) return alert("Digite sua data de nascimento completa.");
 
-    const dataFormatada = this.formatarDataParaBanco(dataDigitada);
+    // Converte a digitada para ISO para poder comparar
+    const dataDigitadaISO = this.formatarDataParaBanco(dataDigitada);
 
-    if (dataFormatada === dataReal) {
+    if (dataDigitadaISO === dataReal) {
         document.getElementById("loginCard").style.display = "none";
         document.getElementById("formResultados").style.display = "block";
         document.getElementById("nomeAtletaDisplay").textContent = document.getElementById("buscaAtleta").value;
@@ -304,7 +337,9 @@ const UI = {
     const workout = document.getElementById("workout").value;
     const score = Number(document.getElementById("score").value);
 
-    btn.textContent = "Salvando...";
+    if(!id) return alert("Erro de identificação. Recarregue.");
+
+    btn.textContent = "Enviando...";
     btn.disabled = true;
 
     const atleta = await Data.getAtletaById(id);
@@ -314,48 +349,60 @@ const UI = {
 
     await Data.updateAtleta(id, { resultados: resultadosAtuais });
 
-    alert("Salvo!");
+    alert("Resultado salvo!");
     location.reload(); 
   },
-  
+
   async renderRanking() {
-      // (Mantém a lógica de ranking original que já estava funcionando)
-      // Vou resumir aqui para não estourar o limite, mas mantenha a função renderRanking
-      // que você já tinha no código anterior, pois ela não muda com a data.
-      const container = document.getElementById("ranking");
-      if(!container) return;
-      
-      const fFaixa = document.getElementById("faixaFiltro").value;
-      const fSexo = document.getElementById("sexoFiltro").value;
-      let dados = await Data.getAtletas();
-      
-      dados = dados.filter(a => {
-        return (fFaixa === "GERAL" || a.faixa_etaria === fFaixa) &&
+    const container = document.getElementById("ranking");
+    if(!container) return;
+    container.innerHTML = "Carregando Leaderboard...";
+
+    const fFaixa = document.getElementById("faixaFiltro").value;
+    const fSexo = document.getElementById("sexoFiltro").value;
+
+    let dados = await Data.getAtletas();
+
+    dados = dados.filter(a => {
+        const faixa = a.faixa_etaria || a.faixaEtaria;
+        return (fFaixa === "GERAL" || faixa === fFaixa) &&
                (fSexo === "TODOS" || a.sexo === fSexo);
-      });
-      
-      dados.sort((a, b) => {
-          const resA = a.resultados || [];
-          const resB = b.resultados || [];
-          // (Lógica de ordenação idêntica à anterior)
-          return Calc.getScore(resB) - Calc.getScore(resA); // Simplificado para exemplo
-      });
-      
-      container.innerHTML = "";
-      dados.forEach((a, idx) => {
-          const res = a.resultados || [];
-          container.innerHTML += `
-            <div class="list-item grid-ranking">
-              <div class="posicao">${idx+1}º</div>
-              <div class="text-left"><strong>${a.nome}</strong><br><small>${a.sexo} • ${a.faixa_etaria}</small></div>
-              <div>${UI.getWodInfo(res, 1)}</div>
-              <div>${UI.getWodInfo(res, 2)}</div>
-              <div>${UI.getWodInfo(res, 3)}</div>
-              <div class="score-highlight">${Calc.getScore(res)}</div>
-            </div>`;
-      });
+    });
+
+    dados.sort((a, b) => {
+      const resA = a.resultados || [];
+      const resB = b.resultados || [];
+      const pesoA = Calc.getCategoriaPeso(resA);
+      const pesoB = Calc.getCategoriaPeso(resB);
+      if (pesoA !== pesoB) return pesoB - pesoA;
+      const rxA = Calc.countRX(resA);
+      const rxB = Calc.countRX(resB);
+      if (rxA !== rxB) return rxB - rxA;
+      const scA = Calc.countScale(resA);
+      const scB = Calc.countScale(resB);
+      if (scA !== scB) return scB - scA;
+      return Calc.getScore(resB) - Calc.getScore(resA);
+    });
+
+    container.innerHTML = "";
+    dados.forEach((a, idx) => {
+      const pos = idx + 1;
+      const medalha = pos === 1 ? "🥇" : pos === 2 ? "🥈" : pos === 3 ? "🥉" : "•";
+      const faixa = a.faixa_etaria || a.faixaEtaria;
+      const res = a.resultados || [];
+
+      container.innerHTML += `
+        <div class="list-item grid-ranking">
+          <div class="posicao"><span>${medalha}</span><br><small>${pos}º</small></div>
+          <div class="text-left"><strong>${a.nome}</strong><br><small>${a.sexo} • ${faixa} • ${Calc.getCategoriaLabel(res)}</small></div>
+          <div>${this.getWodInfo(res, 1)}</div>
+          <div>${this.getWodInfo(res, 2)}</div>
+          <div>${this.getWodInfo(res, 3)}</div>
+          <div class="score-highlight">${Calc.getScore(res)}</div>
+        </div>`;
+    });
   },
-  
+
   getWodInfo(resultados, rodada) {
     if(!resultados) return "-";
     const r = resultados.find(res => res.rodada === rodada);
@@ -363,8 +410,10 @@ const UI = {
   }
 };
 
+// GLOBAL BINDING
 window.cadastrarAtleta = () => UI.cadastrarAtleta();
 window.lancarResultado = () => UI.lancarResultado();
 window.mostrarRanking = () => UI.renderRanking();
 window.UI = UI;
+
 document.addEventListener("DOMContentLoaded", () => UI.init());

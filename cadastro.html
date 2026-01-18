@@ -20,17 +20,8 @@
       
       <div class="input-group">
         <label>Data de Nascimento</label>
-        
-        <div class="date-wrapper">
-            <input type="tel" id="dataNascimento" placeholder="DD/MM/AAAA" maxlength="10" 
-                   oninput="UI.mascaraData(this)" data-picker-id="pickerNasc">
-            
-            <span class="calendar-icon">📅</span>
-            
-            <input type="date" id="pickerNasc" class="date-picker-trigger" 
-                   onchange="UI.syncDate(this)" data-text-id="dataNascimento">
-        </div>
-
+        <input type="tel" id="dataNascimento" placeholder="DD/MM/AAAA" maxlength="10" 
+               oninput="UI.mascaraData(this)">
       </div>
 
       <div class="input-group">
@@ -53,7 +44,6 @@
       <a href="ranking.html">🥇 Ranking</a>
     </nav>
   </div>
-  
   <script>document.addEventListener("DOMContentLoaded", () => UI.init());</script>
 </body>
 </html>

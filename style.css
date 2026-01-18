@@ -13,7 +13,7 @@
   --btn-delete: #ef5350;
   --highlight: #ffeb3b; 
   --white: #ffffff;
-  --input-bg: #f8fafd;
+  --input-bg: #f8fafd; /* Fundo cinza claro para inputs */
   --shadow-standard: 0 4px 10px rgba(0,0,0,0.1);
   --transition-fast: all 0.2s ease;
 }
@@ -30,7 +30,7 @@ body {
   background: linear-gradient(180deg, var(--bg-gradient-start), var(--bg-gradient-end));
   min-height: 100vh;
   color: #ffffff;
-  padding-bottom: 100px;
+  padding-bottom: 100px; /* Espaço extra para o menu fixo não cobrir conteúdo */
 }
 
 /* Custom Scrollbar */
@@ -51,7 +51,7 @@ h1 {
 }
 
 /* ==========================================================================
-   ESTILOS DE FORMULÁRIOS E FILTROS
+   ESTILOS DE FORMULÁRIOS E CARDS
    ========================================================================== */
 .form-card {
   background: rgba(255, 255, 255, 0.95);
@@ -63,9 +63,10 @@ h1 {
   color: var(--text-color);
 }
 
+/* Filtros do Ranking (Lado a Lado) */
 .filters {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr; /* Divide em 2 colunas iguais */
   gap: 15px;
   margin-bottom: 25px;
   background: rgba(255, 255, 255, 0.95);
@@ -102,19 +103,18 @@ input, select {
   box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
 }
 
-/* --- CORREÇÃO ESPECÍFICA PARA DATA NO MOBILE --- */
-/* Isso força o celular a obedecer nosso estilo visual */
+/* CORREÇÃO CRÍTICA PARA DATA NO MOBILE */
+/* Remove o estilo nativo "feio" do iOS/Android e aplica o nosso */
 input[type="date"] {
   -webkit-appearance: none;
   appearance: none;
-  min-height: 52px; /* Garante altura igual aos outros */
+  min-height: 52px; /* Força altura igual aos campos de texto */
   display: block;
   font-family: inherit;
   color: #333;
   background-color: var(--input-bg);
-  line-height: normal; /* Alinha o texto verticalmente */
+  line-height: normal;
 }
-/* ----------------------------------------------- */
 
 input:focus, select:focus {
   outline: none;
@@ -123,6 +123,7 @@ input:focus, select:focus {
   box-shadow: 0 0 0 4px rgba(8, 60, 90, 0.1);
 }
 
+/* Botão de Ação Principal (Azul Grande) */
 .btn-primary-action {
   background-color: var(--btn-primary);
   color: white;
@@ -149,7 +150,7 @@ input:focus, select:focus {
   margin: 0 auto 25px auto; 
   width: 100%; 
   height: 400px; 
-  object-fit: cover; 
+  object-fit: cover; /* Corta excessos para manter proporção */
   border-radius: 15px; 
   filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)); 
   animation: fadeInDown 0.8s ease-out;
@@ -198,7 +199,7 @@ input:focus, select:focus {
 }
 
 /* ==========================================================================
-   AUTOCOMPLETE
+   AUTOCOMPLETE (BUSCA DE ATLETA)
    ========================================================================== */
 .lista-sugestoes {
   position: absolute;
@@ -245,8 +246,18 @@ input:focus, select:focus {
 
 .list-item:hover { transform: translateX(5px); }
 
+/* Colunas Desktop */
 .grid-ranking { grid-template-columns: 80px 3fr 1fr 1fr 1fr 1.2fr; }
 .grid-inscritos { grid-template-columns: 2fr 0.8fr 1.2fr 1fr 1.5fr; }
+
+/* HELPER CLASS: Alinhamento à esquerda para nomes */
+.text-left {
+  text-align: left !important;
+  padding-left: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 
 /* ==========================================================================
    ESTILOS INTERNOS DA LISTA
@@ -299,15 +310,18 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .btn-excluir { background: var(--btn-delete); color: white; }
 
 /* ==========================================================================
-   RESPONSIVIDADE
+   RESPONSIVIDADE E OTIMIZAÇÃO MOBILE
    ========================================================================== */
 @media (max-width: 900px) { .container { width: 100%; } }
 
 @media (max-width: 768px) {
+  /* Some o cabeçalho da tabela */
   .list-header { display: none; }
 
+  /* Se a tela for muito estreita, empilha os filtros */
   @media (max-width: 350px) { .filters { grid-template-columns: 1fr; } }
 
+  /* MENU FIXO NO RODAPÉ */
   .main-nav {
     position: fixed;
     bottom: 0; left: 0; width: 100%; margin: 0;
@@ -322,52 +336,16 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
   .main-nav a { flex-direction: column; padding: 5px; font-size: 0.75em; background: transparent; gap: 2px; min-width: 60px; }
   .main-nav a:hover, .main-nav a.active { background: transparent; color: var(--btn-primary); transform: none; }
 
+  /* TABELAS EM PILHA VERTICAL (DESIGN ANTERIOR) */
   .grid-ranking, .grid-inscritos { display: grid; grid-template-columns: 1fr; text-align: left; gap: 5px; padding: 20px; }
   .grid-ranking > div, .grid-inscritos > div { grid-area: auto; border: none; background: transparent; padding: 0; margin: 0; }
 
+  /* Ajuste dos botões no mobile */
   .acoes { display: flex; margin-top: 10px; gap: 10px; }
   .acoes button { flex: 1; }
 
+  /* Imagem menor no celular */
   .hero-logo { height: auto; max-height: 200px; margin-bottom: 15px; }
 
   .list-item:hover { transform: none; } 
-}
-
-/* ==========================================================================
-   ESTILO DO GRUPO DE DATA HÍBRIDO (DIGITAR + CALENDÁRIO)
-   ========================================================================== */
-.date-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  width: 100%;
-}
-
-/* O campo de texto onde o usuário digita */
-.date-wrapper input[type="tel"] {
-  width: 100%;
-  padding-right: 50px; /* Espaço para o ícone não ficar em cima do texto */
-  z-index: 1;
-}
-
-/* O ícone visual de calendário */
-.calendar-icon {
-  position: absolute;
-  right: 15px;
-  font-size: 1.2rem;
-  color: var(--btn-primary);
-  z-index: 2;
-  pointer-events: none; /* Deixa o clique passar para o input invisível */
-}
-
-/* O input de data REAL (Invisível, mas clicável em cima do ícone) */
-.date-picker-trigger {
-  position: absolute;
-  right: 0;
-  top: 0;
-  height: 100%;
-  width: 60px; /* Largura da área clicável do calendário */
-  opacity: 0; /* Invisível */
-  z-index: 3; /* Fica por cima de tudo na direita */
-  cursor: pointer;
 }
