@@ -60,13 +60,21 @@ const Data = {
 // --- CÁLCULOS ---
 const Calc = {
   getIdade(data) {
+    // Garante que a data string seja interpretada corretamente
+    // Se vier YYYY-MM-DD, o new Date funciona bem.
     const hoje = new Date();
     const nasc = new Date(data);
-    let idade = hoje.getFullYear() - nasc.getFullYear();
-    if (
-      hoje.getMonth() < nasc.getMonth() ||
-      (hoje.getMonth() === nasc.getMonth() && hoje.getDate() < nasc.getDate())
-    ) idade--;
+    
+    // Tratamento de fuso horário simples para evitar erro de "1 dia a menos"
+    // Adicionamos horas para garantir que caia no dia certo ao converter
+    const nascCorrigido = new Date(nasc.getUTCFullYear(), nasc.getUTCMonth(), nasc.getUTCDate());
+    
+    let idade = hoje.getFullYear() - nascCorrigido.getFullYear();
+    const m = hoje.getMonth() - nascCorrigido.getMonth();
+    
+    if (m < 0 || (m === 0 && hoje.getDate() < nascCorrigido.getDate())) {
+        idade--;
+    }
     return idade;
   },
 
@@ -112,11 +120,9 @@ const UI = {
 
   async init() {
     if (document.getElementById("listaInscritos")) await this.renderInscritos();
-    // Verifica se estamos na página de resultados pelo ID do input de busca
     if (document.getElementById("buscaAtleta")) await this.initResultados();
     if (document.getElementById("ranking")) await this.renderRanking();
     
-    // Fecha a lista se clicar fora
     document.addEventListener('click', (e) => {
         if (!e.target.closest('.input-group')) {
             const lista = document.getElementById("listaSugestoes");
@@ -125,13 +131,23 @@ const UI = {
     });
   },
 
+  // --- NOVA FUNÇÃO DE MÁSCARA PARA DATA ---
+  mascaraData(input) {
+    let v = input.value;
+    v = v.replace(/\D/g, ""); // Remove tudo que não é dígito
+    if (v.length > 2) v = v.replace(/^(\d{2})(\d)/, "$1/$2");
+    if (v.length > 5) v = v.replace(/^(\d{2})\/(\d{2})(\d)/, "$1/$2/$3");
+    input.value = v;
+  },
+  // -----------------------------------------
+
   async cadastrarAtleta() {
     const btn = document.querySelector("button");
     btn.textContent = "Salvando...";
     btn.disabled = true;
 
     const nome = document.getElementById("nome").value;
-    const nascimento = document.getElementById("dataNascimento").value;
+    let nascimento = document.getElementById("dataNascimento").value; // Vem como DD/MM/AAAA
     const sexo = document.getElementById("sexo").value;
 
     if (!nome || !nascimento || !sexo) {
@@ -141,10 +157,20 @@ const UI = {
       return;
     }
 
+    // --- CONVERSÃO DE DATA (DD/MM/AAAA -> AAAA-MM-DD) ---
+    if (nascimento.includes('/')) {
+        const partes = nascimento.split('/');
+        if (partes.length === 3) {
+            // Transforma 17/01/2026 em 2026-01-17
+            nascimento = `${partes[2]}-${partes[1]}-${partes[0]}`;
+        }
+    }
+    // ----------------------------------------------------
+
     const novoAtleta = {
       id: Date.now(),
       nome,
-      nascimento,
+      nascimento, // Salva no formato ISO (AAAA-MM-DD)
       sexo,
       faixaEtaria: Calc.getFaixa(Calc.getIdade(nascimento)),
       resultados: []
@@ -224,9 +250,7 @@ const UI = {
     }
   },
 
-  // --- NOVA LÓGICA DE AUTOCOMPLETE ---
   async initResultados() {
-    // Carrega dados e salva no Cache
     this.atletasCache = await Data.getAtletas();
     this.atletasCache.sort((a,b) => a.nome.localeCompare(b.nome));
   },
@@ -235,7 +259,6 @@ const UI = {
     const listaDiv = document.getElementById("listaSugestoes");
     const idInput = document.getElementById("atletaId");
     
-    // Se o usuário altera o texto, limpamos o ID selecionado anteriormente
     idInput.value = "";
 
     if (!termo || termo.length === 0) {
@@ -243,12 +266,10 @@ const UI = {
       return;
     }
 
-    // Filtra
     const filtrados = this.atletasCache.filter(a => 
       a.nome.toLowerCase().includes(termo.toLowerCase())
     );
 
-    // Renderiza sugestões
     listaDiv.innerHTML = "";
     if (filtrados.length > 0) {
       listaDiv.style.display = "block";
@@ -256,7 +277,6 @@ const UI = {
         const div = document.createElement("div");
         div.className = "sugestao-item";
         div.innerHTML = `<strong>${a.nome}</strong> <small>(${a.sexo})</small>`;
-        // Ao clicar, seleciona o atleta
         div.onclick = () => this.selecionarAtleta(a.id, a.nome);
         listaDiv.appendChild(div);
       });
@@ -270,11 +290,9 @@ const UI = {
     document.getElementById("atletaId").value = id;
     document.getElementById("listaSugestoes").style.display = "none";
   },
-  // ------------------------------------
 
   async lancarResultado() {
     const btn = document.querySelector("button");
-    // Agora pegamos o ID do campo oculto
     const id = document.getElementById("atletaId").value;
     const rodada = Number(document.getElementById("rodada").value);
     const workout = document.getElementById("workout").value;
@@ -353,7 +371,6 @@ const UI = {
   }
 };
 
-// GLOBAL BINDING
 window.cadastrarAtleta = () => UI.cadastrarAtleta();
 window.lancarResultado = () => UI.lancarResultado();
 window.mostrarRanking = () => UI.renderRanking();
