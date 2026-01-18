@@ -3,7 +3,6 @@
 <head>
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script src="script.js"></script>
- 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Cadastro de Atletas</title>
@@ -21,7 +20,17 @@
       
       <div class="input-group">
         <label>Data de Nascimento</label>
-        <input id="dataNascimento" type="date">
+        
+        <div class="date-wrapper">
+            <input type="tel" id="dataNascimento" placeholder="DD/MM/AAAA" maxlength="10" 
+                   oninput="UI.mascaraData(this)" data-picker-id="pickerNasc">
+            
+            <span class="calendar-icon">📅</span>
+            
+            <input type="date" id="pickerNasc" class="date-picker-trigger" 
+                   onchange="UI.syncDate(this)" data-text-id="dataNascimento">
+        </div>
+
       </div>
 
       <div class="input-group">
@@ -45,8 +54,6 @@
     </nav>
   </div>
   
-  <script>
-    document.addEventListener("DOMContentLoaded", () => UI.init());
-  </script>
+  <script>document.addEventListener("DOMContentLoaded", () => UI.init());</script>
 </body>
 </html>

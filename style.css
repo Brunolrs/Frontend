@@ -332,3 +332,42 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 
   .list-item:hover { transform: none; } 
 }
+
+/* ==========================================================================
+   ESTILO DO GRUPO DE DATA HÍBRIDO (DIGITAR + CALENDÁRIO)
+   ========================================================================== */
+.date-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+/* O campo de texto onde o usuário digita */
+.date-wrapper input[type="tel"] {
+  width: 100%;
+  padding-right: 50px; /* Espaço para o ícone não ficar em cima do texto */
+  z-index: 1;
+}
+
+/* O ícone visual de calendário */
+.calendar-icon {
+  position: absolute;
+  right: 15px;
+  font-size: 1.2rem;
+  color: var(--btn-primary);
+  z-index: 2;
+  pointer-events: none; /* Deixa o clique passar para o input invisível */
+}
+
+/* O input de data REAL (Invisível, mas clicável em cima do ícone) */
+.date-picker-trigger {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 60px; /* Largura da área clicável do calendário */
+  opacity: 0; /* Invisível */
+  z-index: 3; /* Fica por cima de tudo na direita */
+  cursor: pointer;
+}
