@@ -62,16 +62,14 @@ const Calc = {
     return "40+";
   },
 
+  // Contadores de Categoria
   countRX(res) { if (!res) return 0; return res.filter(r => r.workout === "RX").length; },
   countScale(res) { if (!res) return 0; return res.filter(r => r.workout === "SCALE").length; },
+  
+  // Soma de Pontos
   getScore(res) { if (!res) return 0; return res.reduce((acc, r) => acc + Number(r.score), 0); },
   
-  getCategoriaPeso(res) {
-    if (this.countRX(res) > 0) return 3;
-    if (this.countScale(res) > 0) return 2;
-    return 1; 
-  },
-  
+  // Rótulo Visual (Apenas para exibir na tela)
   getCategoriaLabel(res) {
     if (this.countRX(res) > 0) return "RX";
     if (this.countScale(res) > 0) return "SCALE";
@@ -294,9 +292,8 @@ const UI = {
     alert("Resultado salvo!"); location.reload(); 
   },
 
-// --- RENDERIZAÇÃO DO RANKING (ATUALIZADA PARA ACORDEÃO) ---
-
-async renderRanking() {
+  // --- RENDERIZAÇÃO DO RANKING (LÓGICA CORRIGIDA) ---
+  async renderRanking() {
     const container = document.getElementById("ranking");
     if(!container) return;
     container.innerHTML = "Carregando Leaderboard...";
@@ -306,18 +303,31 @@ async renderRanking() {
 
     let dados = await Data.getAtletas();
 
+    // Filtros
     dados = dados.filter(a => {
         return (fFaixa === "GERAL" || a.faixa_etaria === fFaixa) &&
                (fSexo === "TODOS" || a.sexo === fSexo);
     });
 
+    // --- NOVA ORDENAÇÃO (Critério: Quantidade de RX > Quantidade de Scale > Pontos) ---
     dados.sort((a, b) => {
       const resA = a.resultados || [];
       const resB = b.resultados || [];
-      const pesoA = Calc.getCategoriaPeso(resA);
-      const pesoB = Calc.getCategoriaPeso(resB);
-      if (pesoA !== pesoB) return pesoB - pesoA;
-      return Calc.getScore(resB) - Calc.getScore(a.resultados);
+      
+      // 1. Quem fez MAIS workouts RX ganha
+      const rxA = Calc.countRX(resA);
+      const rxB = Calc.countRX(resB);
+      if (rxA !== rxB) return rxB - rxA; // Maior quantidade primeiro
+
+      // 2. Se empatou no RX, quem fez MAIS workouts SCALE ganha
+      const scaleA = Calc.countScale(resA);
+      const scaleB = Calc.countScale(resB);
+      if (scaleA !== scaleB) return scaleB - scaleA;
+
+      // 3. Se empatou em tudo, quem tem MAIOR pontuação ganha
+      const scoreA = Calc.getScore(resA);
+      const scoreB = Calc.getScore(resB);
+      return scoreB - scoreA;
     });
 
     container.innerHTML = "";
@@ -326,8 +336,6 @@ async renderRanking() {
       const medalha = pos === 1 ? "🥇" : pos === 2 ? "🥈" : pos === 3 ? "🥉" : `${pos}º`;
       const res = a.resultados || [];
       
-      // REMOVIDO: const setaExpandir = `<span class="seta-mobile">▼</span>`;
-
       container.innerHTML += `
         <div class="list-item grid-ranking" onclick="UI.toggleRankDetails(${a.id})">
           <div class="posicao">${medalha}</div>
@@ -352,18 +360,17 @@ async renderRanking() {
     });
   },
 
-  // Função Toggle (Manteve igual)
   toggleRankDetails(id) {
-    if (window.innerWidth > 768) return; // Só funciona no mobile
+    if (window.innerWidth > 768) return; 
     const detalhes = document.getElementById(`detalhes-${id}`);
     const linha = detalhes.previousElementSibling;
 
     if (detalhes.style.display === "none") {
-        detalhes.style.display = "grid"; // Abre como GRID
-        linha.style.background = "rgba(0, 174, 239, 0.1)"; // Destaque visual
+        detalhes.style.display = "grid"; 
+        linha.style.background = "rgba(0, 174, 239, 0.1)"; 
     } else {
         detalhes.style.display = "none";
-        linha.style.background = "var(--card-bg)"; // Volta ao normal
+        linha.style.background = "var(--card-bg)";
     }
   },
 
