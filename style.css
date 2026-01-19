@@ -1,7 +1,6 @@
 /* ==========================================================================
    VARIÁVEIS E TEMA (DARK MODE GLOBAL)
    ========================================================================== */
-
 :root {
   --bg-color: #0f172a; 
   --card-bg: #1e293b;
@@ -30,13 +29,14 @@ body {
   background-color: var(--bg-color);
   color: var(--text-color);
   min-height: 100vh;
-  padding-bottom: 100px;
+  padding-bottom: 100px; /* Espaço para a nav fixa não cobrir conteúdo */
 }
 
 .container { 
   max-width: 1100px; 
   margin: 0 auto; 
-  padding: 0 20px; }
+  padding: 0 20px; 
+}
 
 h1 {
   text-align: center; 
@@ -48,9 +48,75 @@ h1 {
 }
 
 /* ==========================================================================
+   NAVEGAÇÃO INFERIOR (ESTILO PILL / APP MODERNO)
+   ========================================================================== */
+.main-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #0f172a; /* Fundo escuro sólido */
+  padding: 10px 15px 20px 15px; /* Padding extra embaixo para iOS */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 1000;
+  box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  flex: 1;
+}
+
+/* Container do ícone (A "Pílula") */
+.nav-icon-container {
+  width: 50px;
+  height: 30px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: transparent; /* Transparente quando inativo */
+}
+
+/* Ícone SVG */
+.nav-icon-container svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--text-muted);
+  transition: fill 0.3s ease;
+}
+
+/* --- ESTADO ATIVO (SELECIONADO) --- */
+.nav-item.active {
+  color: white; 
+}
+
+.nav-item.active .nav-icon-container {
+  background-color: var(--btn-primary); /* Fundo CIANO */
+  width: 55px; /* Expande levemente */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 174, 239, 0.4);
+}
+
+.nav-item.active .nav-icon-container svg {
+  fill: #0f172a; /* Ícone fica ESCURO para contraste */
+}
+
+/* ==========================================================================
    ESTILOS ESPECÍFICOS DA HOME
    ========================================================================== */
-
 .hero-logo {
   display: block;
   width: 100%; 
@@ -124,7 +190,6 @@ h1 {
 /* ==========================================================================
    ESTILOS DO RANKING (HERO GAMES)
    ========================================================================== */
-   
 .hero-ranking-wrapper {
   position: relative; 
   width: 100%; 
@@ -137,43 +202,27 @@ h1 {
   justify-content: flex-end;
   padding: 20px; 
   margin-bottom: 30px;
-
 }
 
 .hero-overlay {
   position: absolute; 
-  top: 0; 
-  left: 0; 
-  width: 100%; 
-  height: 100%;
+  top: 0; left: 0; width: 100%; height: 100%;
   background: linear-gradient(to bottom, rgba(15, 23, 42, 0.2), rgba(15, 23, 42, 1)); 
   z-index: 1;
 }
 
 .hero-content { 
-  position: relative; 
-  z-index: 2; 
-  width: 100%; 
-  max-width: 1100px; 
-  margin: 0 auto; 
+  position: relative; z-index: 2; width: 100%; max-width: 1100px; margin: 0 auto; 
 }
 
 .hero-title {
-  font-size: 3.5rem; 
-  font-weight: 900; 
-  text-transform: uppercase;
-  line-height: 1; 
-  margin-bottom: 20px; 
-  text-shadow: 0 4px 10px rgba(0,0,0,0.8);
-
+  font-size: 3.5rem; font-weight: 900; text-transform: uppercase;
+  line-height: 1; margin-bottom: 20px; text-shadow: 0 4px 10px rgba(0,0,0,0.8);
 }
+
 .hero-subtitle {
-  font-size: 1rem; 
-  font-weight: 700; 
-  text-transform: uppercase;
-  color: var(--btn-primary); 
-  margin-bottom: 5px; 
-  letter-spacing: 2px;
+  font-size: 1rem; font-weight: 700; text-transform: uppercase;
+  color: var(--btn-primary); margin-bottom: 5px; letter-spacing: 2px;
 }
 
 /* FILTROS RANKING (TRANSPARENTE) */
@@ -186,264 +235,104 @@ h1 {
 }
 
 .ranking-filter-item { 
-  flex: 1; 
-  border-right: 1px solid var(--border-color); 
-  position: relative; 
+  flex: 1; border-right: 1px solid var(--border-color); position: relative; 
 }
-
-.ranking-filter-item:last-child { 
-  border-right: none; 
-}
+.ranking-filter-item:last-child { border-right: none; }
 
 .ranking-filter-item label {
-  position: absolute; 
-  top: 8px; 
-  left: 15px; 
-  font-size: 0.65rem; 
-  color: var(--btn-primary);
-  text-transform: uppercase; 
-  font-weight: bold;
+  position: absolute; top: 8px; left: 15px; font-size: 0.65rem; color: var(--btn-primary);
+  text-transform: uppercase; font-weight: bold;
 }
 
 .ranking-filter-item select {
-  width: 100%; 
-  background: transparent; 
-  border: none; 
-  color: white;
-  padding: 25px 15px 10px 15px; 
-  font-size: 0.9rem; 
-  font-weight: bold;
-  text-transform: uppercase; 
-  cursor: pointer; 
-  -webkit-appearance: none;
+  width: 100%; background: transparent; border: none; color: white;
+  padding: 25px 15px 10px 15px; font-size: 0.9rem; font-weight: bold;
+  text-transform: uppercase; cursor: pointer; -webkit-appearance: none;
 }
-.ranking-filter-item select option { 
-  background-color: var(--bg-color); 
-  color: white; }
+.ranking-filter-item select option { background-color: var(--bg-color); color: white; }
 
 /* ==========================================================================
    FORMULÁRIOS E GERAIS
    ========================================================================== */
-
 .form-card {
-  background: var(--card-bg); 
-  padding: 30px; 
-  border-radius: 16px;
-  box-shadow: var(--shadow); 
-  border: 1px solid var(--border-color);
-  max-width: 500px; 
-  margin: 0 auto;
+  background: var(--card-bg); padding: 30px; border-radius: 16px;
+  box-shadow: var(--shadow); border: 1px solid var(--border-color);
+  max-width: 500px; margin: 0 auto;
 }
-.input-group { 
-  margin-bottom: 20px; 
-}
-
+.input-group { margin-bottom: 20px; }
 .input-group label {
-  display: block; 
-  margin-bottom: 8px; 
-  font-size: 0.85rem;
-  color: var(--btn-primary); 
-  font-weight: 700; 
-  text-transform: uppercase;
+  display: block; margin-bottom: 8px; font-size: 0.85rem;
+  color: var(--btn-primary); font-weight: 700; text-transform: uppercase;
 }
 input, select {
-  width: 100%; 
-  padding: 14px; 
-  border-radius: 8px; 
-  border: 1px solid var(--border-color);
-  background-color: var(--input-bg); 
-  color: white; 
-  font-size: 1rem; 
-  transition: all 0.2s;
+  width: 100%; padding: 14px; border-radius: 8px; border: 1px solid var(--border-color);
+  background-color: var(--input-bg); color: white; font-size: 1rem; transition: all 0.2s;
 }
-
-input:focus, select:focus { 
-  outline: none; 
-  border-color: var(--btn-primary); 
-  background-color: rgba(0,0,0,0.5); 
-}
-
-input[type="date"], 
-input[type="tel"] { 
-  min-height: 52px; 
-  display: block; 
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator { 
-  filter: invert(1); 
-}
+input:focus, select:focus { outline: none; border-color: var(--btn-primary); background-color: rgba(0,0,0,0.5); }
+input[type="date"], input[type="tel"] { min-height: 52px; display: block; }
+input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
 
 .btn-primary-action, button {
-  background-color: var(--btn-primary); 
-  color: #000; 
-  width: 100%; 
-  padding: 16px;
-  font-size: 1rem; 
-  text-transform: uppercase; 
-  font-weight: 900;
-  border: none; 
-  border-radius: 8px; 
-  cursor: pointer; 
-  margin-top: 10px;
+  background-color: var(--btn-primary); color: #000; width: 100%; padding: 16px;
+  font-size: 1rem; text-transform: uppercase; font-weight: 900;
+  border: none; border-radius: 8px; cursor: pointer; margin-top: 10px;
 }
-.acoes button { 
-  width: auto; 
-  padding: 8px 12px; 
-  margin: 0 2px; }
+.acoes button { width: auto; padding: 8px 12px; margin: 0 2px; }
 
 /* ==========================================================================
    TABELAS
    ========================================================================== */
-
 .list-header {
-  background: black; 
-  color: white; 
-  padding: 15px; 
-  font-weight: 900;
-  text-transform: uppercase; 
-  font-size: 0.9rem; 
-  border-top: 4px solid var(--btn-primary);
-  display: grid; 
-  align-items: center; 
-  gap: 10px;
+  background: black; color: white; padding: 15px; font-weight: 900;
+  text-transform: uppercase; font-size: 0.9rem; border-top: 4px solid var(--btn-primary);
+  display: grid; align-items: center; gap: 10px;
 }
 .list-item {
-  background: var(--card-bg); 
-  padding: 15px; 
-  align-items: center; 
-  margin-bottom: 4px;
-  border-bottom: 1px solid var(--border-color); 
-  display: grid; 
-  gap: 10px; 
-  color: white; 
-  transition: transform 0.2s;
+  background: var(--card-bg); padding: 15px; align-items: center; margin-bottom: 4px;
+  border-bottom: 1px solid var(--border-color); display: grid; gap: 10px; color: white; transition: transform 0.2s;
 }
+.list-item:hover { transform: translateX(5px); border-left: 3px solid var(--btn-primary); }
 
-.list-item:hover { 
-  transform: translateX(5px); 
-  border-left: 3px solid var(--btn-primary); }
+.grid-ranking { grid-template-columns: 60px 4fr 1fr 1fr 1fr 1fr; text-align: center; }
+.grid-ranking > div:nth-child(2) { text-align: left; padding-left: 10px; }
+.grid-ranking > div:nth-child(6) { font-weight: bold; color: var(--btn-primary); font-size: 1.1em; }
 
-.grid-ranking { 
-  grid-template-columns: 60px 4fr 1fr 1fr 1fr 1fr; 
-  text-align: center; 
-}
-.grid-ranking > div:nth-child(2) { 
-  text-align: left; 
-  padding-left: 10px; 
-}
-.grid-ranking > div:nth-child(6) { 
-  font-weight: bold; 
-  color: var(--btn-primary); 
-  font-size: 1.1em; }
-
-.grid-inscritos { 
-  grid-template-columns: 2fr 0.5fr 1fr 1fr 1fr; 
-  text-align: center; 
-}
-
-.grid-inscritos > div:nth-child(1) { 
-  text-align: left; 
-  padding-left: 10px; 
-}
-
-.list-item input, .list-item select { 
-  background: transparent; 
-  border: 1px solid transparent; 
-  padding: 5px; 
-}
-
-.list-item input:disabled, .list-item select:disabled { 
-  opacity: 1; 
-  color: #ccc; 
-}
+.grid-inscritos { grid-template-columns: 2fr 0.5fr 1fr 1fr 1fr; text-align: center; }
+.grid-inscritos > div:nth-child(1) { text-align: left; padding-left: 10px; }
+.list-item input, .list-item select { background: transparent; border: 1px solid transparent; padding: 5px; }
+.list-item input:disabled, .list-item select:disabled { opacity: 1; color: #ccc; }
 
 /* ==========================================================================
    AUTOCOMPLETE E MENU FIXO
    ========================================================================== */
-
 .lista-sugestoes {
-  position: absolute; 
-  top: 100%; 
-  left: 0; 
-  width: 100%; 
-  background: var(--card-bg);
-  border: 1px solid var(--btn-primary); 
-  border-top: none; 
-  border-radius: 0 0 8px 8px;
-  max-height: 200px; 
-  overflow-y: auto; 
-  z-index: 1000; 
-  display: none;
+  position: absolute; top: 100%; left: 0; width: 100%; background: var(--card-bg);
+  border: 1px solid var(--btn-primary); border-top: none; border-radius: 0 0 8px 8px;
+  max-height: 200px; overflow-y: auto; z-index: 1000; display: none;
 }
-
-.sugestao-item { 
-  padding: 12px; 
-  cursor: pointer; 
-  border-bottom: 1px solid var(--border-color); 
-}
-
-.sugestao-item:hover { 
-  background-color: var(--btn-primary); 
-  color: black; 
-  font-weight: bold; 
-}
-
-.main-nav {
-  position: fixed; 
-  bottom: 0; 
-  left: 0; 
-  width: 100%; 
-  background: rgba(15, 23, 42, 0.95);
-  padding: 10px; 
-  display: flex; 
-  justify-content: space-around;
-  border-top: 2px solid var(--btn-primary);
-  z-index: 1000; 
-  backdrop-filter: blur(5px);
-}
-.main-nav a {
-  color: var(--text-muted); 
-  text-decoration: none; 
-  font-size: 0.75rem;
-  display: flex; 
-  flex-direction: column; 
-  align-items: center; 
-  gap: 4px;
-}
-
-.main-nav a.active { 
-  color: var(--btn-primary); 
-  font-weight: bold; 
-}
-
+.sugestao-item { padding: 12px; cursor: pointer; border-bottom: 1px solid var(--border-color); }
+.sugestao-item:hover { background-color: var(--btn-primary); color: black; font-weight: bold; }
 
 /* ==========================================================================
-   RESPONSIVIDADE (MOBILE) - RANKING
+   RESPONSIVIDADE (MOBILE) - RANKING E FILTROS
    ========================================================================== */
 
 @media (max-width: 768px) {
   
   /* --- HERO E FILTROS --- */
-  .hero-ranking-header { 
-    height: 220px; 
-    justify-content: 
-    flex-end; 
-    padding-bottom: 5px; 
-  }
+  .hero-ranking-header { height: 220px; justify-content: flex-end; padding-bottom: 5px; }
   
   .hero-ranking-wrapper { 
     background-image: url('rank5.png'); 
-    height: 40vh; 
+    height: 40vh; /* Altura menor no mobile */
+    min-height: 400px;
     background-position: center top; 
     justify-content: flex-end; 
     padding-bottom: 20px; 
     margin-bottom: 20px; 
   }
   
-  .hero-title { 
-    font-size: 2rem; 
-    text-align:left; 
-    margin-bottom: 5px; }
+  .hero-title { font-size: 2rem; text-align:left; margin-bottom: 5px; }
   
   /* Filtros Boxed */
   .ranking-filters-bar { display: grid; grid-template-columns: 1fr 1fr; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.6); backdrop-filter: blur(5px); border-radius: 4px; margin-top: 10px; }
