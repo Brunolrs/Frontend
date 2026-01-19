@@ -37,30 +37,20 @@ const Data = {
 // --- CÁLCULOS ROBUSTOS ---
 const Calc = {
   getIdade(dataString) {
-    // Aceita tanto AAAA-MM-DD quanto DD/MM/AAAA por segurança
     if (!dataString) return 0;
-    
     let ano, mes, dia;
-
     if (dataString.includes('/')) {
-        // Formato BR
         [dia, mes, ano] = dataString.split('/').map(Number);
     } else if (dataString.includes('-')) {
-        // Formato ISO
         [ano, mes, dia] = dataString.split('-').map(Number);
     } else {
         return 0;
     }
-    
     const nasc = new Date(ano, mes - 1, dia);
     const hoje = new Date();
-    
     let idade = hoje.getFullYear() - nasc.getFullYear();
     const m = hoje.getMonth() - nasc.getMonth();
-    
-    if (m < 0 || (m === 0 && hoje.getDate() < nasc.getDate())) {
-        idade--;
-    }
+    if (m < 0 || (m === 0 && hoje.getDate() < nasc.getDate())) { idade--; }
     return idade;
   },
 
@@ -75,11 +65,13 @@ const Calc = {
   countRX(res) { if (!res) return 0; return res.filter(r => r.workout === "RX").length; },
   countScale(res) { if (!res) return 0; return res.filter(r => r.workout === "SCALE").length; },
   getScore(res) { if (!res) return 0; return res.reduce((acc, r) => acc + Number(r.score), 0); },
+  
   getCategoriaPeso(res) {
     if (this.countRX(res) > 0) return 3;
     if (this.countScale(res) > 0) return 2;
     return 1; 
   },
+  
   getCategoriaLabel(res) {
     if (this.countRX(res) > 0) return "RX";
     if (this.countScale(res) > 0) return "SCALE";
@@ -104,53 +96,38 @@ const UI = {
     });
   },
 
-  // --- NOVA FUNÇÃO: MÁSCARA DE DATA (DD/MM/AAAA) ---
   mascaraData(input) {
     let v = input.value;
-    v = v.replace(/\D/g, ""); // Remove tudo que não é número
-    
-    // Adiciona as barras automaticamente nos lugares certos
+    v = v.replace(/\D/g, ""); 
     if (v.length > 2) v = v.replace(/^(\d{2})(\d)/, "$1/$2");
     if (v.length > 5) v = v.replace(/^(\d{2})\/(\d{2})(\d)/, "$1/$2/$3");
-    
     input.value = v;
   },
 
-  // --- NOVA FUNÇÃO: CONVERTE DD/MM/AAAA PARA AAAA-MM-DD ---
   formatarDataParaBanco(dataBR) {
       if (!dataBR || dataBR.length !== 10) return "";
       const partes = dataBR.split('/');
-      // Retorna AAAA-MM-DD
       return `${partes[2]}-${partes[1]}-${partes[0]}`;
   },
 
   async cadastrarAtleta() {
     const btn = document.querySelector("button");
-    btn.textContent = "Verificando...";
-    btn.disabled = true;
+    btn.textContent = "Verificando..."; btn.disabled = true;
 
     const nome = document.getElementById("nome").value;
-    const nascimentoBR = document.getElementById("dataNascimento").value; // Agora vem com barras (DD/MM/AAAA)
+    const nascimentoBR = document.getElementById("dataNascimento").value;
     const sexo = document.getElementById("sexo").value;
 
     if (!nome || !nascimentoBR || !sexo) {
       alert("Preencha todos os campos!");
-      btn.textContent = "Finalizar Cadastro";
-      btn.disabled = false;
-      return;
+      btn.textContent = "Finalizar Cadastro"; btn.disabled = false; return;
     }
-
     if (nascimentoBR.length < 10) {
       alert("Digite a data completa: Dia, Mês e Ano.");
-      btn.textContent = "Finalizar Cadastro";
-      btn.disabled = false;
-      return;
+      btn.textContent = "Finalizar Cadastro"; btn.disabled = false; return;
     }
 
-    // Converte para salvar no banco
     const nascimentoISO = this.formatarDataParaBanco(nascimentoBR);
-
-    // --- VERIFICAÇÃO DE DUPLICIDADE ---
     const atletasExistentes = await Data.getAtletas();
     const duplicado = atletasExistentes.find(a => 
       a.nome.trim().toLowerCase() === nome.trim().toLowerCase() && 
@@ -159,17 +136,13 @@ const UI = {
 
     if (duplicado) {
       alert("Este atleta já está cadastrado!");
-      btn.textContent = "Finalizar Cadastro";
-      btn.disabled = false;
-      return;
+      btn.textContent = "Finalizar Cadastro"; btn.disabled = false; return;
     }
-
-    btn.textContent = "Salvando...";
 
     const novoAtleta = {
       id: Date.now(),
       nome,
-      nascimento: nascimentoISO, // Salva ISO
+      nascimento: nascimentoISO,
       sexo,
       faixaEtaria: Calc.getFaixa(Calc.getIdade(nascimentoISO)),
       resultados: []
@@ -182,22 +155,17 @@ const UI = {
       window.location.href = "inscritos.html";
     } else {
       alert("Erro ao cadastrar.");
-      btn.textContent = "Finalizar Cadastro";
-      btn.disabled = false;
+      btn.textContent = "Finalizar Cadastro"; btn.disabled = false;
     }
   },
 
   async renderInscritos() {
     const container = document.getElementById("listaInscritos");
     container.innerHTML = "<p>Carregando...</p>";
-    
     const atletas = await Data.getAtletas();
     container.innerHTML = "";
 
     atletas.forEach(a => {
-      const faixa = a.faixa_etaria || a.faixaEtaria; 
-      
-      // Converte a data do banco (ISO) para exibir com barras (BR) na lista
       let nascDisplay = a.nascimento;
       if (a.nascimento && a.nascimento.includes('-')) {
           const p = a.nascimento.split('-');
@@ -213,10 +181,8 @@ const UI = {
               <option value="F" ${a.sexo === "F" ? "selected" : ""}>F</option>
             </select>
           </div>
-          <div>
-            <input type="tel" id="nasc-${a.id}" value="${nascDisplay}" disabled maxlength="10" oninput="UI.mascaraData(this)">
-          </div>
-          <div><strong>${faixa}</strong></div>
+          <div><input type="tel" id="nasc-${a.id}" value="${nascDisplay}" disabled maxlength="10" oninput="UI.mascaraData(this)"></div>
+          <div><strong>${a.faixa_etaria}</strong></div>
           <div class="acoes">
             <button onclick="UI.toggleEdit(${a.id}, true)">✏️</button>
             <button id="sv-${a.id}" style="display:none; background-color: var(--btn-save);" onclick="UI.salvarEdicao(${a.id})">💾</button>
@@ -238,34 +204,22 @@ const UI = {
   async salvarEdicao(id) {
     const novoNome = document.getElementById(`nome-${id}`).value;
     const novoSexo = document.getElementById(`sexo-${id}`).value;
-    const nascBR = document.getElementById(`nasc-${id}`).value; // Lê formato BR
-    
-    // Converte BR -> ISO para salvar
+    const nascBR = document.getElementById(`nasc-${id}`).value;
     const novoNascISO = this.formatarDataParaBanco(nascBR);
     
-    if(!novoNascISO) {
-        alert("Data inválida na edição.");
-        return;
-    }
+    if(!novoNascISO) { alert("Data inválida na edição."); return; }
 
     const novaFaixa = Calc.getFaixa(Calc.getIdade(novoNascISO));
 
     await Data.updateAtleta(id, {
-      nome: novoNome,
-      sexo: novoSexo,
-      nascimento: novoNascISO,
-      faixa_etaria: novaFaixa
+      nome: novoNome, sexo: novoSexo, nascimento: novoNascISO, faixa_etaria: novaFaixa
     });
 
-    alert("Atualizado!");
-    this.renderInscritos();
+    alert("Atualizado!"); this.renderInscritos();
   },
 
   async excluirAtleta(id) {
-    if (confirm("Tem certeza?")) {
-      await Data.deleteAtleta(id);
-      this.renderInscritos();
-    }
+    if (confirm("Tem certeza?")) { await Data.deleteAtleta(id); this.renderInscritos(); }
   },
 
   async initResultados() {
@@ -276,17 +230,11 @@ const UI = {
   buscarAtleta(termo) {
     const listaDiv = document.getElementById("listaSugestoes");
     const idInput = document.getElementById("atletaId");
-    
     idInput.value = "";
 
-    if (!termo || termo.length === 0) {
-      listaDiv.style.display = "none";
-      return;
-    }
+    if (!termo || termo.length === 0) { listaDiv.style.display = "none"; return; }
 
-    const filtrados = this.atletasCache.filter(a => 
-      a.nome.toLowerCase().includes(termo.toLowerCase())
-    );
+    const filtrados = this.atletasCache.filter(a => a.nome.toLowerCase().includes(termo.toLowerCase()));
 
     listaDiv.innerHTML = "";
     if (filtrados.length > 0) {
@@ -298,36 +246,31 @@ const UI = {
         div.onclick = () => this.selecionarAtleta(a.id, a.nome, a.nascimento);
         listaDiv.appendChild(div);
       });
-    } else {
-      listaDiv.style.display = "none";
-    }
+    } else { listaDiv.style.display = "none"; }
   },
 
   selecionarAtleta(id, nome, nascimento) {
     document.getElementById("buscaAtleta").value = nome;
     document.getElementById("atletaId").value = id;
-    document.getElementById("atletaId").setAttribute("data-nasc-real", nascimento); // Guarda a data real (ISO)
+    document.getElementById("atletaId").setAttribute("data-nasc-real", nascimento);
     document.getElementById("listaSugestoes").style.display = "none";
   },
 
   validarAtleta() {
     const id = document.getElementById("atletaId").value;
-    const dataDigitada = document.getElementById("dataNascimentoLogin").value; // Vem com barras (DD/MM/AAAA)
-    const dataReal = document.getElementById("atletaId").getAttribute("data-nasc-real"); // Vem ISO (AAAA-MM-DD)
+    const dataDigitada = document.getElementById("dataNascimentoLogin").value;
+    const dataReal = document.getElementById("atletaId").getAttribute("data-nasc-real");
 
     if (!id) return alert("Por favor, selecione seu nome na lista.");
     if (!dataDigitada || dataDigitada.length < 10) return alert("Digite sua data de nascimento completa.");
 
-    // Converte a digitada para ISO para poder comparar
     const dataDigitadaISO = this.formatarDataParaBanco(dataDigitada);
 
     if (dataDigitadaISO === dataReal) {
         document.getElementById("loginCard").style.display = "none";
         document.getElementById("formResultados").style.display = "block";
         document.getElementById("nomeAtletaDisplay").textContent = document.getElementById("buscaAtleta").value;
-    } else {
-        alert("Data de nascimento incorreta!");
-    }
+    } else { alert("Data de nascimento incorreta!"); }
   },
 
   async lancarResultado() {
@@ -339,8 +282,7 @@ const UI = {
 
     if(!id) return alert("Erro de identificação. Recarregue.");
 
-    btn.textContent = "Enviando...";
-    btn.disabled = true;
+    btn.textContent = "Enviando..."; btn.disabled = true;
 
     const atleta = await Data.getAtletaById(id);
     let resultadosAtuais = atleta.resultados || [];
@@ -349,11 +291,12 @@ const UI = {
 
     await Data.updateAtleta(id, { resultados: resultadosAtuais });
 
-    alert("Resultado salvo!");
-    location.reload(); 
+    alert("Resultado salvo!"); location.reload(); 
   },
 
-  async renderRanking() {
+// --- RENDERIZAÇÃO DO RANKING (ATUALIZADA PARA ACORDEÃO) ---
+
+async renderRanking() {
     const container = document.getElementById("ranking");
     if(!container) return;
     container.innerHTML = "Carregando Leaderboard...";
@@ -364,8 +307,7 @@ const UI = {
     let dados = await Data.getAtletas();
 
     dados = dados.filter(a => {
-        const faixa = a.faixa_etaria || a.faixaEtaria;
-        return (fFaixa === "GERAL" || faixa === fFaixa) &&
+        return (fFaixa === "GERAL" || a.faixa_etaria === fFaixa) &&
                (fSexo === "TODOS" || a.sexo === fSexo);
     });
 
@@ -375,32 +317,54 @@ const UI = {
       const pesoA = Calc.getCategoriaPeso(resA);
       const pesoB = Calc.getCategoriaPeso(resB);
       if (pesoA !== pesoB) return pesoB - pesoA;
-      const rxA = Calc.countRX(resA);
-      const rxB = Calc.countRX(resB);
-      if (rxA !== rxB) return rxB - rxA;
-      const scA = Calc.countScale(resA);
-      const scB = Calc.countScale(resB);
-      if (scA !== scB) return scB - scA;
-      return Calc.getScore(resB) - Calc.getScore(resA);
+      return Calc.getScore(resB) - Calc.getScore(a.resultados);
     });
 
     container.innerHTML = "";
     dados.forEach((a, idx) => {
       const pos = idx + 1;
-      const medalha = pos === 1 ? "🥇" : pos === 2 ? "🥈" : pos === 3 ? "🥉" : "•";
-      const faixa = a.faixa_etaria || a.faixaEtaria;
+      const medalha = pos === 1 ? "🥇" : pos === 2 ? "🥈" : pos === 3 ? "🥉" : `${pos}º`;
       const res = a.resultados || [];
+      
+      // REMOVIDO: const setaExpandir = `<span class="seta-mobile">▼</span>`;
 
       container.innerHTML += `
-        <div class="list-item grid-ranking">
-          <div class="posicao"><span>${medalha}</span><br><small>${pos}º</small></div>
-          <div class="text-left"><strong>${a.nome}</strong><br><small>${a.sexo} • ${faixa} • ${Calc.getCategoriaLabel(res)}</small></div>
-          <div>${this.getWodInfo(res, 1)}</div>
-          <div>${this.getWodInfo(res, 2)}</div>
-          <div>${this.getWodInfo(res, 3)}</div>
+        <div class="list-item grid-ranking" onclick="UI.toggleRankDetails(${a.id})">
+          <div class="posicao">${medalha}</div>
+          
+          <div class="text-left nome-col">
+            <strong>${a.nome}</strong> 
+            <br><small style="opacity:0.7">${a.sexo} • ${a.faixa_etaria} • ${Calc.getCategoriaLabel(res)}</small>
+          </div>
+          
+          <div class="wod-col">${this.getWodInfo(res, 1)}</div>
+          <div class="wod-col">${this.getWodInfo(res, 2)}</div>
+          <div class="wod-col">${this.getWodInfo(res, 3)}</div>
+          
           <div class="score-highlight">${Calc.getScore(res)}</div>
+        </div>
+
+        <div id="detalhes-${a.id}" class="ranking-details" style="display:none;">
+            <div class="detalhe-box"><span>26.1</span> ${this.getWodInfo(res, 1)}</div>
+            <div class="detalhe-box"><span>26.2</span> ${this.getWodInfo(res, 2)}</div>
+            <div class="detalhe-box"><span>26.3</span> ${this.getWodInfo(res, 3)}</div>
         </div>`;
     });
+  },
+
+  // Função Toggle (Manteve igual)
+  toggleRankDetails(id) {
+    if (window.innerWidth > 768) return; // Só funciona no mobile
+    const detalhes = document.getElementById(`detalhes-${id}`);
+    const linha = detalhes.previousElementSibling;
+
+    if (detalhes.style.display === "none") {
+        detalhes.style.display = "grid"; // Abre como GRID
+        linha.style.background = "rgba(0, 174, 239, 0.1)"; // Destaque visual
+    } else {
+        detalhes.style.display = "none";
+        linha.style.background = "var(--card-bg)"; // Volta ao normal
+    }
   },
 
   getWodInfo(resultados, rodada) {
@@ -410,7 +374,6 @@ const UI = {
   }
 };
 
-// GLOBAL BINDING
 window.cadastrarAtleta = () => UI.cadastrarAtleta();
 window.lancarResultado = () => UI.lancarResultado();
 window.mostrarRanking = () => UI.renderRanking();

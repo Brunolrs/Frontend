@@ -416,139 +416,114 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   font-weight: bold; 
 }
 
-/* ==========================================================================
-   RESPONSIVIDADE (MOBILE)
-   ========================================================================== */
 
+/* ==========================================================================
+   RESPONSIVIDADE (MOBILE) - RANKING
+   ========================================================================== */
+   
 @media (max-width: 768px) {
   
-  .hero-ranking-header { 
-    height: 220px;
-    background-position: center center; 
-    justify-content: flex-end; 
-    padding-bottom: 5px;
-  }
-
-  .hero-ranking-wrapper {
-    /* Troca a imagem apenas no celular */
-    background-image: url('rank5.png'); 
-    height: 40vh; 
-    background-position: center top;
-    justify-content: flex-end;
-    padding-bottom: 20px;
-    margin-bottom: 20px;
-  }
-}
+  /* --- HERO E FILTROS --- */
+  .hero-ranking-header { height: 220px; justify-content: flex-end; padding-bottom: 5px; }
+  .hero-ranking-wrapper { background-image: url('rank5.png'); height: 40vh; background-position: center top; justify-content: flex-end; padding-bottom: 20px; margin-bottom: 20px; }
+  .hero-title { font-size: 2rem; text-align: center; margin-bottom: 5px; }
   
-  .hero-title { 
-    font-size: 2rem; 
-    text-align: center; 
-    margin-bottom: 5px; 
-  }
-  .hero-subtitle { text-align: center; }
+  /* Filtros Boxed */
+  .ranking-filters-bar { display: grid; grid-template-columns: 1fr 1fr; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.6); backdrop-filter: blur(5px); border-radius: 4px; margin-top: 10px; }
+  .ranking-filter-item:nth-child(1) { grid-column: span 2; border-right: none; border-bottom: 1px solid rgba(255, 255, 255, 0.3); }
+  .ranking-filter-item:nth-child(2) { border-right: 1px solid rgba(255, 255, 255, 0.3); border-bottom: none; }
+  .ranking-filter-item:nth-child(3) { border-right: none; border-bottom: none; }
+  .ranking-filter-item { height: auto; min-height: 50px; }
+  .ranking-filter-item label { top: 4px; font-size: 0.6rem; opacity: 0.8; color: var(--btn-primary); }
+  .ranking-filter-item select { padding: 18px 5px 5px 10px; font-size: 0.85rem; }
+
+  /* --- CABEÇALHO DA TABELA --- */
+  .list-header { display: none; } /* Esconde desktop */
   
-  /* Filtros em Grid Boxed */
-  .ranking-filters-bar {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(5px);
-    border-radius: 4px;
-    margin-top: 10px;
-  }
-
-  .ranking-filter-item:nth-child(1) {
-    grid-column: span 2;
-    border-right: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-  }
-
-  .ranking-filter-item:nth-child(2) {
-    border-right: 1px solid rgba(255, 255, 255, 0.3);
-    border-bottom: none;
-  }
-
-  .ranking-filter-item:nth-child(3) {
-    border-right: none;
-    border-bottom: none;
-  }
-
-  .ranking-filter-item { 
-    height: auto; 
-    min-height: 50px; 
-  }
-
-  .ranking-filter-item label { 
-    top: 4px; 
-    font-size: 0.6rem; 
-    opacity: 0.8; 
-    color: var(--btn-primary); 
-  }
-  
-  .ranking-filter-item select { 
-    padding: 18px 5px 5px 10px; 
-    font-size: 0.85rem; 
-  }
-
-  /* --- CORREÇÃO DO CABEÇALHO DA TABELA --- */
-  
-  /* 1. Esconde o cabeçalho padrão para todas as listas... */
-  .list-header { display: none; }
-
-  /* 2. ...MAS força a exibição (Grid) SOMENTE para o Ranking */
   .list-header.grid-ranking { 
-    display: grid; /* Traz de volta o header do ranking */
+    display: grid;
     font-size: 0.75rem; 
     padding: 10px 5px; 
-
-    /* Colunas idênticas aos itens da lista */
-    grid-template-columns: 30px 3fr 1fr 1fr 1fr 1.2fr;
+    /* Rank | Nome | Pontos (WODs somem aqui) */
+    grid-template-columns: 40px 1fr 60px;
     gap: 5px;
-    background: #000; 
+    background: #000;
     margin-top: 10px;
+    border-top: 2px solid var(--btn-primary);
   }
+  
+  /* Garante que colunas extras sumam do header */
+  .list-header.grid-ranking > div:nth-child(3),
+  .list-header.grid-ranking > div:nth-child(4),
+  .list-header.grid-ranking > div:nth-child(5) { display: none; }
 
-  /* --- ITENS DA TABELA RANKING --- */
+  /* --- LINHA DO ATLETA (PRINCIPAL) --- */
   .list-item.grid-ranking {
     display: grid;
-    grid-template-columns: 30px 3fr 1fr 1fr 1fr 1.2fr;
-    gap: 5px; 
-    padding: 15px 5px; 
-    font-size: 0.8rem;
-    align-items: center; 
-    border-radius: 0;
+    /* Mesmas colunas do header: Rank | Nome | Pontos */
+    grid-template-columns: 40px 1fr 60px;
+    gap: 5px; padding: 15px 5px; font-size: 0.85rem;
+    align-items: center; border-radius: 0;
     border-bottom: 1px solid rgba(255,255,255,0.1);
+    cursor: pointer;
   }
 
-  .grid-ranking > div:nth-child(2) { 
-    white-space: normal; 
-    font-size: 0.85rem; 
-    line-height: 1.2; 
-    padding-left: 5px; 
-  }
-  .grid-ranking > div:nth-child(3), .grid-ranking > div:nth-child(4), .grid-ranking > div:nth-child(5) { 
-    font-size: 0.75rem; 
+  /* CRÍTICO: Esconde as colunas de WOD da linha principal no celular */
+  .list-item.grid-ranking .wod-col {
+    display: none !important; 
   }
 
-  /* --- INSCRITOS (CARD) --- */
+  /* Ajuste visual do Nome */
+  .list-item.grid-ranking .nome-col { 
+    white-space: normal; line-height: 1.2; padding-left: 5px; 
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  
+  /* Ajuste visual dos Pontos */
+  .list-item.grid-ranking .score-highlight { font-size: 1.1rem; text-align: center; }
+
+  /* Seta para indicar clique */
+  .seta-mobile { font-size: 0.7em; color: var(--btn-primary); margin-left: 5px; display: inline-block; vertical-align: middle; }
+
+  /* --- DETALHES (EXPANDIDO) --- */
+  .ranking-details {
+    /* Grid de 3 colunas para ficar lado a lado: 26.1 | 26.2 | 26.3 */
+    grid-template-columns: 1fr 1fr 1fr !important;
+    gap: 5px;
+    background: #0a1525; /* Fundo mais escuro */
+    padding: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    border-left: 3px solid var(--btn-primary);
+  }
+
+  .detalhe-box {
+    background: rgba(255,255,255,0.05);
+    padding: 8px 4px;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 0.8rem;
+  }
+  
+  .detalhe-box span {
+    display: block; 
+    color: var(--btn-primary); 
+    font-weight: bold; 
+    margin-bottom: 2px;
+    font-size: 0.7rem;
+  }
+
+  /* Inscritos Card */
   .list-item.grid-inscritos {
-    display: flex; 
-    flex-direction: column; 
-    align-items: flex-start;
-    text-align: left; gap: 5px; 
-    padding: 20px; 
-    margin-bottom: 10px;
-    border-radius: 8px; 
-    background: var(--card-bg);
+    display: flex; flex-direction: column; align-items: flex-start;
+    text-align: left; gap: 5px; padding: 20px; margin-bottom: 10px;
+    border-radius: 8px; background: var(--card-bg);
   }
-  .grid-inscritos > div { 
-    width: 100%; 
-    text-align: left; 
-    padding: 0; 
-  }
+  .grid-inscritos > div { width: 100%; text-align: left; padding: 0; }
+  .list-item.grid-inscritos input, .list-item.grid-inscritos select { border-bottom: 1px solid rgba(255,255,255,0.1) !important; width: 100%; }
+}
 
-  .list-item.grid-inscritos input, .list-item.grid-inscritos select { 
-    border-bottom: 1px solid rgba(255,255,255,0.1) !important; 
-    width: 100%; 
-  }
+/* ESCONDER DETALHES NO DESKTOP */
+@media (min-width: 769px) {
+  .ranking-details { display: none !important; }
+  .seta-mobile { display: none; }
+}
