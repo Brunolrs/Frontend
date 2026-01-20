@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Painel de Gestão - Clã</title>
+  
+  <link rel="icon" href="logo1.jpg" type="image/png">
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="script.js"></script>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="container">
+    
+    <header style="text-align: center; margin-bottom: 20px;">
+      <img src="open3.png" alt="CrossFit Clã" class="hero-logo" style="border: 2px solid var(--btn-primary);">
+      <h2 style="margin-top:10px; color:var(--btn-primary);">PAINEL ADMINISTRATIVO</h2>
+    </header>
+
+    <nav class="menu-grid">
+      
+      <a href="cadastro.html" class="menu-card">
+        <div style="font-size: 2.5rem; margin-bottom: 10px;">📝</div>
+        <h2>Cadastro</h2>
+        <p>Registrar Atletas</p>
+      </a>
+
+      <a href="inscritos.html" class="menu-card">
+        <div style="font-size: 2.5rem; margin-bottom: 10px;">👥</div>
+        <h2>Inscritos</h2>
+        <p>Gerenciar Lista</p>
+      </a>
+
+      <a href="ranking.html" class="menu-card card-highlight">
+        <div style="font-size: 2.5rem; margin-bottom: 10px;">🥇</div>
+        <h2>Leaderboard</h2>
+        <p>Ver Classificação</p>
+      </a>
+
+      <a href="resultados.html" class="menu-card">
+        <div style="font-size: 2.5rem; margin-bottom: 10px;">⏱️</div>
+        <h2>Lançar Resultados</h2>
+        <p>Área do Atleta</p>
+      </a>
+
+      <a href="gestao_workouts.html" class="menu-card">
+        <div style="font-size: 2.5rem; margin-bottom: 10px;">⚙️</div>
+        <h2>Configurar Workouts</h2>
+        <p>Definir Tipos e Prazos</p>
+      </a>
+
+    </nav>
+
+    <footer style="text-align:center; margin-top:40px; font-size:0.8rem; color:#94a3b8; opacity:0.6; padding-bottom: 20px;">
+      <p>&copy; 2026 Bruno Lopes Ribeiro Silva</p>
+    </footer>
+
+<script>document.addEventListener("DOMContentLoaded", () => UI.init());</script>
+</body>
+</html>

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   VARIÁVEIS E TEMA (DARK MODE GLOBAL)
+   1. VARIÁVEIS E TEMA (DARK MODE GLOBAL)
    ========================================================================== */
 :root {
   --bg-color: #0f172a; 
@@ -48,15 +48,15 @@ h1 {
 }
 
 /* ==========================================================================
-   NAVEGAÇÃO INFERIOR (ESTILO PILL / APP MODERNO)
+   2. NAVEGAÇÃO INFERIOR (ESTILO PILL / APP MODERNO)
    ========================================================================== */
 .main-nav {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  background: #0f172a; /* Fundo escuro sólido */
-  padding: 10px 15px 20px 15px; /* Padding extra embaixo para iOS */
+  background: #0f172a;
+  padding: 10px 15px 20px 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -77,7 +77,6 @@ h1 {
   flex: 1;
 }
 
-/* Container do ícone (A "Pílula") */
 .nav-icon-container {
   width: 50px;
   height: 30px;
@@ -87,10 +86,9 @@ h1 {
   justify-content: center;
   margin-bottom: 4px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  background: transparent; /* Transparente quando inativo */
+  background: transparent;
 }
 
-/* Ícone SVG */
 .nav-icon-container svg {
   width: 20px;
   height: 20px;
@@ -98,152 +96,74 @@ h1 {
   transition: fill 0.3s ease;
 }
 
-/* --- ESTADO ATIVO (SELECIONADO) --- */
-.nav-item.active {
-  color: white; 
-}
-
+/* Estado Ativo */
+.nav-item.active { color: white; }
 .nav-item.active .nav-icon-container {
-  background-color: var(--btn-primary); /* Fundo CIANO */
-  width: 55px; /* Expande levemente */
+  background-color: var(--btn-primary);
+  width: 55px;
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(0, 174, 239, 0.4);
 }
-
-.nav-item.active .nav-icon-container svg {
-  fill: #0f172a; /* Ícone fica ESCURO para contraste */
-}
+.nav-item.active .nav-icon-container svg { fill: #0f172a; }
 
 /* ==========================================================================
-   ESTILOS ESPECÍFICOS DA HOME
+   3. ESTILOS ESPECÍFICOS DA HOME
    ========================================================================== */
 .hero-logo {
-  display: block;
-  width: 100%; 
-  max-height: 350px; 
-  object-fit: cover; 
-  border-radius: 15px; 
-  border: 1px solid var(--border-color);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
-  margin-bottom: 10px;
+  display: block; width: 100%; max-height: 350px; object-fit: cover; 
+  border-radius: 15px; border: 1px solid var(--border-color);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 10px;
 }
 
 .menu-grid {
-  display: grid; 
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 15px; 
-  margin-top: 20px; 
-  padding-bottom: 40px;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 15px; margin-top: 20px; padding-bottom: 40px;
 }
 
 .menu-card {
-  background: var(--card-bg); 
-  color: white; 
-  padding: 30px 15px; 
-  text-align: center;
-  border-radius: 15px; 
-  text-decoration: none; 
-  transition: all 0.2s ease;
-  display: flex; 
-  flex-direction: column; 
-  align-items: center; 
-  justify-content: center;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.2); 
-  border: 1px solid var(--border-color);
+  background: var(--card-bg); color: white; padding: 30px 15px; 
+  text-align: center; border-radius: 15px; text-decoration: none; 
+  transition: all 0.2s ease; display: flex; flex-direction: column; 
+  align-items: center; justify-content: center;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2); border: 1px solid var(--border-color);
 }
 
-.menu-card div { 
-  margin-bottom: 10px; 
-  font-size: 40px; 
-}
+.menu-card div { margin-bottom: 10px; font-size: 40px; }
+.menu-card h2 { margin-bottom: 5px; font-size: 1.1em; text-transform: uppercase; letter-spacing: 1px; color: var(--btn-primary); }
+.menu-card p { font-size: 0.85em; opacity: 0.8; line-height: 1.3; margin: 0; color: var(--text-muted); }
 
-.menu-card h2 { 
-  margin-bottom: 5px; 
-  font-size: 1.1em; 
-  text-transform: uppercase; 
-  letter-spacing: 1px; 
-  color: var(--btn-primary); 
-}
-
-.menu-card p { 
-  font-size: 0.85em; 
-  opacity: 0.8; 
-  line-height: 1.3; 
-  margin: 0; 
-  color: var(--text-muted); 
-}
-
-.menu-card:active { 
-  transform: scale(0.96); 
-  background: var(--btn-primary); 
-  color: #000; 
-}
-
+.menu-card:active { transform: scale(0.96); background: var(--btn-primary); color: #000; }
 @media (min-width: 769px) {
-  .menu-card:hover { 
-    transform: translateY(-5px); 
-    box-shadow: 0 8px 15px rgba(0,0,0,0.4); 
-    border-color: var(--btn-primary); 
-    filter: brightness(1.1); }
+  .menu-card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.4); border-color: var(--btn-primary); filter: brightness(1.1); }
 }
 
 /* ==========================================================================
-   ESTILOS DO RANKING (HERO GAMES)
+   4. ESTILOS DO RANKING (HERO GAMES)
    ========================================================================== */
 .hero-ranking-wrapper {
-  position: relative; 
-  width: 100%; 
-  height: 350px;
-  background-image: url('rank5.png'); 
-  background-size: cover; 
-  background-position: center 20%;
-  display: flex; 
-  flex-direction: column; 
-  justify-content: flex-end;
-  padding: 20px; 
-  margin-bottom: 30px;
+  position: relative; width: 100%; height: 350px;
+  background-image: url('rank5.png'); background-size: cover; background-position: center 20%;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 20px; margin-bottom: 30px;
 }
 
 .hero-overlay {
-  position: absolute; 
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: linear-gradient(to bottom, rgba(15, 23, 42, 0.2), rgba(15, 23, 42, 1)); 
-  z-index: 1;
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(to bottom, rgba(15, 23, 42, 0.2), rgba(15, 23, 42, 1)); z-index: 1;
 }
 
-.hero-content { 
-  position: relative; z-index: 2; width: 100%; max-width: 1100px; margin: 0 auto; 
-}
+.hero-content { position: relative; z-index: 2; width: 100%; max-width: 1100px; margin: 0 auto; }
+.hero-title { font-size: 3.5rem; font-weight: 900; text-transform: uppercase; line-height: 1; margin-bottom: 20px; text-shadow: 0 4px 10px rgba(0,0,0,0.8); }
+.hero-subtitle { font-size: 1rem; font-weight: 700; text-transform: uppercase; color: var(--btn-primary); margin-bottom: 5px; letter-spacing: 2px; }
 
-.hero-title {
-  font-size: 3.5rem; font-weight: 900; text-transform: uppercase;
-  line-height: 1; margin-bottom: 20px; text-shadow: 0 4px 10px rgba(0,0,0,0.8);
-}
-
-.hero-subtitle {
-  font-size: 1rem; font-weight: 700; text-transform: uppercase;
-  color: var(--btn-primary); margin-bottom: 5px; letter-spacing: 2px;
-}
-
-/* FILTROS RANKING (TRANSPARENTE) */
+/* FILTROS RANKING */
 .ranking-filters-bar {
-  display: flex;
-  background: transparent;
-  border: 1px solid var(--border-color);
-  backdrop-filter: blur(5px);
-  border-radius: 8px 8px 0 0;
+  display: flex; background: transparent; border: 1px solid var(--border-color);
+  backdrop-filter: blur(5px); border-radius: 8px 8px 0 0;
 }
-
-.ranking-filter-item { 
-  flex: 1; border-right: 1px solid var(--border-color); position: relative; 
-}
+.ranking-filter-item { flex: 1; border-right: 1px solid var(--border-color); position: relative; }
 .ranking-filter-item:last-child { border-right: none; }
-
-.ranking-filter-item label {
-  position: absolute; top: 8px; left: 15px; font-size: 0.65rem; color: var(--btn-primary);
-  text-transform: uppercase; font-weight: bold;
-}
-
+.ranking-filter-item label { position: absolute; top: 8px; left: 15px; font-size: 0.65rem; color: var(--btn-primary); text-transform: uppercase; font-weight: bold; }
 .ranking-filter-item select {
   width: 100%; background: transparent; border: none; color: white;
   padding: 25px 15px 10px 15px; font-size: 0.9rem; font-weight: bold;
@@ -252,7 +172,7 @@ h1 {
 .ranking-filter-item select option { background-color: var(--bg-color); color: white; }
 
 /* ==========================================================================
-   FORMULÁRIOS E GERAIS
+   5. FORMULÁRIOS E GERAIS
    ========================================================================== */
 .form-card {
   background: var(--card-bg); padding: 30px; border-radius: 16px;
@@ -260,10 +180,7 @@ h1 {
   max-width: 500px; margin: 0 auto;
 }
 .input-group { margin-bottom: 20px; }
-.input-group label {
-  display: block; margin-bottom: 8px; font-size: 0.85rem;
-  color: var(--btn-primary); font-weight: 700; text-transform: uppercase;
-}
+.input-group label { display: block; margin-bottom: 8px; font-size: 0.85rem; color: var(--btn-primary); font-weight: 700; text-transform: uppercase; }
 input, select {
   width: 100%; padding: 14px; border-radius: 8px; border: 1px solid var(--border-color);
   background-color: var(--input-bg); color: white; font-size: 1rem; transition: all 0.2s;
@@ -280,30 +197,43 @@ input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
 .acoes button { width: auto; padding: 8px 12px; margin: 0 2px; }
 
 /* ==========================================================================
-   TABELAS
+   6. TABELAS (GRID DINÂMICO ATUALIZADO)
    ========================================================================== */
 .list-header {
   background: black; color: white; padding: 15px; font-weight: 900;
   text-transform: uppercase; font-size: 0.9rem; border-top: 4px solid var(--btn-primary);
   display: grid; align-items: center; gap: 10px;
+  /* Importante para o Grid Dinâmico do Header */
+  grid-template-columns: var(--grid-cols, 50px 2fr repeat(3, 1fr) 70px);
 }
+
 .list-item {
   background: var(--card-bg); padding: 15px; align-items: center; margin-bottom: 4px;
   border-bottom: 1px solid var(--border-color); display: grid; gap: 10px; color: white; transition: transform 0.2s;
 }
 .list-item:hover { transform: translateX(5px); border-left: 3px solid var(--btn-primary); }
 
-.grid-ranking { grid-template-columns: 60px 4fr 1fr 1fr 1fr 1fr; text-align: center; }
-.grid-ranking > div:nth-child(2) { text-align: left; padding-left: 10px; }
-.grid-ranking > div:nth-child(6) { font-weight: bold; color: var(--btn-primary); font-size: 1.1em; }
+/* GRID DO RANKING (CONTROLADO PELO JS) */
+.grid-ranking {
+  display: grid;
+  /* A variável --grid-cols é calculada pelo JS. Fallback padrão incluso. */
+  grid-template-columns: var(--grid-cols, 50px 2fr repeat(3, 1fr) 70px);
+  gap: 10px;
+  align-items: center;
+  text-align: center;
+}
 
+.grid-ranking > div:nth-child(2) { text-align: left; padding-left: 10px; } /* Nome */
+.grid-ranking > div:last-child { font-weight: bold; color: var(--btn-primary); font-size: 1.1em; } /* Pontos */
+
+/* Grid Inscritos (Estático) */
 .grid-inscritos { grid-template-columns: 2fr 0.5fr 1fr 1fr 1fr; text-align: center; }
 .grid-inscritos > div:nth-child(1) { text-align: left; padding-left: 10px; }
 .list-item input, .list-item select { background: transparent; border: 1px solid transparent; padding: 5px; }
 .list-item input:disabled, .list-item select:disabled { opacity: 1; color: #ccc; }
 
 /* ==========================================================================
-   AUTOCOMPLETE E MENU FIXO
+   7. AUTOCOMPLETE E OUTROS
    ========================================================================== */
 .lista-sugestoes {
   position: absolute; top: 100%; left: 0; width: 100%; background: var(--card-bg);
@@ -314,122 +244,168 @@ input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
 .sugestao-item:hover { background-color: var(--btn-primary); color: black; font-weight: bold; }
 
 /* ==========================================================================
-   RESPONSIVIDADE (MOBILE) - RANKING E FILTROS
+   8. RESPONSIVIDADE (MOBILE)
    ========================================================================== */
-
 @media (max-width: 768px) {
-  
-  /* --- HERO E FILTROS --- */
   .hero-ranking-header { height: 220px; justify-content: flex-end; padding-bottom: 5px; }
-  
-  .hero-ranking-wrapper { 
-    background-image: url('rank5.png'); 
-    height: 40vh; /* Altura menor no mobile */
-    min-height: 400px;
-    background-position: center top; 
-    justify-content: flex-end; 
-    padding-bottom: 20px; 
-    margin-bottom: 20px; 
-  }
-  
+  .hero-ranking-wrapper { height: 40vh; min-height: 400px; padding-bottom: 20px; margin-bottom: 20px; }
   .hero-title { font-size: 2rem; text-align:left; margin-bottom: 5px; }
-  
-  /* Filtros Boxed */
-  .ranking-filters-bar { display: grid; grid-template-columns: 1fr 1fr; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.6); backdrop-filter: blur(5px); border-radius: 4px; margin-top: 10px; }
-  .ranking-filter-item:nth-child(1) { grid-column: span 2; border-right: none; border-bottom: 1px solid rgba(255, 255, 255, 0.3); }
-  .ranking-filter-item:nth-child(2) { border-right: 1px solid rgba(255, 255, 255, 0.3); border-bottom: none; }
-  .ranking-filter-item:nth-child(3) { border-right: none; border-bottom: none; }
-  .ranking-filter-item { height: auto; min-height: 50px; }
-  .ranking-filter-item label { top: 4px; font-size: 0.6rem; opacity: 0.8; color: var(--btn-primary); }
-  .ranking-filter-item select { padding: 18px 5px 5px 10px; font-size: 0.85rem; }
 
-  /* --- CABEÇALHO DA TABELA --- */
-  .list-header { display: none; } /* Esconde desktop */
+  /* Filtros Mobile */
+  .ranking-filters-bar { display: grid; grid-template-columns: 1fr 1fr; }
+  .ranking-filter-item:nth-child(1) { grid-column: span 2; border-right: none; border-bottom: 1px solid rgba(255, 255, 255, 0.3); }
   
+  /* Cabeçalho Mobile */
+  .list-header { display: none; } 
   .list-header.grid-ranking { 
     display: grid;
-    font-size: 0.75rem; 
-    padding: 10px 5px; 
-    /* Rank | Nome | Pontos (WODs somem aqui) */
-    grid-template-columns: 40px 1fr 60px;
-    gap: 5px;
-    background: #000;
-    margin-top: 10px;
-    border-top: 2px solid var(--btn-primary);
+    /* Força layout mobile: Rank | Nome | Pontos */
+    grid-template-columns: 40px 1fr 60px !important;
+    gap: 5px; background: #000; margin-top: 10px; 
   }
   
-  /* Garante que colunas extras sumam do header */
-  .list-header.grid-ranking > div:nth-child(3),
-  .list-header.grid-ranking > div:nth-child(4),
-  .list-header.grid-ranking > div:nth-child(5) { display: none; }
+  /* Esconde colunas WOD do header */
+  .wod-col-header { display: none !important; }
+  /* Garante exibição de Rank/Atleta/Points */
+  .list-header.grid-ranking > div:nth-child(1),
+  .list-header.grid-ranking > div:nth-child(2),
+  .list-header.grid-ranking > div:last-child { display: block !important; }
 
-  /* --- LINHA DO ATLETA (PRINCIPAL) --- */
+  /* Linha Atleta Mobile */
   .list-item.grid-ranking {
     display: grid;
-    /* Mesmas colunas do header: Rank | Nome | Pontos */
-    grid-template-columns: 40px 1fr 60px;
+    grid-template-columns: 40px 1fr 60px !important;
     gap: 5px; padding: 15px 5px; font-size: 0.85rem;
-    align-items: center; border-radius: 0;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    cursor: pointer;
-  }
-
-  /* CRÍTICO: Esconde as colunas de WOD da linha principal no celular */
-  .list-item.grid-ranking .wod-col {
-    display: none !important; 
-  }
-
-  /* Ajuste visual do Nome */
-  .list-item.grid-ranking .nome-col { 
-    white-space: normal; line-height: 1.2; padding-left: 5px; 
-    display: flex; flex-direction: column; justify-content: center;
+    border-radius: 0;
   }
   
-  /* Ajuste visual dos Pontos */
-  .list-item.grid-ranking .score-highlight { font-size: 1.1rem; text-align: center; }
+  /* Esconde colunas WOD da linha */
+  .list-item.grid-ranking .wod-col { display: none !important; }
 
-  /* Seta para indicar clique */
+  .list-item.grid-ranking .nome-col { white-space: normal; line-height: 1.2; padding-left: 5px; }
   .seta-mobile { font-size: 0.7em; color: var(--btn-primary); margin-left: 5px; display: inline-block; vertical-align: middle; }
 
-  /* --- DETALHES (EXPANDIDO) --- */
+  /* Detalhes Mobile */
   .ranking-details {
-    /* Grid de 3 colunas para ficar lado a lado: 26.1 | 26.2 | 26.3 */
-    grid-template-columns: 1fr 1fr 1fr !important;
-    gap: 5px;
-    background: #0a1525; /* Fundo mais escuro */
-    padding: 10px;
-    border-bottom: 1px solid rgba(255,255,255,0.2);
+    grid-template-columns: 1fr 1fr 1fr !important; gap: 5px;
+    background: #0a1525; padding: 10px;
     border-left: 3px solid var(--btn-primary);
   }
+  .detalhe-box { background: rgba(255,255,255,0.05); padding: 8px 4px; border-radius: 4px; text-align: center; font-size: 0.8rem; }
+  .detalhe-box span { display: block; color: var(--btn-primary); font-weight: bold; margin-bottom: 2px; font-size: 0.7rem; }
 
-  .detalhe-box {
-    background: rgba(255,255,255,0.05);
-    padding: 8px 4px;
-    border-radius: 4px;
-    text-align: center;
-    font-size: 0.8rem;
-  }
-  
-  .detalhe-box span {
-    display: block; 
-    color: var(--btn-primary); 
-    font-weight: bold; 
-    margin-bottom: 2px;
-    font-size: 0.7rem;
-  }
-
-  /* Inscritos Card */
-  .list-item.grid-inscritos {
-    display: flex; flex-direction: column; align-items: flex-start;
-    text-align: left; gap: 5px; padding: 20px; margin-bottom: 10px;
-    border-radius: 8px; background: var(--card-bg);
-  }
+  /* Inscritos Mobile */
+  .list-item.grid-inscritos { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; padding: 20px; }
   .grid-inscritos > div { width: 100%; text-align: left; padding: 0; }
   .list-item.grid-inscritos input, .list-item.grid-inscritos select { border-bottom: 1px solid rgba(255,255,255,0.1) !important; width: 100%; }
 }
 
-/* ESCONDER DETALHES NO DESKTOP */
 @media (min-width: 769px) {
   .ranking-details { display: none !important; }
   .seta-mobile { display: none; }
+}
+
+/* ==========================================================================
+   9. SPLASH SCREEN
+   ========================================================================== */
+#splash-screen {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background-color: var(--bg-color); z-index: 9999;
+  display: flex; justify-content: center; align-items: center;
+  transition: opacity 0.8s ease-out, visibility 0.8s;
+}
+#splash-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.splash-logo { width: 120px; height: 120px; object-fit: contain; border-radius: 50%; margin-bottom: 20px; animation: pulseLogo 2s infinite; box-shadow: 0 0 20px rgba(0, 174, 239, 0.4); }
+.splash-text { font-size: 1.5rem; font-weight: 900; color: white; letter-spacing: 2px; text-transform: uppercase; animation: slideUp 1s ease-out; }
+
+@keyframes pulseLogo {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 174, 239, 0.7); }
+  70% { transform: scale(1.1); box-shadow: 0 0 0 20px rgba(0, 174, 239, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 174, 239, 0); }
+}
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ==========================================================================
+   10. SELETOR TIME CAP
+   ========================================================================== */
+.cap-selector-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 5px; }
+.cap-option { position: relative; cursor: pointer; }
+.cap-option input { display: none; }
+.cap-box {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);
+  border-radius: 10px; padding: 15px 5px; transition: all 0.3s ease; text-align: center; height: 100%;
+}
+.check-circle {
+  width: 20px; height: 20px; border: 2px solid var(--text-muted); border-radius: 50%;
+  margin-bottom: 8px; position: relative;
+}
+.check-circle::after {
+  content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0);
+  width: 10px; height: 10px; background: var(--btn-primary); border-radius: 50%; transition: transform 0.2s ease;
+}
+.cap-info .main-text { display: block; font-weight: 900; font-size: 1rem; color: var(--text-muted); margin-bottom: 2px; }
+.cap-info small { font-size: 0.7rem; color: #64748b; text-transform: uppercase; }
+
+.cap-option input:checked + .cap-box { background: rgba(0, 174, 239, 0.15); border-color: var(--btn-primary); box-shadow: 0 4px 15px rgba(0, 174, 239, 0.2); }
+.cap-option input:checked + .cap-box .check-circle { border-color: var(--btn-primary); }
+.cap-option input:checked + .cap-box .check-circle::after { transform: translate(-50%, -50%) scale(1); }
+.cap-option input:checked + .cap-box .main-text { color: white; }
+.cap-option input:checked + .cap-box small { color: var(--btn-primary); }
+
+/* ==========================================================================
+   11. GESTÃO DE WORKOUTS (.admin-*)
+   ========================================================================== */
+.admin-btn-add {
+  background: rgba(0, 174, 239, 0.1); border: 2px dashed var(--btn-primary); color: var(--btn-primary);
+  width: 100%; padding: 20px; border-radius: 12px; font-weight: 900; font-size: 1rem;
+  text-transform: uppercase; cursor: pointer; margin-bottom: 25px; transition: all 0.3s ease;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.admin-btn-add:hover { background: var(--btn-primary); color: white; border-style: solid; }
+
+.admin-card {
+  background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px;
+  margin-bottom: 20px; position: relative; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); overflow: hidden;
+}
+.admin-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: linear-gradient(to bottom, var(--btn-primary), #3b82f6); }
+
+.admin-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; margin-bottom: 20px; }
+.admin-header h3 { color: white; font-size: 1.2rem; margin: 0; display: flex; align-items: center; gap: 10px; }
+.admin-badge-id { background: #0f172a; color: #64748b; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; }
+
+.admin-input {
+  width: 100%; background: #0f172a !important; border: 1px solid #334155 !important; color: #e2e8f0 !important;
+  padding: 12px !important; border-radius: 6px !important; font-family: 'Roboto Condensed', sans-serif;
+  font-size: 0.95rem; transition: border-color 0.2s;
+}
+.admin-input:focus { border-color: var(--btn-primary) !important; box-shadow: 0 0 0 2px rgba(0, 174, 239, 0.2); }
+
+.admin-label { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8; margin-bottom: 6px; font-weight: 700; }
+.admin-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+.admin-input.date-start { border-left: 3px solid #fbbf24 !important; }
+.admin-input.date-end { border-left: 3px solid #ef4444 !important; }
+
+.admin-btn-save {
+  width: 100%; padding: 12px; background: #3b82f6; color: white; border: none; border-radius: 6px;
+  font-weight: bold; text-transform: uppercase; cursor: pointer; margin-top: 10px;
+}
+.admin-btn-save:hover { background: #2563eb; }
+
+/* Botão Excluir (Perigo) */
+.admin-btn-delete {
+  width: 100%; padding: 12px; background: transparent; border: 1px solid #ef4444; color: #ef4444;
+  border-radius: 6px; font-weight: bold; text-transform: uppercase; cursor: pointer; margin-top: 10px; transition: all 0.2s;
+}
+.admin-btn-delete:hover { background: #ef4444; color: white; }
+
+/* --- CLASSE PARA DESTAQUE DE EDIÇÃO --- */
+.input-editavel {
+  border: 1px solid #00AEEF !important; /* Borda Ciano */
+  background-color: rgba(0, 174, 239, 0.15) !important; /* Fundo leve */
+  box-shadow: 0 0 10px rgba(0, 174, 239, 0.3); /* Brilho */
+  color: white !important;
+  border-radius: 4px !important;
+  padding-left: 8px !important;
+  transition: all 0.3s ease;
 }
