@@ -23,15 +23,13 @@ body { background-color: var(--bg-color); color: var(--text-color); min-height: 
 h1 { text-align: center; text-transform: uppercase; margin: 30px 0; color: var(--text-color); font-weight: 900; letter-spacing: 1px; }
 
 /* ==========================================================================
-   2. BOTÕES GERAIS E AÇÕES
+   2. BOTÕES (REGRAS GERAIS E ADMIN)
    ========================================================================== */
-/* Seletor reforçado para pegar botões input e button */
+/* Regra Base: Aplica forma e fonte para TODOS os botões */
+button, 
 .btn-primary-action, 
-button:not(.admin-btn-save):not(.admin-btn-delete):not(.admin-btn-add):not(.small-action),
 input[type="submit"], 
 input[type="button"] {
-  background-color: var(--btn-primary) !important;
-  color: #000 !important;
   width: 100%;
   padding: 16px;
   font-size: 1rem;
@@ -40,20 +38,61 @@ input[type="button"] {
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  margin-top: 10px;
-  transition: background 0.3s ease;
-  -webkit-appearance: none;
+  transition: all 0.3s ease;
+  background-color: var(--btn-primary); /* Padrão Ciano */
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.btn-primary-action:hover, 
-button:hover:not(.admin-btn-save):not(.admin-btn-delete):not(.admin-btn-add):not(.small-action) {
-  background-color: var(--btn-hover) !important;
+button:hover, .btn-primary-action:hover {
+  filter: brightness(1.1);
 }
 
-.acoes button { width: auto; padding: 8px 12px; margin: 0 2px; font-size: 0.9rem; }
-.admin-btn-save { background: #3b82f6 !important; color: white !important; }
-.admin-btn-delete { background: transparent !important; border: 1px solid var(--btn-danger) !important; color: var(--btn-danger) !important; }
-.admin-btn-add { background: rgba(0, 174, 239, 0.1) !important; border: 2px dashed var(--btn-primary) !important; color: var(--btn-primary) !important; }
+/* --- Sobrescritas Específicas para ADMIN --- */
+
+/* Botão Criar Workout (Tracejado) */
+.admin-btn-add {
+  background: rgba(0, 174, 239, 0.1) !important;
+  border: 2px dashed var(--btn-primary) !important;
+  color: var(--btn-primary) !important;
+  margin-bottom: 25px;
+  gap: 10px;
+}
+.admin-btn-add:hover {
+  background: var(--btn-primary) !important;
+  color: #000 !important;
+  border-style: solid !important;
+}
+
+/* Botão Salvar Config (Azul Escuro) */
+.admin-btn-save {
+  background-color: #3b82f6 !important;
+  color: white !important;
+  padding: 12px !important; /* Um pouco menor que o principal */
+}
+
+/* Botão Excluir (Vermelho Transparente) */
+.admin-btn-delete {
+  background-color: transparent !important;
+  border: 1px solid var(--btn-danger) !important;
+  color: var(--btn-danger) !important;
+  padding: 12px !important;
+}
+.admin-btn-delete:hover {
+  background-color: var(--btn-danger) !important;
+  color: white !important;
+}
+
+/* Botões Pequenos (Tabela de Inscritos) */
+.acoes button {
+  width: auto;
+  padding: 8px 12px;
+  margin: 0 2px;
+  font-size: 0.9rem;
+  display: inline-flex;
+}
 
 /* ==========================================================================
    3. NAVEGAÇÃO
@@ -91,7 +130,7 @@ button:hover:not(.admin-btn-save):not(.admin-btn-delete):not(.admin-btn-add):not
 .ranking-filter-item select { width: 100%; background: transparent; border: none; color: white; padding: 25px 15px 10px 15px; font-size: 0.9rem; font-weight: bold; text-transform: uppercase; cursor: pointer; -webkit-appearance: none; }
 .ranking-filter-item select option { background-color: var(--bg-color); color: white; }
 
-/* Formulários & AUTOFILL FIX */
+/* Formulários & Fix Autofill */
 .form-card { background: var(--card-bg); padding: 30px; border-radius: 16px; box-shadow: var(--shadow); border: 1px solid var(--border-color); max-width: 500px; margin: 0 auto; }
 .input-group { margin-bottom: 20px; }
 .input-group label { display: block; margin-bottom: 8px; font-size: 0.85rem; color: var(--btn-primary); font-weight: 700; text-transform: uppercase; }
@@ -99,12 +138,12 @@ button:hover:not(.admin-btn-save):not(.admin-btn-delete):not(.admin-btn-add):not
 input, select { width: 100%; padding: 14px; border-radius: 8px; border: 1px solid var(--border-color); background-color: var(--input-bg); color: white; font-size: 1rem; transition: all 0.2s; }
 input:focus, select:focus { outline: none; border-color: var(--btn-primary); background-color: rgba(0,0,0,0.5); }
 
-/* Correção para Autofill do Navegador (Fundo Branco indesejado) */
+/* Remove fundo branco do navegador */
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus, 
 input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0 30px #1e293b inset !important; /* Cor do fundo card */
+    -webkit-box-shadow: 0 0 0 30px #1e293b inset !important;
     -webkit-text-fill-color: white !important;
     transition: background-color 5000s ease-in-out 0s;
 }
@@ -128,7 +167,7 @@ input:-webkit-autofill:active {
 .sugestao-item:hover { background-color: var(--btn-primary); color: black; font-weight: bold; }
 
 /* ==========================================================================
-   6. MOBILE (VISUALIZAÇÃO CORRIGIDA)
+   6. MOBILE (LAYOUT GAMES)
    ========================================================================== */
 @media (max-width: 768px) {
   .hero-ranking-header { height: 220px; justify-content: flex-end; padding-bottom: 5px; }
@@ -154,9 +193,10 @@ input:-webkit-autofill:active {
   .posicao { font-size: 1.2rem; font-weight: 900; text-align: center; }
   
   .nome-col { padding-left: 0; display: flex; flex-direction: column; justify-content: center; }
-  .nome-col strong { font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; display: flex; align-items: center; }
-  .nome-col small { display: flex; align-items: center; gap: 5px; font-size: 0.75rem; opacity: 0.8; margin-top: 2px; }
-  
+  .nome-row { display: flex; align-items: center; gap: 5px; font-weight: bold; font-size: 1rem; color: white; }
+  .info-row { display: block; font-size: 0.75rem; opacity: 0.7; margin-top: 3px; color: var(--text-muted); }
+
+  /* Score Mobile */
   .mobile-result-wrapper { display: flex !important; flex-direction: column; align-items: flex-end; justify-content: center; line-height: 1.3; text-align: right; }
   .mobile-wod-cat { font-size: 0.65rem; text-transform: uppercase; font-weight: bold; opacity: 0.6; letter-spacing: 1px; }
   .mobile-result-value { font-size: 1.1rem; font-weight: 900; color: white; }
@@ -168,7 +208,6 @@ input:-webkit-autofill:active {
 
   /* Detalhes Mobile (Destravado) */
   .ranking-details { 
-    /* Removemos o display:none do CSS para que o JS controle */
     grid-template-columns: 1fr 1fr 1fr;
     gap: 5px;
     background: #0a1525;
@@ -187,7 +226,6 @@ input:-webkit-autofill:active {
 
 @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-/* Oculta detalhes no Desktop */
 @media (min-width: 769px) {
   .ranking-details { display: none !important; }
   .mobile-result-wrapper { display: none !important; }
@@ -207,6 +245,7 @@ input:-webkit-autofill:active {
 #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-color); z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.8s ease-out, visibility 0.8s; }
 #splash-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 .splash-logo { width: 120px; height: 120px; border-radius: 50%; box-shadow: 0 0 20px rgba(0, 174, 239, 0.4); }
+
 /* Admin */
 .admin-card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px; margin-bottom: 20px; position: relative; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); overflow: hidden; }
 .admin-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: linear-gradient(to bottom, var(--btn-primary), #3b82f6); }
