@@ -9,16 +9,21 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 /**
  * ============================================================================
- * 2. DATA LAYER
+ * 2. DATA LAYER (BANCO DE DADOS)
  * ============================================================================
  */
 const Data = {
   async getAtletas() {
-    const { data } = await supabaseClient.from('atletas').select('*');
+    const { data, error } = await supabaseClient.from('atletas').select('*');
+    if (error) console.error("Erro ao buscar atletas:", error);
     return data || [];
   },
   async getConfigs() {
-    const { data } = await supabaseClient.from('workout_config').select('*').order('ordem', { ascending: true });
+    const { data, error } = await supabaseClient
+      .from('workout_config')
+      .select('*')
+      .order('ordem', { ascending: true });
+    if (error) console.error("Erro ao buscar configs:", error);
     return data || [];
   },
   async updateConfig(id, updates) {
@@ -34,14 +39,15 @@ const Data = {
     return error;
   },
   async getAtletaById(id) {
-    const { data } = await supabaseClient.from('atletas').select('*').eq('id', id).single();
+    const { data, error } = await supabaseClient.from('atletas').select('*').eq('id', id).single();
+    if (error) console.error("Erro ao buscar atleta:", error);
     return data;
   },
   async updateAtleta(id, updates) {
-    const response = await supabaseClient.from('atletas').update(updates).eq('id', id);
-    return response;
+    return await supabaseClient.from('atletas').update(updates).eq('id', id);
   },
   async addAtleta(atleta) {
+    // Retorna o erro explicitamente para tratamento
     const { error } = await supabaseClient.from('atletas').insert([atleta]);
     return error;
   },
@@ -52,14 +58,20 @@ const Data = {
 
 /**
  * ============================================================================
- * 3. CORE LOGIC
+ * 3. LÓGICA DE NEGÓCIO (CÁLCULOS)
  * ============================================================================
  */
 const Calc = {
   getIdade(d) {
     if (!d) return 0;
-    const p = d.includes('/') ? d.split('/') : d.split('-');
-    const y = d.includes('/') ? p[2] : p[0];
+    // Aceita formato YYYY-MM-DD (do banco) ou DD/MM/YYYY (visual)
+    let y;
+    if (d.includes('-')) {
+        y = d.split('-')[0];
+    } else {
+        const p = d.split('/');
+        y = p[2];
+    }
     return new Date().getFullYear() - Number(y);
   },
   getFaixa(i) {
@@ -126,7 +138,7 @@ const Calc = {
 
 /**
  * ============================================================================
- * 4. UI CONTROLLER
+ * 4. UI CONTROLLER (INTERFACE)
  * ============================================================================
  */
 const UI = {
@@ -136,6 +148,7 @@ const UI = {
   async init() {
     this.configsCache = await Data.getConfigs();
 
+    // Filtro WOD
     const selWod = document.getElementById("workoutFiltro");
     if (selWod && this.configsCache.length > 0) {
       selWod.innerHTML = '<option value="GERAL">Ranking Geral</option>';
@@ -161,7 +174,7 @@ const UI = {
     }
   },
 
-  // --- HEADER TABELA ---
+  // --- RENDER RANKING HEADER ---
   renderRankingHeader(configs, selectedWodId) {
     const h = document.querySelector(".list-header.grid-ranking");
     if (!h) return;
@@ -186,7 +199,7 @@ const UI = {
     }
   },
 
-  // --- RENDERIZAR RANKING ---
+  // --- RENDER RANKING BODY ---
   async renderRanking() {
     const container = document.getElementById("ranking");
     if (!container) return;
@@ -215,7 +228,7 @@ const UI = {
     const activeWods = new Set();
     atletas.forEach(a => a.resultados?.forEach(r => activeWods.add(r.rodada)));
 
-    // Cálculo
+    // Lógica de Pontuação
     configs.forEach(conf => {
       if (!activeWods.has(conf.id) && fWod === "GERAL") return;
 
@@ -231,9 +244,7 @@ const UI = {
 
       let currentRank = 1;
       let sumRX = this.assignPointsToGroup(groupRX, conf.id, currentRank, 0);
-      currentRank += groupRX.length;
       let sumSC = this.assignPointsToGroup(groupScale, conf.id, currentRank, sumRX);
-      currentRank += groupScale.length;
       this.assignPointsToGroup(groupFoundation, conf.id, currentRank, sumRX + sumSC);
 
       const maxPen = participantes.length + 5;
@@ -249,7 +260,6 @@ const UI = {
         let ptsA = 0, ptsB = 0;
         configs.forEach(c => { ptsA += (a.pontosWod?.[c.id] || 0); ptsB += (b.pontosWod?.[c.id] || 0); });
         if (ptsA !== ptsB) return ptsA - ptsB;
-        
         const rA = configs.map(c => a.pontosWod?.[c.id] || 999).sort((x, y) => x - y);
         const rB = configs.map(c => b.pontosWod?.[c.id] || 999).sort((x, y) => x - y);
         for (let i = 0; i < rA.length; i++) { if (rA[i] !== rB[i]) return rA[i] - rB[i]; }
@@ -264,7 +274,6 @@ const UI = {
       });
     }
 
-    // Renderização
     container.innerHTML = "";
     if (fWod !== "GERAL") {
       const wodId = Number(fWod);
@@ -296,7 +305,6 @@ const UI = {
           detailsHTML += `<div class="detalhe-box"><span>${c.nome}</span> ${info}</div>`;
         });
 
-        // HTML INTERNO DA LINHA
         innerRowHTML = `
           ${colsHTML}
           <div class="score-highlight">${total} <small>pts</small></div>
@@ -332,7 +340,6 @@ const UI = {
 
       const currentGridStyle = document.querySelector(".list-header.grid-ranking").style.getPropertyValue('--grid-cols');
 
-      // --- CONSTRUÇÃO DO HTML (DIVS IRMÃS PARA O CLIQUE FUNCIONAR) ---
       container.innerHTML += `
         <div class="list-item grid-ranking" style="--grid-cols: ${currentGridStyle}" onclick="UI.toggleRankDetails(${a.id})">
           <div class="posicao">${medalha}</div>
@@ -371,26 +378,25 @@ const UI = {
     return sumPoints;
   },
 
-  // --- FUNÇÃO DE TOGGLE (CLIQUE NO MOBILE) ---
   toggleRankDetails(id) {
-    // Verifica se é mobile (opcional, mas bom pra performance)
     if (window.innerWidth > 768) return; 
-    
     const d = document.getElementById(`detalhes-${id}`);
-    if (!d) return; // Segurança
+    if (!d) return; 
+    
+    // Toggle simples baseado no estado atual
+    const currentDisplay = window.getComputedStyle(d).display;
+    const l = d.previousElementSibling;
 
-    const l = d.previousElementSibling; // Pega a linha do atleta (list-item)
-
-    if (d.style.display === "none") {
-      d.style.display = "grid"; // Abre o grid de detalhes
-      l.style.background = "rgba(0,174,239,0.1)"; // Highlight na linha
+    if (currentDisplay === "none") {
+      d.style.display = "grid";
+      l.style.background = "rgba(0,174,239,0.1)";
     } else {
       d.style.display = "none";
-      l.style.background = "var(--card-bg)"; // Volta cor original
+      l.style.background = "var(--card-bg)";
     }
   },
 
-  // --- OUTRAS FUNÇÕES ---
+  // --- UTILS ---
   toggleEdit(id, modo) { const campos = ["nome", "sexo", "nasc"]; campos.forEach(c => { const el = document.getElementById(`${c}-${id}`); if (el) { el.disabled = !modo; if (modo) { el.classList.add("input-editavel"); if (c === "nome") el.focus(); } else { el.classList.remove("input-editavel"); } } }); const btn = document.getElementById(`sv-${id}`); if (btn) btn.style.display = modo ? "inline-block" : "none"; },
   async salvarEdicao(id) { const nome = document.getElementById(`nome-${id}`).value; const sexo = document.getElementById(`sexo-${id}`).value; const nasc = document.getElementById(`nasc-${id}`).value; if (!nome || !nasc) return alert("Preencha todos os campos"); const di = this.formatarDataParaBanco(nasc); const faixa = Calc.getFaixa(Calc.getIdade(di)); const btn = document.getElementById(`sv-${id}`); const org = btn.textContent; btn.textContent = "..."; btn.disabled = true; const { error } = await Data.updateAtleta(id, { nome, sexo, nascimento: di, faixa_etaria: faixa }); if (error) { alert("Erro: " + error.message); btn.textContent = org; btn.disabled = false; } else { alert("Atualizado!"); this.renderInscritos(); } },
   async renderInscritos() { const c = document.getElementById("listaInscritos"); if (!c) return; c.innerHTML = "<p style='text-align:center'>Carregando...</p>"; const ats = await Data.getAtletas(); c.innerHTML = ""; ats.forEach(a => { let nd = a.nascimento; if (a.nascimento && a.nascimento.includes('-')) { const p = a.nascimento.split('-'); nd = `${p[2]}/${p[1]}/${p[0]}`; } c.innerHTML += `<div class="list-item grid-inscritos"><div class="text-left"><input id="nome-${a.id}" value="${a.nome}" disabled></div><div><select id="sexo-${a.id}" disabled><option value="M" ${a.sexo === "M" ? "selected" : ""}>M</option><option value="F" ${a.sexo === "F" ? "selected" : ""}>F</option></select></div><div><input type="tel" id="nasc-${a.id}" value="${nd}" disabled maxlength="10" oninput="UI.mascaraData(this)"></div><div><strong>${a.faixa_etaria}</strong></div><div class="acoes"><button onclick="UI.toggleEdit(${a.id},true)">✏️</button><button id="sv-${a.id}" style="display:none;background:var(--btn-success);color:white" onclick="UI.salvarEdicao(${a.id})">💾</button><button style="background:var(--btn-delete)" onclick="UI.excluirAtleta(${a.id})">🗑️</button></div></div>`; }); },
@@ -410,11 +416,69 @@ const UI = {
   renderOptionsRodada() { const select = document.getElementById("rodada"); if (!select) return; const currentVal = select.value; select.innerHTML = ""; this.configsCache.forEach(c => { const opt = document.createElement("option"); opt.value = c.id; opt.textContent = c.nome ? `Workout ${c.nome}` : `Workout 26.${c.id}`; select.appendChild(opt); }); if (currentVal) select.value = currentVal; },
   verificarPrazo() { const rodadaId = document.getElementById("rodada").value; const config = this.configsCache.find(c => c.id == rodadaId); const btn = document.getElementById("btnSalvarResultado"), av = document.getElementById("avisoPrazo"), divP = document.getElementById("divPerguntaCap"), inp = document.getElementById("score"); if (!config) return; const now = new Date(), ini = new Date(config.data_inicio), lim = new Date(config.data_limite); const opt = { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }; if (now < ini) { btn.disabled = true; inp.disabled = true; btn.textContent = "AGUARDE O INÍCIO"; btn.style.backgroundColor = "#fbbf24"; btn.style.color = "#000"; if (av) { av.textContent = `Abre em: ${ini.toLocaleDateString('pt-BR', opt)}`; av.style.color = "#fbbf24"; } } else if (now > lim) { btn.disabled = true; inp.disabled = true; btn.textContent = "PRAZO ENCERRADO"; btn.style.backgroundColor = "#475569"; btn.style.color = "#fff"; if (av) { av.textContent = `Fechou em: ${lim.toLocaleDateString('pt-BR', opt)}`; av.style.color = "#ef4444"; } } else { btn.disabled = false; inp.disabled = false; btn.textContent = "SALVAR RESULTADO"; btn.style.backgroundColor = "var(--btn-primary)"; btn.style.color = "#fff"; if (av) { av.textContent = `Aberto até: ${lim.toLocaleDateString('pt-BR', opt)}`; av.style.color = "var(--btn-primary)"; } } if (config.tipo === 'TIME') { if (divP) divP.style.display = "block"; const sim = document.querySelector('input[name="capCheck"][value="SIM"]'); this.toggleInputType(sim && sim.checked); } else { if (divP) divP.style.display = "none"; inp.placeholder = config.tipo === 'CARGA' ? "Carga (KG)" : "Repetições"; inp.type = "number"; } },
   toggleInputType(isTime) { const inp = document.getElementById("score"), lbl = document.getElementById("labelScore"); inp.value = ""; if (isTime) { lbl.textContent = "Tempo"; inp.placeholder = "Ex: 12:30"; inp.type = "text"; } else { lbl.textContent = "Reps"; inp.placeholder = "Ex: 185"; inp.type = "number"; } },
-  async lancarResultado() { const btn = document.getElementById("btnSalvarResultado"), id = document.getElementById("atletaId").value, rod = Number(document.getElementById("rodada").value), cat = document.getElementById("workout").value, sc = document.getElementById("score").value, cf = this.configsCache.find(c => c.id == rod); if (!id || btn.disabled) return; if (!sc) return alert("Digite resultado"); if (cf.tipo === 'TIME') { const s = document.querySelector('input[name="capCheck"][value="SIM"]').checked; if (s && !sc.includes(':')) return alert("Use dois pontos (Ex: 10:30)"); if (!s && (sc.includes(':') || isNaN(sc))) return alert("Use apenas números."); } btn.textContent = "Salvando..."; btn.disabled = true; const atl = await Data.getAtletaById(id); let res = atl.resultados || []; res = res.filter(r => r.rodada !== rod); res.push({ rodada: rod, workout: cat, score: sc }); await Data.updateAtleta(id, { resultados: res }); alert("Salvo!"); location.reload(); },
-  async cadastrarAtleta() { const btn = document.querySelector("button"); btn.disabled = true; const n = document.getElementById("nome").value, d = document.getElementById("dataNascimento").value, s = document.getElementById("sexo").value; if (!n || !d || !s) { alert("Preencha tudo"); btn.disabled = false; return; } if (d.length < 10) { alert("Data incompleta"); btn.disabled = false; return; } const di = this.formatarDataParaBanco(d), ex = await Data.getAtletas(), dup = ex.find(a => a.nome.toLowerCase() === n.toLowerCase() && a.nascimento === di); if (dup) { alert("Já cadastrado"); btn.disabled = false; return; } await Data.addAtleta({ id: Date.now(), nome: n, nascimento: di, sexo: s, faixaEtaria: Calc.getFaixa(Calc.getIdade(di)), resultados: [] }); alert("Sucesso!"); window.location.href = "inscritos.html"; }
+  async lancarResultado() { const btn = document.getElementById("btnSalvarResultado"), id = document.getElementById("atletaId").value, rod = Number(document.getElementById("rodada").value), cat = document.getElementById("workout").value, scoreVal = document.getElementById("score").value, cf = this.configsCache.find(c => c.id == rod); if (!id || btn.disabled) return; if (!scoreVal) return alert("Digite resultado"); if (cf.tipo === 'TIME') { const s = document.querySelector('input[name="capCheck"][value="SIM"]').checked; if (s && !scoreVal.includes(':')) return alert("Use dois pontos (Ex: 10:30)"); if (!s && (scoreVal.includes(':') || isNaN(scoreVal))) return alert("Use apenas números."); } btn.textContent = "Salvando..."; btn.disabled = true; const atl = await Data.getAtletaById(id); let res = atl.resultados || []; res = res.filter(r => r.rodada !== rod); res.push({ rodada: rod, workout: cat, score: scoreVal }); const { error } = await Data.updateAtleta(id, { resultados: res }); if(error) { alert("Erro ao salvar: " + error.message); btn.textContent = "TENTAR NOVAMENTE"; btn.disabled = false; } else { alert("Resultado Salvo!"); location.reload(); } },
+  
+  // ========================================================================
+  // CORREÇÃO: CADASTRO COM NOMES DE COLUNAS DO BANCO (snake_case)
+  // ========================================================================
+  async cadastrarAtleta() {
+    const btn = document.querySelector("button");
+    btn.disabled = true;
+    
+    const n = document.getElementById("nome").value;
+    const d = document.getElementById("dataNascimento").value;
+    const s = document.getElementById("sexo").value;
+
+    if (!n || !d || !s) { 
+        alert("Preencha todos os campos"); 
+        btn.disabled = false; 
+        return; 
+    }
+    
+    let di = d;
+    if(d.includes('/')) {
+       const p = d.split('/');
+       di = `${p[2]}-${p[1]}-${p[0]}`;
+    }
+
+    const idade = Calc.getIdade(di);
+    if(isNaN(idade) || idade < 0) {
+        alert("Data de nascimento inválida");
+        btn.disabled = false; 
+        return;
+    }
+
+    const ex = await Data.getAtletas();
+    const dup = ex.find(a => a.nome.toLowerCase() === n.toLowerCase() && a.nascimento === di);
+
+    if (dup) { 
+        alert("Atleta já cadastrado!"); 
+        btn.disabled = false; 
+        return; 
+    }
+
+    // FIX: Nomes das colunas corrigidos para snake_case (igual ao banco)
+    // FIX: Incluído ID manual pois a tabela não tem auto-incremento
+    const error = await Data.addAtleta({
+      id: Date.now(), 
+      nome: n,
+      nascimento: di,
+      sexo: s,
+      faixa_etaria: Calc.getFaixa(idade),
+      resultados: []
+    });
+
+    if (error) {
+        alert("Erro ao cadastrar: " + error.message + "\n" + error.details);
+        btn.disabled = false;
+    } else {
+        alert("Cadastro realizado com sucesso!");
+        window.location.href = "inscritos.html";
+    }
+  }
 };
 
-// Exports para HTML
+// Exports
 window.cadastrarAtleta = () => UI.cadastrarAtleta();
 window.lancarResultado = () => UI.lancarResultado();
 window.mostrarRanking = () => UI.renderRanking();
