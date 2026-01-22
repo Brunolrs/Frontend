@@ -21,6 +21,11 @@
       
       <div class="ranking-filters-bar">
         
+        <div class="ranking-filter-item search-row"> 
+            <label>Pesquisar Atleta</label>
+            <input type="text" id="buscaRanking" placeholder="DIGITE O NOME..." onkeyup="UI.renderRanking()">
+        </div>
+
         <div class="ranking-filter-item">
           <label>Visualizar</label>
           <select id="workoutFiltro" onchange="UI.renderRanking()">
@@ -59,11 +64,7 @@
           </select>
         </div>
 
-      </div>
-    </div>
-  </div>
-
-  <div class="container">
+      </div> </div> </div> <div class="container">
     <div class="list-header grid-ranking"></div>
     <div id="ranking"></div>
   </div>
@@ -75,7 +76,7 @@
       </div>
       <span>Home</span>
     </a>
-   <a href="ranking.html" class="nav-item active">
+    <a href="ranking.html" class="nav-item active">
       <div class="nav-icon-container">
         <svg viewBox="0 0 24 24"><path d="M20.2 2H3.8C2.8 2 2 2.8 2 3.8v2.4C2 9 4 11.2 6.6 11.6 7.5 14.5 10 16.7 13 17v3H8v2h8v-2h-5v-3c3-.3 5.5-2.5 6.4-5.4 2.6-.4 4.6-2.6 4.6-5.2V3.8c0-1-.8-1.8-1.8-1.8zM5 6.2V4h2v3.7c-1.3-.4-2-1.5-2-1.5zm14 0c0 1.5-1.1 2.9-2.6 3.1-.3-1.1-.4-2.3-.4-3.5V4h3v2.2z"/></svg>
       </div>

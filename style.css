@@ -3,29 +3,30 @@
    Definição das cores, sombras e espaçamentos globais do sistema.
    ========================================================================== */
 :root {
-  /* Paleta de Cores do Fundo */
+  /* --- Paleta de Cores --- */
   --bg-color: #0f172a;       /* Fundo Principal (Slate-900) */
   --card-bg: #1e293b;        /* Fundo dos Cards/Listas (Slate-800) */
   
-  /* Tipografia */
+  /* --- Tipografia --- */
   --text-color: #f8fafc;     /* Texto Principal (Branco/Gelo) */
   --text-muted: #94a3b8;     /* Texto Secundário (Cinza) */
 
-  /* Cores de Ação (Brand Colors) */
+  /* --- Cores de Ação (Brand Colors) --- */
   --btn-primary: #00AEEF;    /* Ciano Principal (Brand) */
   --btn-hover: #009cd6;      /* Variação escura para Hover */
   --btn-danger: #ef4444;     /* Vermelho para erros/exclusão */
   --btn-success: #22c55e;    /* Verde para sucesso/salvar */
 
-  /* Utilitários de UI */
+  /* --- Utilitários de UI --- */
   --border-color: rgba(255, 255, 255, 0.1);
   --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
   --input-bg: rgba(0, 0, 0, 0.3);
 }
 
-/* Reset Global e Configurações Base 
-   Garante que todos os elementos usem box-sizing border-box e a fonte padrão.
-*/
+/* ==========================================================================
+   2. RESET E ESTILOS BASE
+   Configurações iniciais para garantir consistência entre navegadores.
+   ========================================================================== */
 * { 
   margin: 0; 
   padding: 0; 
@@ -41,12 +42,6 @@ body {
   padding-bottom: 100px; /* Espaço para a barra de navegação fixa no rodapé */
 }
 
-.container { 
-  max-width: 1100px; 
-  margin: 0 auto; 
-  padding: 0 20px; 
-}
-
 h1 { 
   text-align: center; 
   text-transform: uppercase; 
@@ -56,88 +51,93 @@ h1 {
   letter-spacing: 1px; 
 }
 
+/* Container Principal */
+.container { 
+  max-width: 1100px; 
+  margin: 0 auto; 
+  padding: 0 20px; 
+}
+
 /* ==========================================================================
-   2. BOTÕES (REGRAS GERAIS E ADMIN)
-   Estilos compartilhados para todos os elementos clicáveis.
+   3. COMPONENTES: BOTÕES E AÇÕES
+   Estilos para botões primários, secundários e ações administrativas.
    ========================================================================== */
 
-/* Regra Base: Aplica forma e fonte para TODOS os botões e inputs do tipo botão */
+/* Botão Padrão */
 button, 
 .btn-primary-action, 
 input[type="submit"], 
 input[type="button"] {
-  width: 100%;
-  padding: 16px;
-  font-size: 1rem;
-  text-transform: uppercase;
+  width: 100%; 
+  padding: 16px; 
+  font-size: 1rem; 
+  text-transform: uppercase; 
   font-weight: 900;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+  border: none; 
+  border-radius: 8px; 
+  cursor: pointer; 
   transition: all 0.3s ease;
-  background-color: var(--btn-primary); /* Padrão Ciano */
+  background-color: var(--btn-primary); 
   color: #000;
-  display: flex;
-  align-items: center;
+  display: flex; 
+  align-items: center; 
   justify-content: center;
 }
 
 button:hover, 
-.btn-primary-action:hover {
-  filter: brightness(1.1);
+.btn-primary-action:hover { 
+  filter: brightness(1.1); 
 }
 
-/* --- Sobrescritas Específicas para ADMIN --- */
-/* Utilizamos !important aqui para garantir que estilos específicos do admin
-   sobreponham a regra genérica de 'button' definida acima. */
+/* --- Botões Específicos (Admin) --- */
 
-/* Botão Criar Workout (Estilo Tracejado/Ghost) */
-.admin-btn-add {
-  background: rgba(0, 174, 239, 0.1) !important;
-  border: 2px dashed var(--btn-primary) !important;
-  color: var(--btn-primary) !important;
-  margin-bottom: 25px;
-  gap: 10px;
+/* Botão Adicionar (Tracejado) */
+.admin-btn-add { 
+  background: rgba(0, 174, 239, 0.1) !important; 
+  border: 2px dashed var(--btn-primary) !important; 
+  color: var(--btn-primary) !important; 
+  margin-bottom: 25px; 
+  gap: 10px; 
 }
 
-.admin-btn-add:hover {
-  background: var(--btn-primary) !important;
-  color: #000 !important;
-  border-style: solid !important;
+.admin-btn-add:hover { 
+  background: var(--btn-primary) !important; 
+  color: #000 !important; 
+  border-style: solid !important; 
 }
 
-/* Botão Salvar Config (Azul Royal) */
-.admin-btn-save {
-  background-color: #3b82f6 !important;
-  color: white !important;
-  padding: 12px !important; /* Um pouco menor que o principal */
+/* Botão Salvar (Azul Sólido) */
+.admin-btn-save { 
+  background-color: #3b82f6 !important; 
+  color: white !important; 
+  padding: 12px !important; 
 }
 
-/* Botão Excluir (Vermelho Transparente/Outline) */
-.admin-btn-delete {
-  background-color: transparent !important;
-  border: 1px solid var(--btn-danger) !important;
-  color: var(--btn-danger) !important;
-  padding: 12px !important;
+/* Botão Excluir (Outline Vermelho) */
+.admin-btn-delete { 
+  background-color: transparent !important; 
+  border: 1px solid var(--btn-danger) !important; 
+  color: var(--btn-danger) !important; 
+  padding: 12px !important; 
 }
 
-.admin-btn-delete:hover {
-  background-color: var(--btn-danger) !important;
-  color: white !important;
+.admin-btn-delete:hover { 
+  background-color: var(--btn-danger) !important; 
+  color: white !important; 
 }
 
-/* Botões Pequenos (Usados dentro das linhas da Tabela de Inscritos) */
-.acoes button {
-  width: auto;
-  padding: 8px 12px;
-  margin: 0 2px;
-  font-size: 0.9rem;
-  display: inline-flex;
+/* Botões Pequenos (Tabela) */
+.acoes button { 
+  width: auto; 
+  padding: 8px 12px; 
+  margin: 0 2px; 
+  font-size: 0.9rem; 
+  display: inline-flex; 
 }
 
 /* ==========================================================================
-   3. NAVEGAÇÃO (BOTTOM BAR)
-   Barra fixa no rodapé estilo App Mobile.
+   4. NAVEGAÇÃO (BOTTOM BAR)
+   Barra de navegação fixa no rodapé para experiência mobile-app.
    ========================================================================== */
 .main-nav { 
   position: fixed; 
@@ -166,7 +166,7 @@ button:hover,
   flex: 1; 
 }
 
-/* Container do ícone: Responsável pela animação de "pílula" ao ativar */
+/* Ícone da Navegação */
 .nav-icon-container { 
   width: 50px; 
   height: 30px; 
@@ -186,7 +186,7 @@ button:hover,
   transition: fill 0.3s ease; 
 }
 
-/* Estado Ativo: Ícone sobe, ganha fundo colorido e sombra */
+/* Estado Ativo da Navegação */
 .nav-item.active { 
   color: white; 
 }
@@ -203,73 +203,11 @@ button:hover,
 }
 
 /* ==========================================================================
-   4. UI GERAL & LEADERBOARD
-   Estilos da Home, Cabeçalho com Imagem e Formulários.
+   5. UI: HERO & CARDS
+   Cabeçalho com imagem de fundo e cards de menu principal.
    ========================================================================== */
-.hero-logo { 
-  display: block; 
-  width: 100%; 
-  max-height: 350px; 
-  object-fit: cover; 
-  border-radius: 15px; 
-  border: 1px solid var(--border-color); 
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
-  margin-bottom: 10px; 
-}
 
-/* Grid do Menu Principal (Cards Grandes) */
-.menu-grid { 
-  display: grid; 
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); 
-  gap: 15px; 
-  margin-top: 20px; 
-  padding-bottom: 40px; 
-}
-
-.menu-card { 
-  background: var(--card-bg); 
-  color: white; 
-  padding: 30px 15px; 
-  text-align: center; 
-  border-radius: 15px; 
-  text-decoration: none; 
-  transition: all 0.2s ease; 
-  display: flex; 
-  flex-direction: column; 
-  align-items: center; 
-  justify-content: center; 
-  box-shadow: 0 4px 6px rgba(0,0,0,0.2); 
-  border: 1px solid var(--border-color); 
-}
-
-.menu-card div { 
-  margin-bottom: 10px; 
-  font-size: 40px; 
-}
-
-.menu-card h2 { 
-  margin-bottom: 5px; 
-  font-size: 1.1em; 
-  text-transform: uppercase; 
-  letter-spacing: 1px; 
-  color: var(--btn-primary); 
-}
-
-.menu-card p { 
-  font-size: 0.85em; 
-  opacity: 0.8; 
-  line-height: 1.3; 
-  margin: 0; 
-  color: var(--text-muted); 
-}
-
-.menu-card:active { 
-  transform: scale(0.96); 
-  background: var(--btn-primary); 
-  color: #000; 
-}
-
-/* Hero Section com Imagem de Fundo (Ranking) */
+/* Hero Section (Topo da página de Ranking) */
 .hero-ranking-wrapper { 
   position: relative; 
   width: 100%; 
@@ -320,9 +258,73 @@ button:hover,
   letter-spacing: 2px; 
 }
 
-/* Filtros Desktop (Barra Horizontal) */
+/* Logo Hero (Página Inicial) */
+.hero-logo { 
+  display: block; 
+  width: 100%; 
+  max-height: 350px; 
+  object-fit: cover; 
+  border-radius: 15px; 
+  border: 1px solid var(--border-color); 
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+  margin-bottom: 10px; 
+}
+
+/* Imagem Responsiva para uso geral em Cards */
+.responsive-card-img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  object-fit: cover;
+  margin-bottom: 15px;
+}
+
+/* Grid de Menu Principal */
+.menu-grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); 
+  gap: 15px; 
+  margin-top: 20px; 
+  padding-bottom: 40px; 
+}
+
+.menu-card { 
+  background: var(--card-bg); 
+  color: white; 
+  padding: 30px 15px; 
+  text-align: center; 
+  border-radius: 15px; 
+  text-decoration: none; 
+  transition: all 0.2s ease; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center; 
+  box-shadow: var(--shadow); 
+  border: 1px solid var(--border-color); 
+}
+
+.menu-card:active { 
+  transform: scale(0.96); 
+  background: var(--btn-primary); 
+  color: #000; 
+}
+
+.menu-card h2 { 
+  color: var(--btn-primary); 
+  font-size: 1.1em; 
+  margin-bottom: 5px; 
+}
+
+/* ==========================================================================
+   6. BARRA DE FILTROS & BUSCA
+   Estilização dos filtros de ranking e campo de pesquisa.
+   ========================================================================== */
 .ranking-filters-bar { 
   display: flex; 
+  flex-wrap: wrap; /* Permite quebra de linha para responsividade */
   background: rgba(15, 23, 42, 0.85); 
   border: 1px solid var(--border-color); 
   backdrop-filter: blur(5px); 
@@ -335,6 +337,13 @@ button:hover,
   border-right: 1px solid var(--border-color); 
   position: relative; 
   min-height: 55px; 
+}
+
+/* Item de Busca: Ocupa linha inteira no topo */
+.ranking-filter-item.search-row {
+  flex: 0 0 100%; /* Força largura total */
+  border-right: none;
+  border-bottom: 1px solid var(--border-color); 
 }
 
 .ranking-filter-item:last-child { 
@@ -351,7 +360,9 @@ button:hover,
   font-weight: bold; 
 }
 
-.ranking-filter-item select { 
+/* Estilo unificado para Selects e Inputs na barra de filtros */
+.ranking-filter-item select,
+.ranking-filter-item input { 
   width: 100%; 
   background: transparent; 
   border: none; 
@@ -361,6 +372,7 @@ button:hover,
   font-weight: bold; 
   text-transform: uppercase; 
   cursor: pointer; 
+  outline: none; 
   -webkit-appearance: none; 
 }
 
@@ -369,7 +381,15 @@ button:hover,
   color: white; 
 }
 
-/* Formulários & Estilização de Inputs */
+.ranking-filter-item input::placeholder { 
+  color: rgba(255,255,255,0.3); 
+  font-weight: normal; 
+}
+
+/* ==========================================================================
+   7. FORMULÁRIOS GERAIS
+   Estilização de inputs e formulários fora da barra de filtros.
+   ========================================================================== */
 .form-card { 
   background: var(--card-bg); 
   padding: 30px; 
@@ -393,7 +413,9 @@ button:hover,
   text-transform: uppercase; 
 }
 
-input, select { 
+/* Inputs Padrão */
+input:not(.ranking-filter-item input), 
+select:not(.ranking-filter-item select) { 
   width: 100%; 
   padding: 14px; 
   border-radius: 8px; 
@@ -404,28 +426,26 @@ input, select {
   transition: all 0.2s; 
 }
 
-input:focus, select:focus { 
+input:focus, 
+select:focus { 
   outline: none; 
   border-color: var(--btn-primary); 
   background-color: rgba(0,0,0,0.5); 
 }
 
-/* Hack para Autocomplete do Chrome/Webkit:
-   O navegador tende a colocar um fundo branco no input quando preenche automático.
-   Isso força a cor de fundo e texto para combinar com o tema escuro.
-*/
-input:-webkit-autofill,
+/* Hack para Autocomplete do Chrome (Remove fundo branco) */
+input:-webkit-autofill, 
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus, 
 input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0 30px #1e293b inset !important;
-    -webkit-text-fill-color: white !important;
-    transition: background-color 5000s ease-in-out 0s;
+  -webkit-box-shadow: 0 0 0 30px #1e293b inset !important; 
+  -webkit-text-fill-color: white !important; 
+  transition: background-color 5000s ease-in-out 0s;
 }
 
 /* ==========================================================================
-   5. TABELAS (LAYOUT GRID DESKTOP)
-   Estrutura padrão para exibição de ranking e lista de inscritos.
+   8. TABELAS (LAYOUT DESKTOP)
+   Estrutura de grid para o Leaderboard e Lista de Inscritos.
    ========================================================================== */
 .list-header { 
   background: black; 
@@ -438,7 +458,6 @@ input:-webkit-autofill:active {
   display: grid; 
   align-items: center; 
   gap: 10px; 
-  /* A variável --grid-cols é injetada via JS dependendo do nª de WODs */
   grid-template-columns: var(--grid-cols, 50px 2fr repeat(3, 1fr) 70px); 
 }
 
@@ -459,7 +478,7 @@ input:-webkit-autofill:active {
   border-left: 3px solid var(--btn-primary); 
 }
 
-/* Configurações específicas das colunas do Ranking */
+/* Grid Específico do Ranking */
 .grid-ranking { 
   display: grid; 
   grid-template-columns: var(--grid-cols, 50px 2fr repeat(3, 1fr) 70px); 
@@ -479,23 +498,23 @@ input:-webkit-autofill:active {
   font-size: 1.1em; 
 }
 
-/* Configurações específicas das colunas de Inscritos */
+/* Grid Específico de Inscritos */
 .grid-inscritos { 
   grid-template-columns: 2fr 0.5fr 1fr 1fr 1fr; 
   text-align: center; 
 }
 
-.list-item input, .list-item select { 
+/* Admin Inputs na Tabela */
+.list-item input, 
+.list-item select { 
   background: transparent; 
   border: 1px solid transparent; 
   padding: 5px; 
 }
 
-/* Estado de Edição (Admin) */
 .input-editavel { 
   border: 1px solid #00AEEF !important; 
   background-color: rgba(0, 174, 239, 0.15) !important; 
-  box-shadow: 0 0 10px rgba(0, 174, 239, 0.3); 
   color: white !important; 
   border-radius: 4px !important; 
   padding-left: 8px !important; 
@@ -530,11 +549,11 @@ input:-webkit-autofill:active {
 }
 
 /* ==========================================================================
-   6. MOBILE (LAYOUT GAMES & RESPONSIVIDADE)
-   Transforma a tabela em lista e ajusta cabeçalhos para telas pequenas.
+   9. MOBILE & RESPONSIVIDADE
+   Ajustes para telas menores (Tablets e Celulares).
    ========================================================================== */
 @media (max-width: 768px) {
-  /* Ajuste do Hero Header */
+  /* Hero Ajustes */
   .hero-ranking-header { 
     height: 220px; 
     justify-content: flex-end; 
@@ -554,27 +573,39 @@ input:-webkit-autofill:active {
     margin-bottom: 5px; 
   }
 
-  /* Filtros viram Grid 2x2 */
+  /* Filtros em Grid (Mobile) */
   .ranking-filters-bar { 
     display: grid; 
     grid-template-columns: 1fr 1fr; 
-    grid-template-rows: auto auto; 
+    grid-template-rows: auto auto auto; 
   }
-  
+
+  /* Busca ocupa largura total */
+  .ranking-filter-item.search-row {
+    grid-column: 1 / -1; 
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  /* Ajuste de bordas no grid 2x2 */
   .ranking-filter-item { 
     border-right: 1px solid var(--border-color); 
     border-bottom: 1px solid var(--border-color); 
   }
   
-  .ranking-filter-item:nth-child(2n) { 
+  /* Remove borda direita dos itens pares (lado direito) */
+  .ranking-filter-item:nth-child(even) { 
     border-right: none; 
-  }
+  } 
   
-  .ranking-filter-item:nth-child(n+3) { 
-    border-bottom: none; 
-  }
+  /* Ajuste fino específico para a ordem dos filtros */
+  .ranking-filter-item:nth-child(1) { border-right: none; } /* Busca */
+  .ranking-filter-item:nth-child(2) { border-right: 1px solid var(--border-color); } /* Visualizar */
+  .ranking-filter-item:nth-child(3) { border-right: none; } /* Nivel */
+  .ranking-filter-item:nth-child(4) { border-right: 1px solid var(--border-color); border-bottom: none; } /* Sexo */
+  .ranking-filter-item:nth-child(5) { border-right: none; border-bottom: none; } /* Idade */
 
-  /* Header da Tabela Simplificado (Rank - Nome - Pontos) */
+
+  /* Tabela Mobile (Layout Simplificado) */
   .list-header.grid-ranking { 
     display: grid; 
     grid-template-columns: 50px 1fr 100px !important; 
@@ -584,10 +615,11 @@ input:-webkit-autofill:active {
     border-bottom: 2px solid var(--border-color); 
   }
   
-  /* Esconde colunas individuais dos WODs no header */
-  .wod-col-header { display: none !important; }
+  .wod-col-header { 
+    display: none !important; 
+  }
   
-  /* Força exibição apenas das colunas principais */
+  /* Força exibição de colunas chave */
   .list-header.grid-ranking > div:nth-child(1), 
   .list-header.grid-ranking > div:nth-child(2), 
   .list-header.grid-ranking > div:last-child { 
@@ -598,7 +630,6 @@ input:-webkit-autofill:active {
   .list-header.grid-ranking > div:nth-child(2) { text-align: left; }
   .list-header.grid-ranking > div:last-child { text-align: right; padding-right: 5px; }
 
-  /* Linha da Lista Mobile (Clicável para expandir) */
   .list-item.grid-ranking { 
     display: grid; 
     grid-template-columns: 50px 1fr 100px !important; 
@@ -635,7 +666,7 @@ input:-webkit-autofill:active {
     color: var(--text-muted); 
   }
 
-  /* Score Mobile (Layout Vertical) */
+  /* Exibição de Scores no Mobile */
   .mobile-result-wrapper { 
     display: flex !important; 
     flex-direction: column; 
@@ -649,19 +680,20 @@ input:-webkit-autofill:active {
   .mobile-result-value { font-size: 1.1rem; font-weight: 900; color: white; }
   .mobile-result-points { font-size: 0.85rem; color: var(--btn-primary); font-weight: bold; }
 
-  /* Oculta elementos de Desktop */
-  .wod-col { display: none !important; }
-  .score-highlight { display: none !important; }
+  .wod-col, 
+  .score-highlight { 
+    display: none !important; 
+  }
 
-  /* Área de Detalhes Expansível (Accordion Mobile) */
+  /* Detalhes Expansíveis (Accordion) */
   .ranking-details { 
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 5px;
-    background: #0a1525;
-    padding: 15px;
-    border-left: 3px solid var(--btn-primary);
-    border-bottom: 1px solid var(--border-color);
-    animation: slideDown 0.2s ease-out;
+    grid-template-columns: 1fr 1fr 1fr; 
+    gap: 5px; 
+    background: #0a1525; 
+    padding: 15px; 
+    border-left: 3px solid var(--btn-primary); 
+    border-bottom: 1px solid var(--border-color); 
+    animation: slideDown 0.2s ease-out; 
   }
   
   .detalhe-box { 
@@ -681,7 +713,6 @@ input:-webkit-autofill:active {
     text-transform: uppercase; 
   }
 
-  /* Lista de Inscritos no Mobile (Vertical) */
   .list-item.grid-inscritos { 
     display: flex; 
     flex-direction: column; 
@@ -689,31 +720,35 @@ input:-webkit-autofill:active {
     padding: 20px; 
   }
   
-  .grid-inscritos > div { width: 100%; text-align: left; padding: 0; }
-  .list-item.grid-inscritos input, .list-item.grid-inscritos select { 
+  .grid-inscritos > div { 
+    width: 100%; 
+    text-align: left; 
+    padding: 0; 
+  }
+  
+  .list-item.grid-inscritos input, 
+  .list-item.grid-inscritos select { 
     border-bottom: 1px solid rgba(255,255,255,0.1) !important; 
     width: 100%; 
   }
 }
 
-/* Animação para abertura dos detalhes */
 @keyframes slideDown { 
   from { opacity: 0; transform: translateY(-10px); } 
   to { opacity: 1; transform: translateY(0); } 
 }
 
-/* Regras para Desktop (> 769px): Garante que elementos mobile fiquem ocultos */
-@media (min-width: 769px) {
-  .ranking-details { display: none !important; }
-  .mobile-result-wrapper { display: none !important; }
+@media (min-width: 769px) { 
+  .ranking-details { display: none !important; } 
+  .mobile-result-wrapper { display: none !important; } 
 }
 
 /* ==========================================================================
-   7. UTILITÁRIOS FINAIS & COMPONENTES ESPECÍFICOS
-   Styles para inputs customizados, splash screen e admin cards.
+   10. ADMIN, UTILS E SPLASH SCREEN
+   Estilos auxiliares, tela de carregamento e área administrativa.
    ========================================================================== */
 
-/* Seletor Customizado (Checkbox Grande para Time Cap) */
+/* Seletor Customizado (Radio Button) */
 .cap-selector-wrapper { 
   display: grid; 
   grid-template-columns: 1fr 1fr; 
@@ -721,8 +756,14 @@ input:-webkit-autofill:active {
   margin-top: 5px; 
 }
 
-.cap-option { position: relative; cursor: pointer; }
-.cap-option input { display: none; } /* Esconde o radio nativo */
+.cap-option { 
+  position: relative; 
+  cursor: pointer; 
+}
+
+.cap-option input { 
+  display: none; 
+}
 
 .cap-box { 
   display: flex; 
@@ -737,13 +778,11 @@ input:-webkit-autofill:active {
   height: 100%; 
 }
 
-/* Estado Selecionado */
 .cap-option input:checked + .cap-box { 
   background: rgba(0, 174, 239, 0.15); 
   border-color: var(--btn-primary); 
 }
 
-/* Círculo visual do Radio */
 .check-circle { 
   width: 20px; 
   height: 20px; 
@@ -769,7 +808,7 @@ input:-webkit-autofill:active {
   border-radius: 50%; 
 }
 
-/* Splash Screen (Tela de carregamento) */
+/* Splash Screen (Tela de Carregamento) */
 #splash-screen { 
   position: fixed; 
   top: 0; 
@@ -809,7 +848,6 @@ input:-webkit-autofill:active {
   overflow: hidden; 
 }
 
-/* Barra lateral colorida no Card Admin */
 .admin-card::before { 
   content: ''; 
   position: absolute; 
@@ -859,6 +897,10 @@ input:-webkit-autofill:active {
   margin-bottom: 15px; 
 }
 
-/* Indicadores coloridos para datas (Amarelo = Início, Vermelho = Fim) */
-.admin-input.date-start { border-left: 3px solid #fbbf24 !important; }
-.admin-input.date-end { border-left: 3px solid #ef4444 !important; }
+.admin-input.date-start { 
+  border-left: 3px solid #fbbf24 !important; 
+}
+
+.admin-input.date-end { 
+  border-left: 3px solid #ef4444 !important; 
+}
