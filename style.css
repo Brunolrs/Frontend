@@ -139,6 +139,7 @@ button:hover,
    4. NAVEGAÇÃO (BOTTOM BAR)
    Barra de navegação fixa no rodapé para experiência mobile-app.
    ========================================================================== */
+
 .main-nav { 
   position: fixed; 
   bottom: 0; 
@@ -306,6 +307,11 @@ button:hover,
   border: 1px solid var(--border-color); 
 }
 
+.menu-card div {
+  font-size: 45px; 
+  margin-bottom: 1px;
+}
+
 .menu-card:active { 
   transform: scale(0.96); 
   background: var(--btn-primary); 
@@ -322,6 +328,7 @@ button:hover,
    6. BARRA DE FILTROS & BUSCA
    Estilização dos filtros de ranking e campo de pesquisa.
    ========================================================================== */
+
 .ranking-filters-bar { 
   display: flex; 
   flex-wrap: wrap; /* Permite quebra de linha para responsividade */
