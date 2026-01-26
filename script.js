@@ -1,4 +1,3 @@
-
 /**
  * ============================================================================
  * 1. CONFIGURAÇÃO E INICIALIZAÇÃO
@@ -191,6 +190,41 @@ const UI = {
       selRodada.addEventListener("change", () => this.verificarPrazo());
       setTimeout(() => this.verificarPrazo(), 500);
     }
+
+    // Inicializa o Realtime
+    this.initRealtime();
+  },
+
+  // --- REALTIME LISTENER ---
+  initRealtime() {
+    console.log("Iniciando Realtime...");
+    const channel = supabaseClient
+      .channel('tabela-atletas') // Nome do canal
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'atletas' }, // Escuta qualquer mudança na tabela atletas
+        async (payload) => {
+          console.log('Alteração Realtime detectada:', payload);
+          
+          // Atualiza o cache local de atletas
+          this.atletasCache = await Data.getAtletas();
+
+          // Se a tela de Ranking estiver presente, atualiza
+          if (document.getElementById("ranking")) {
+             await this.renderRanking(); 
+          }
+          
+          // Se a lista de inscritos (admin) estiver presente, atualiza
+          if (document.getElementById("listaInscritos")) {
+             await this.renderInscritos();
+          }
+        }
+      )
+      .subscribe((status) => {
+        if (status === 'SUBSCRIBED') {
+            console.log('Conectado ao Realtime do Supabase!');
+        }
+      });
   },
 
   renderRankingHeader(configs, selectedWodId) {
@@ -224,7 +258,10 @@ const UI = {
     const container = document.getElementById("ranking");
     if (!container) return;
 
-    container.innerHTML = "<p style='text-align:center; padding:20px;'>Calculando pontuação...</p>";
+    // Apenas coloca "Calculando..." se estiver vazio, para não piscar no realtime
+    if(container.innerHTML.trim() === "") {
+        container.innerHTML = "<p style='text-align:center; padding:20px;'>Calculando pontuação...</p>";
+    }
 
     const configs = this.configsCache;
     const totalWods = configs.length;
@@ -238,7 +275,7 @@ const UI = {
 
     let atletas = await Data.getAtletas();
 
-    // 1. Filtros Estruturais (categoria agora considera WODs faltantes => FOUNDATION)
+    // 1. Filtros Estruturais
     atletas = atletas.filter((a) => {
       const faixa = a.faixa_etaria || a.faixaEtaria;
       const catLabel = Calc.getCategoriaLabel(a.resultados || [], totalWods);
@@ -251,7 +288,7 @@ const UI = {
     const activeWods = new Set();
     atletas.forEach((a) => a.resultados?.forEach((r) => activeWods.add(r.rodada)));
 
-    // 2. Cálculo de Pontos (mantém sua lógica + penalidade soma dos que registraram)
+    // 2. Cálculo de Pontos
     configs.forEach((conf) => {
       let participantes = [];
       atletas.forEach((a) => {
@@ -279,7 +316,6 @@ const UI = {
       const sumSC = this.assignPointsToGroup(groupScale, conf.id, currentRank, sumRX);
       const sumFD = this.assignPointsToGroup(groupFoundation, conf.id, currentRank, sumRX + sumSC);
 
-      // Penalidade por ausência no WOD = soma dos que registraram (fallback: atletas.length + 5)
       const maxPen = atletas.length + 5;
       const somaRegistrados = sumRX + sumSC + sumFD;
 
@@ -354,7 +390,6 @@ const UI = {
         idx + 1 === 1 ? "🥇" : idx + 1 === 2 ? "🥈" : idx + 1 === 3 ? "🥉" : `${idx + 1}º`;
       const res = a.resultados || [];
 
-      // ⚠️ Badge agora considera WODs faltantes => FOUNDATION
       const tierGeral = Calc.getOverallCategoryTier(res, totalWods);
       let catBadge =
         tierGeral === 3
