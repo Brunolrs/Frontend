@@ -911,3 +911,31 @@ input:-webkit-autofill:active {
 .admin-input.date-end { 
   border-left: 3px solid #ef4444 !important; 
 }
+
+/* Divisor de Categorias */
+.category-divider {
+  grid-column: 1 / -1; /* Ocupa a largura total da grid */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin: 20px 0 10px 0;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: bold;
+}
+
+.category-divider::before, 
+.category-divider::after {
+  content: '';
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+  flex: 1;
+}
+
+/* Cor específica para cada divisor (Opcional, mas fica bonito) */
+.div-rx { color: #22c55e; }
+.div-sc { color: #fbbf24; }
+.div-fd { color: #94a3b8; }

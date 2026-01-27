@@ -91,12 +91,6 @@ const Calc = {
     return 1;
   },
 
-  /**
-   * Determina a categoria GERAL do atleta:
-   * - Se não tem resultados => FOUNDATION (1)
-   * - Se deixou de registrar algum WOD (resultados < totalWods) => FOUNDATION (1)
-   * - Caso contrário, aplica regra RX/SC/FD por presença de tiers nos resultados.
-   */
   getOverallCategoryTier(resultados, totalWods) {
     if (!resultados || resultados.length === 0) return 1;
     if (typeof totalWods === "number" && totalWods > 0 && resultados.length < totalWods) {
@@ -381,6 +375,8 @@ const UI = {
       .querySelector(".list-header.grid-ranking")
       ?.style.getPropertyValue("--grid-cols");
 
+    let lastTier = null; // Variável para controle da categoria anterior
+
     displayList.forEach((a, idx) => {
       if (fNome && !a.nome.toLowerCase().includes(fNome)) return;
 
@@ -390,7 +386,22 @@ const UI = {
         idx + 1 === 1 ? "🥇" : idx + 1 === 2 ? "🥈" : idx + 1 === 3 ? "🥉" : `${idx + 1}º`;
       const res = a.resultados || [];
 
+      // ⚠️ Badge agora considera WODs faltantes => FOUNDATION
       const tierGeral = Calc.getOverallCategoryTier(res, totalWods);
+      
+      // Lógica da linha separadora
+      if (lastTier !== null && lastTier !== tierGeral && fWod === "GERAL") {
+          let label = tierGeral === 3 ? "Categoria RX" : tierGeral === 2 ? "Categoria SCALE" : "Categoria FOUNDATION";
+          let colorClass = tierGeral === 3 ? "div-rx" : tierGeral === 2 ? "div-sc" : "div-fd";
+          htmlBuffer.push(`<div class="category-divider ${colorClass}">${label}</div>`);
+      }
+      if (lastTier === null && fWod === "GERAL") {
+          let label = tierGeral === 3 ? "Categoria RX" : tierGeral === 2 ? "Categoria SCALE" : "Categoria FOUNDATION";
+          let colorClass = tierGeral === 3 ? "div-rx" : tierGeral === 2 ? "div-sc" : "div-fd";
+          htmlBuffer.push(`<div class="category-divider ${colorClass}">${label}</div>`);
+      }
+      lastTier = tierGeral;
+
       let catBadge =
         tierGeral === 3
           ? `<span style="color:#22c55e; border:1px solid #22c55e; font-size:0.7em; padding:0 3px; border-radius:3px; margin-left:6px;">RX</span>`
