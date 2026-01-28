@@ -2,11 +2,11 @@
  * ============================================================================
  * 1. CONFIGURAÇÃO E INICIALIZAÇÃO - Produção
  * ============================================================================
-*/ 
+*/
 const SUPABASE_URL = "https://fcnjpdzxqceenfsprrvw.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjbmpwZHp4cWNlZW5mc3BycnZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzNjQxNTAsImV4cCI6MjA4Mzk0MDE1MH0.da-1snEhvQjT3sbQ0vt-DQcmm-D-RzlQzgzkE0VdJpM";
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
+ 
 
 /**
  * ============================================================================
@@ -726,8 +726,19 @@ const UI = {
       const sim = document.querySelector('input[name="capCheck"][value="SIM"]');
       this.toggleInputType(sim && sim.checked);
     } else {
+      // ESSE É O BLOCO PARA CARGA OU REPS
       if (divP) divP.style.display = "none";
-      inp.placeholder = config.tipo === "CARGA" ? "Carga (lb)" : "Repetições";
+      
+      const lbl = document.getElementById("labelScore"); // Pega o elemento do título
+      
+      if (config.tipo === "CARGA") {
+          inp.placeholder = "Carga (lb)";
+          if(lbl) lbl.textContent = "Carga Máxima"; // <--- MUDA O TEXTO VERDE AQUI
+      } else {
+          inp.placeholder = "REPS";
+          if(lbl) lbl.textContent = "REPS";
+      }
+      
       inp.type = "number";
     }
   },
