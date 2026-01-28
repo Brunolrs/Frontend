@@ -80,7 +80,8 @@ const Calc = {
     return new Date().getFullYear() - Number(y);
   },
   getFaixa(i) {
-    if (i < 25) return "Até 24";
+    if (i < 15) return "Até 15";
+    if (i <= 24) return "16-24";
     if (i <= 29) return "25–29";
     if (i <= 34) return "30–34";
     if (i <= 39) return "35–39";
