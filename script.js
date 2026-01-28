@@ -367,7 +367,7 @@ const UI = {
       // Linha Divisória
       if (fWod === "GERAL") {
         if (lastTier === null || lastTier !== tierGeral) {
-           let label = tierGeral === 3 ? "Categoria RX" : tierGeral === 2 ? "Categoria SCALE" : "Categoria FOUNDATION";
+           let label = tierGeral === 3 ? "RX" : tierGeral === 2 ? "SCALE" : "FOUNDATION";
            let colorClass = tierGeral === 3 ? "div-rx" : tierGeral === 2 ? "div-sc" : "div-fd";
            htmlBuffer.push(`<div class="category-divider ${colorClass}">${label}</div>`);
         }
