@@ -3,10 +3,11 @@
  * 1. CONFIGURAÇÃO E INICIALIZAÇÃO - Produção
  * ============================================================================
 */
+
 const SUPABASE_URL = "https://fcnjpdzxqceenfsprrvw.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjbmpwZHp4cWNlZW5mc3BycnZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzNjQxNTAsImV4cCI6MjA4Mzk0MDE1MH0.da-1snEhvQjT3sbQ0vt-DQcmm-D-RzlQzgzkE0VdJpM";
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
- 
+
 
 /**
  * ============================================================================
@@ -16,8 +17,8 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const SUPABASE_URL = "https://rhjdelkpdmnzotdjddji.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJoamRlbGtwZG1uem90ZGpkZGppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk1NDg0MzksImV4cCI6MjA4NTEyNDQzOX0.QSK316Id2FW_X2FDtIOdlima8v37dgQ3n9NuxVjFxwY";
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-*/
 
+*/
 /**
  * ============================================================================
  * 2. DATA LAYER (BANCO DE DADOS)
@@ -85,7 +86,9 @@ const Calc = {
     if (i <= 29) return "25–29";
     if (i <= 34) return "30–34";
     if (i <= 39) return "35–39";
-    return "40+";
+    if (i <= 45) return "40–44";
+    if (i <= 49) return "45–49";
+    return "50+";
   },
   getTier(w) {
     if (!w) return 1;
@@ -274,6 +277,7 @@ const UI = {
       });
 
       // 2. SCALE: Rank + Soma dos pontos RX (Regra 3)
+
       let sumPointsSC = 0;
       groupScale.forEach((a, idx) => {
           if(!a.pontosWod) a.pontosWod = {};
@@ -284,6 +288,7 @@ const UI = {
 
       // 3. FOUNDATION: Rank + Soma RX + Soma SC (Regra 4 - acumulando para garantir hierarquia)
       // *Nota: A regra diz "soma de quem fez scale", mas para manter hierarquia RX < SC < FD, somamos tudo acima.
+      
       let sumPointsFD = 0;
       let penalidadeBaseFD = sumPointsRX + sumPointsSC;
       groupFoundation.forEach((a, idx) => {
@@ -296,6 +301,7 @@ const UI = {
       // 4. NÃO REGISTROU (Regra 5)
       // Punição = Soma RX + Soma SC + Soma FD (para garantir que fique atrás de todos)
       // Usamos uma penalidade bem alta para jogar pro fundo
+      
       let penalidadeMissing = sumPointsRX + sumPointsSC + sumPointsFD + 10; 
       
       atletas.forEach((a) => {
