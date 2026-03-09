@@ -8,7 +8,11 @@
   <link rel="icon" href="logo1.jpg" type="image/png">
   
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <script src="script.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/calc.js"></script>
+  <script src="js/ui.js"></script>
+  
   
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
@@ -95,13 +99,22 @@
         <label id="labelScore">Resultado</label>
         <input id="score" type="text" placeholder="...">
       </div>
+
+      <div class="input-group" id="divTiebreak" style="margin-top: 10px; border-top: 1px solid var(--border-color); padding-top: 15px;">
+        <label style="color: var(--btn-primary);">Tiebreak (Tempo de Desempate)</label>
+        <input id="tiebreak" type="text" placeholder="Ex: 04:0" maxlength="5" oninput="UI.mascaraTempo(this)">
+        <small style="color:var(--text-muted); display:block; margin-top:5px;">
+          Tempo em que completou a rodada/reps de desempate (Ex: 04:30).
+        </small>
+      </div>
       
       <button id="btnSalvarResultado" onclick="lancarResultado()" class="btn-primary-action">SALVAR RESULTADO</button>
       <button onclick="location.reload()" style="background: transparent; border: 1px solid var(--border-color); margin-top: 15px; width: 100%; color: var(--text-muted); cursor: pointer;">Sair / Trocar Atleta</button>
     </div>
 
-  </div> <nav class="main-nav">
-    
+  </div> 
+
+  <nav class="main-nav">
     <a href="index.html" class="nav-item">
       <div class="nav-icon-container">
         <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
@@ -122,7 +135,6 @@
       </div>
       <span>Lançar Resultado</span>
     </a>
-
   </nav>
 
   <script>document.addEventListener("DOMContentLoaded", () => UI.init());</script>

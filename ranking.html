@@ -2,41 +2,43 @@
 <html lang="pt-BR">
 <head>
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <script src="script.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/calc.js"></script>
+  <script src="js/ui.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Leaderboard - CrossFit Clã</title>
-  
   <link rel="icon" href="logo1.jpg" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  
+
   <div class="hero-ranking-wrapper">
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <div class="hero-subtitle">Open 2026</div>
       <div class="hero-title">Leaderboard</div>
-      
+
       <div class="ranking-filters-bar">
-        
-        <div class="ranking-filter-item search-row"> 
-            <label>Pesquisar Atleta</label>
-            <input type="text" id="buscaRanking" placeholder="DIGITE O NOME..." onkeyup="UI.renderRanking()">
+
+        <div class="ranking-filter-item search-row">
+          <label>Pesquisar Atleta</label>
+          <input type="text" id="buscaRanking" placeholder="Digite o nome..." onkeyup="UI.renderRanking()">
         </div>
 
         <div class="ranking-filter-item">
           <label>Visualizar</label>
           <select id="workoutFiltro" onchange="UI.renderRanking()">
             <option value="GERAL">Ranking Geral</option>
-            </select>
+          </select>
         </div>
 
         <div class="ranking-filter-item">
           <label>Categoria</label>
           <select id="categoriaFiltro" onchange="UI.renderRanking()">
-            <option value="TODAS">Geral</option>
+            <option value="TODAS">Todas</option>
             <option value="RX">RX (Elite)</option>
             <option value="SCALE">Scale</option>
             <option value="FOUNDATION">Foundation</option>
@@ -51,9 +53,9 @@
             <option value="F">Feminino</option>
           </select>
         </div>
-        
+
         <div class="ranking-filter-item">
-          <label>Idade</label>
+          <label>Faixa Etária</label>
           <select id="faixaFiltro" onchange="UI.renderRanking()">
             <option value="GERAL">Todas</option>
             <option value="Até 15">Até 15</option>
@@ -67,7 +69,11 @@
           </select>
         </div>
 
-      </div> </div> </div> <div class="container">
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
     <div class="list-header grid-ranking"></div>
     <div id="ranking"></div>
   </div>
@@ -89,8 +95,9 @@
       <div class="nav-icon-container">
         <svg viewBox="0 0 24 24"><path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>
       </div>
-      <span>Lançar Resultados</span>
+      <span>Lançar Resultado</span>
     </a>
   </nav>
+
 </body>
 </html>
