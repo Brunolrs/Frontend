@@ -25,7 +25,7 @@ Sistema de gestão de atletas e leaderboard para competições de CrossFit, insp
 - **Dashboard Intuitivo**: Navegação rápida entre as principais funções.
 - **Gestão de Inscritos**: Cadastro de atletas com separação automática por Sexo e Faixa Etária.
 - **Lançamento de Resultados**: Registro de scores com distinção entre categorias (RX ou Scale).
-- **Leaderboard Dinâmico**: Ranking em tempo real com critérios de desempate (Total de RX > Pontuação Total).
+- **Leaderboard Dinâmico**: Ranking em tempo real com critérios de desempate, seguindo a logica da Crossfit  (Total de RX > Pontuação Total).
 - **Pódio com Medalhas**: Destaque automático com 🥇, 🥈 e 🥉 para os primeiros colocados.
 - **Design Responsivo**: Totalmente otimizado para uso em smartphones (Mobile-First) durante o evento.
 
