@@ -285,7 +285,10 @@ const UI = {
       encontrouAlgum = true;
 
       const rank    = posicaoReal[idx];
-      const medalha = rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : `${rank}º`;
+      const medalhaEmoji = rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : null;
+      const medalha = medalhaEmoji
+        ? `<span class="pos-emoji">${medalhaEmoji}</span>`
+        : `<span class="pos-num pos-num--plain">${rank}º</span>`;
       const res     = a.resultados || [];
 
       // Badge e divisória: categoria do WOD específico ou geral do campeonato
@@ -319,9 +322,25 @@ const UI = {
         configs.forEach((c) => {
           const info          = this.getWodInfo(res, c.id);
           const isMissingThis = a._isMissing?.[c.id];
-          const ptDisplay     = isMissingThis ? "-" : `(${a.pontosWod?.[c.id]})`;
+          const wodPts        = a.pontosWod?.[c.id];
+          const ptDisplay     = isMissingThis ? "-" : `(${wodPts})`;
           colsHTML    += `<div class="wod-col">${info} <span class="pts-wod">${ptDisplay}</span></div>`;
-          detailsHTML += `<div class="detalhe-box"><span>${c.nome}</span> ${info}</div>`;
+
+          // Posição real neste WOD (pontosWod === colocação no CrossFit scoring)
+          const posWod   = isMissingThis || !wodPts ? null : wodPts;
+          const posEmoji = posWod === 1 ? "🥇" : posWod === 2 ? "🥈" : posWod === 3 ? "🥉" : null;
+          const posLabel = posWod
+            ? `<div class="detalhe-pos">${posEmoji
+                ? `<span class="detalhe-pos-emoji">${posEmoji}</span>`
+                : `<span class="detalhe-pos-num">${posWod}º</span>`
+              }</div>`
+            : `<div class="detalhe-pos"><span class="detalhe-pos-miss">—</span></div>`;
+
+          detailsHTML += `<div class="detalhe-box">`+
+            `<span class="detalhe-wod-nome">${c.nome}</span>`+
+            `${posLabel}`+
+            `<div class="detalhe-info">${info}</div>`+
+            `</div>`;
         });
 
         const totalDisplay = a._noResultAll ? "-" : a._displayTotal;
@@ -330,7 +349,7 @@ const UI = {
         innerRowHTML = `
           ${colsHTML}
           <div class="score-highlight">${totalDisplay} ${ptsLabel}</div>
-          <div class="mobile-result-wrapper" style="display:none;">
+          <div class="mobile-result-wrapper">
             <span class="mobile-wod-cat">TOTAL</span>
             <span class="mobile-result-value">${totalDisplay}</span>
             <span class="mobile-result-points">PTS</span>
@@ -351,7 +370,7 @@ const UI = {
         innerRowHTML = `
           <div class="score-highlight" style="font-size:1.2em;">${displayPt} <small>pts</small></div>
           <div style="font-size:1.1em;" class="wod-col">${info}</div>
-          <div class="mobile-result-wrapper" style="display:none;">
+          <div class="mobile-result-wrapper">
             <span class="mobile-wod-cat">${displayCat}</span>
             <span class="mobile-result-value">${displayScore}</span>
             <span class="mobile-result-points">${displayPt} pts</span>
