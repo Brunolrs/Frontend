@@ -328,12 +328,8 @@ const UI = {
 
           // Posição real neste WOD (pontosWod === colocação no CrossFit scoring)
           const posWod   = isMissingThis || !wodPts ? null : wodPts;
-          const posEmoji = posWod === 1 ? "🥇" : posWod === 2 ? "🥈" : posWod === 3 ? "🥉" : null;
           const posLabel = posWod
-            ? `<div class="detalhe-pos">${posEmoji
-                ? `<span class="detalhe-pos-emoji">${posEmoji}</span>`
-                : `<span class="detalhe-pos-num">${posWod}º</span>`
-              }</div>`
+            ? `<div class="detalhe-pos"><span class="detalhe-pos-num">${posWod}</span><span class="detalhe-pos-label">pts</span></div>`
             : `<div class="detalhe-pos"><span class="detalhe-pos-miss">—</span></div>`;
 
           detailsHTML += `<div class="detalhe-box">`+

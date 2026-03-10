@@ -770,19 +770,8 @@ input:-webkit-autofill:active {
     margin: 2px 0;
     line-height: 1;
   }
-  .detalhe-pos-emoji { font-size: 1.4rem; line-height: 1.2; }
-  .detalhe-pos-num   {
-    font-size: 1.1rem;
-    font-weight: 900;
-    color: white;
-    letter-spacing: -0.5px;
-  }
-  /* Para top 3: número menor em ciano abaixo do emoji */
-  .detalhe-pos-emoji + .detalhe-pos-num {
-    font-size: 0.7rem;
-    color: var(--btn-primary);
-    font-weight: 700;
-  }
+  .detalhe-pos-num   { font-size: 1.4rem; font-weight: 900; color: white; letter-spacing: -0.5px; line-height: 1; }
+  .detalhe-pos-label { font-size: 0.65rem; font-weight: 700; color: var(--btn-primary); text-transform: uppercase; letter-spacing: 1px; margin-top: 1px; }
   .detalhe-pos-miss  { font-size: 1rem; color: #334155; font-weight: 900; }
 
   /* Score e resultado — linha menor abaixo da posição */
