@@ -4,67 +4,333 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>CrossFit Clã - Open 2026</title>
-  
   <link rel="icon" href="logo1.jpg" type="image/png">
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script src="js/config.js"></script>
   <script src="js/data.js"></script>
   <script src="js/calc.js"></script>
   <script src="js/ui.js"></script>
-  
-  
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,900;1,900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      background: #0a0f1a;
+      color: #fff;
+      font-family: 'Barlow Condensed', 'Roboto Condensed', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ── SPLASH ─────────────────────────────────────────── */
+    #splash-screen {
+      position: fixed; inset: 0; z-index: 9999;
+      background: #0a0f1a;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 18px;
+      transition: opacity 0.5s, visibility 0.5s;
+    }
+    #splash-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .splash-logo-wrap { position: relative; width: 80px; height: 80px; }
+    .splash-logo-wrap img {
+      width: 80px; height: 80px; border-radius: 50%;
+      object-fit: cover; position: relative; z-index: 2;
+      box-shadow: 0 0 24px rgba(0,174,239,0.35);
+    }
+    .splash-ring {
+      position: absolute; inset: -6px; border-radius: 50%;
+      border: 2px solid transparent;
+      border-top-color: #00AEEF; border-right-color: #00AEEF;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .splash-name {
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 5px; text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+    }
+    .splash-name b { color: #00AEEF; }
+
+    /* ── PAGE WRAPPER ────────────────────────────────────── */
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* ── HERO BANNER ─────────────────────────────────────── */
+    .hero-banner {
+      position: relative;
+      width: 100%;
+      height: 240px;
+      overflow: hidden;
+    }
+    @media (min-width: 600px)  { .hero-banner { height: 340px; } }
+    @media (min-width: 960px)  { .hero-banner { height: 440px; border-radius: 0 0 16px 16px; } }
+
+    .hero-banner img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+      display: block;
+    }
+    .hero-banner-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom,
+        rgba(10,15,26,0.0)  0%,
+        rgba(10,15,26,0.0)  50%,
+        rgba(10,15,26,0.55) 80%,
+        rgba(10,15,26,0.85) 100%
+      );
+    }
+    .hero-banner-text {
+      position: absolute;
+      bottom: 20px; left: 24px; right: 24px;
+    }
+    .hero-eyebrow {
+      font-size: 0.58rem; font-weight: 800;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: #00AEEF; margin-bottom: 8px;
+      display: flex; align-items: center; gap: 7px;
+    }
+    .hero-eyebrow::before {
+      content: ''; display: block;
+      width: 16px; height: 2px; background: #00AEEF; flex-shrink: 0;
+    }
+    .hero-name-row {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .hero-logo {
+      width: 4px; height: 4px; border-radius: 50%;
+      object-fit: cover; flex-shrink: 0;
+      border: 1.5px solid rgba(0,174,239,0.5);
+    }
+    .hero-title {
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      font-weight: 900; text-transform: uppercase;
+      line-height: 0.9; letter-spacing: -0.5px; color: #fff;
+    }
+    .hero-title em { font-style: italic; color: #00AEEF; }
+
+    /* desktop: texto e logo maiores */
+    @media (min-width: 600px) {
+      .hero-logo { width: 4px; height: 4px; }
+      .hero-eyebrow { font-size: 0.68rem; margin-bottom: 10px; }
+      .hero-banner-text { bottom: 28px; left: 32px; }
+    }
+
+    /* ── CONTENT ─────────────────────────────────────────── */
+    .content {
+      padding: 18px 16px 40px;
+    }
+    @media (min-width: 600px) { .content { padding: 24px 32px 56px; } }
+
+    /* ── INFO ROW ────────────────────────────────────────── */
+    .info-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 0 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      margin-bottom: 14px;
+    }
+
+    /* ── LIVE PILL ───────────────────────────────────────── */
+    .live-pill {
+      display: flex; align-items: center; gap: 7px;
+      border-radius: 20px; padding: 5px 12px;
+    }
+    /* aberto = verde */
+    .live-pill--open  { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); }
+    .live-pill--open .live-dot  { background: #22c55e; box-shadow: 0 0 6px #22c55e; }
+    .live-pill--open .live-txt  { color: #22c55e; }
+    /* fechado = vermelho */
+    .live-pill--closed { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); }
+    .live-pill--closed .live-dot { background: #ef4444; box-shadow: 0 0 6px #ef4444; animation: none; }
+    .live-pill--closed .live-txt { color: #ef4444; }
+
+    .live-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+    .live-txt {
+      font-size: 0.62rem; font-weight: 800;
+      letter-spacing: 2px; text-transform: uppercase;
+    }
+
+    .stats-mini { display: flex; align-items: center; gap: 12px; }
+    .stat-mini  { display: flex; align-items: baseline; gap: 4px; }
+    .stat-val   { font-size: 1.1rem; font-weight: 900; color: #fff; line-height: 1; }
+    .stat-lbl   { font-size: 0.55rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.3); }
+    .stat-sep   { width: 1px; height: 16px; background: rgba(255,255,255,0.1); }
+
+    /* ── BOTÕES ──────────────────────────────────────────── */
+    .btn-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (min-width: 600px) { .btn-grid { gap: 16px; } }
+
+    .btn-card {
+      display: flex; flex-direction: column;
+      align-items: flex-start; gap: 12px;
+      padding: 18px 16px;
+      border-radius: 10px;
+      text-decoration: none;
+      background: #111827;
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: all 0.15s ease;
+      position: relative; overflow: hidden;
+    }
+    .btn-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: #00AEEF;
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.2s ease;
+    }
+    .btn-card:hover {
+      background: #151e2e;
+      border-color: rgba(0,174,239,0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    }
+    .btn-card:hover::before { transform: scaleX(1); }
+    .btn-card:active  { transform: scale(0.97); box-shadow: 0 0 0 2px rgba(0,174,239,0.45); }
+    .btn-card:focus-visible { outline: 2px solid #00AEEF; outline-offset: 2px; }
+
+    .btn-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: rgba(0,174,239,0.1);
+      border: 1px solid rgba(0,174,239,0.18);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .btn-icon svg { width: 20px; height: 20px; fill: #00AEEF; }
+
+    .btn-label {
+      font-size: 0.95rem; font-weight: 900;
+      text-transform: uppercase; letter-spacing: 0.3px;
+      color: #fff; line-height: 1;
+    }
+    .btn-sub {
+      font-size: 0.58rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px;
+      color: rgba(255,255,255,0.3); margin-top: 3px;
+    }
+
+    /* desktop: cards maiores */
+    @media (min-width: 600px) {
+      .btn-card  { padding: 24px 22px; gap: 16px; }
+      .btn-icon  { width: 52px; height: 52px; border-radius: 12px; }
+      .btn-icon svg { width: 26px; height: 26px; }
+      .btn-label { font-size: 1.15rem; }
+      .btn-sub   { font-size: 0.65rem; }
+      .stat-val  { font-size: 1.3rem; }
+      .live-txt  { font-size: 0.68rem; }
+    }
+
+    /* ── FOOTER ──────────────────────────────────────────── */
+    .home-footer {
+      text-align: center; margin-top: 24px;
+      font-size: 0.6rem; color: rgba(255,255,255,0.1);
+    }
+  </style>
 </head>
 <body>
-  
+
+  <!-- SPLASH -->
   <div id="splash-screen">
-    <div class="splash-content">
-      <img src="logo1.jpg" alt="Logo Clã" class="splash-logo">
-      <h2 class="splash-text">OPEN<span style="color: var(--btn-primary);">2026</span></h2>
+    <div class="splash-logo-wrap">
+      <img src="logo1.jpg" alt="Clã">
+      <div class="splash-ring"></div>
     </div>
+    <div class="splash-name">OPEN<b>2026</b></div>
   </div>
 
-  <div class="container">
-    
-    <header style="text-align: center; margin-bottom: 20px;">
-      <img src="open3.png" alt="CrossFit Clã - Open Series 2026" class="hero-logo">
-    </header>
+  <div class="page">
 
-    <nav class="menu-grid">
-      
-      <a href="ranking.html" class="menu-card card-highlight">
-        <div>🥇</div>
-        <h2>Leaderboard</h2>
-        <p>Ver Classificação</p>
-      </a>
+    <!-- BANNER -->
+    <div class="hero-banner">
+      <img src="open5.png" alt="Open 2026">
+      <div class="hero-banner-overlay"></div>
+      <div class="hero-banner-text">
+        <div class="hero-eyebrow">OUR OPEN 2026</div>
+        <div class="hero-name-row">
+          <img src="logo1.jpg" alt="Logo" class="hero-logo" style="width: 40px; height: 40px;">
+          <div class="hero-title">CrossFit <em>Clã</em></div>
+        </div>
+      </div>
+    </div>
 
-     <a href="resultados.html" class="menu-card">
-        <div>⏱️</div>
-        <h2>Lançar Resultados</h2>
-        <p>Área do Atleta</p>
-      </a>
+    <!-- CONTEÚDO -->
+    <div class="content">
 
-    </nav>
+      <!-- ao vivo + stats -->
+      <div class="info-row">
+        <div class="live-pill live-pill--open">
+          <div class="live-dot"></div>
+          <span class="live-txt">Aberto</span>
+        </div>
+        <div class="stats-mini">
+          <div class="stat-mini">
+            <span class="stat-val" id="statAtletas">—</span>
+            <span class="stat-lbl">atletas</span>
+          </div>
+          <div class="stat-sep"></div>
+          <div class="stat-mini">
+            <span class="stat-val" id="statWods">—</span>
+            <span class="stat-lbl">WODs</span>
+          </div>
+        </div>
+      </div>
 
-    <footer style="text-align:center; margin-top:40px; font-size:0.8rem; color:#94a3b8; opacity:0.6; padding-bottom: 20px;">
-      <p>&copy; 2026 Bruno Lopes Ribeiro Silva</p>
-    </footer>
+      <!-- botões -->
+      <div class="btn-grid">
+
+        <a href="ranking.html" class="btn-card">
+          <div class="btn-icon">
+            <svg viewBox="0 0 24 24"><path d="M20.2 2H3.8C2.8 2 2 2.8 2 3.8v2.4C2 9 4 11.2 6.6 11.6 7.5 14.5 10 16.7 13 17v3H8v2h8v-2h-5v-3c3-.3 5.5-2.5 6.4-5.4 2.6-.4 4.6-2.6 4.6-5.2V3.8c0-1-.8-1.8-1.8-1.8zM5 6.2V4h2v3.7c-1.3-.4-2-1.5-2-1.5zm14 0c0 1.5-1.1 2.9-2.6 3.1-.3-1.1-.4-2.3-.4-3.5V4h3v2.2z"/></svg>
+          </div>
+          <div>
+            <div class="btn-label">Leaderboard</div>
+            <div class="btn-sub">Ver classificação</div>
+          </div>
+        </a>
+
+        <a href="resultados.html" class="btn-card">
+          <div class="btn-icon">
+            <svg viewBox="0 0 24 24"><path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>
+          </div>
+          <div>
+            <div class="btn-label">Lançar Resultado</div>
+            <div class="btn-sub">Área do atleta</div>
+          </div>
+        </a>
+
+      </div>
+
+      <div class="home-footer">&copy; 2026 Bruno Lopes Ribeiro Silva</div>
+    </div>
 
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        UI.init(); // Inicia funcionalidades
-        
-        // Remove Splash Screen após 2.5s
-        const splash = document.getElementById("splash-screen");
-        if(splash) {
-            setTimeout(() => {
-                splash.classList.add("hidden");
-            }, 2500);
-        }
+    document.addEventListener("DOMContentLoaded", async () => {
+      UI.init();
+      const splash = document.getElementById("splash-screen");
+      if (splash) setTimeout(() => splash.classList.add("hidden"), 1800);
+      try {
+        const [atletas, configs] = await Promise.all([
+          Data.getAtletas(),
+          Data.getConfigs()
+        ]);
+        document.getElementById("statAtletas").textContent =
+          Array.isArray(atletas) && atletas.length ? atletas.length : "—";
+        document.getElementById("statWods").textContent =
+          Array.isArray(configs) && configs.length ? configs.length : "—";
+      } catch(e) { console.error("Erro stats:", e); }
     });
   </script>
+
 </body>
 </html>
